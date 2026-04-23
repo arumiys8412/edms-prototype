@@ -724,6 +724,17 @@
   .tab-btn:hover { color: var(--primary); }
   .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
 
+  /* 카드 안에 탭 네비만 들어있는 경우 — 카드 하단 테두리·둥근 모서리 제거하여
+     탭 언더라인이 카드 경계와 겹쳐 보이지 않도록 함 */
+  .card:has(> .tab-nav) {
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .card:has(> .tab-nav) > .tab-nav {
+    margin-bottom: 0;
+  }
+
   /* 목록 상단 액션 */
   .list-actions { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
   .list-count { font-size: 12px; color: #666; }
@@ -1188,6 +1199,212 @@
     border-radius: 3px; font-size: 12px; font-weight: 700; background: #fff;
     display: flex; align-items: center; justify-content: center;
   }
+
+  /* ══════════════════════════════════════════ */
+  /* 교육비용 관리 전용 스타일                      */
+  /* ══════════════════════════════════════════ */
+
+  /* 결제 상태 뱃지 */
+  .fee-status {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 2px 8px; border-radius: 3px;
+    font-size: 11px; font-weight: 600; line-height: 1.4;
+  }
+  .fee-status-done   { background: #e6f7ee; color: #1a7a4a; }
+  .fee-status-wait   { background: #fef6e7; color: #b35c00; }
+  .fee-status-info   { background: #e8f0fe; color: #1a5cc8; }
+  .fee-status-cancel { background: #f0f2f5; color: #888; }
+
+  /* 교육비용 리스트 테이블 (비고 컬럼 좌측 정렬 및 숫자 모노스페이스) */
+  .main-table td.fee-left { text-align: left; }
+  .main-table td.fee-num  { text-align: right; font-family: 'Consolas', 'Courier New', monospace; font-feature-settings: 'tnum'; }
+  .main-table td.fee-mono { font-family: 'Consolas', 'Courier New', monospace; font-feature-settings: 'tnum'; }
+  .main-table td.fee-dim  { color: #aaa; }
+  .main-table td .fee-note { font-size: 11px; color: #999; margin-left: 2px; }
+  .main-table tbody tr.fee-subtotal td {
+    background: #f5f6fa !important; font-weight: 700;
+    border-top: 2px solid #dde1e7;
+  }
+
+  /* 결제관리 리스트용 작은 버튼 */
+  .btn-xs {
+    height: 24px; padding: 0 10px; font-size: 11px;
+    background: #fff; color: #444; border: 1px solid #ccc;
+    border-radius: 3px; cursor: pointer; font-family: inherit;
+    transition: all 0.15s;
+  }
+  .btn-xs:hover { background: #f0f4ff; border-color: var(--primary); color: var(--primary); }
+  .btn-xs:disabled { background: #f5f6fa; color: #bbb; cursor: not-allowed; border-color: #e0e3e8; }
+  .btn-xs:disabled:hover { background: #f5f6fa; color: #bbb; border-color: #e0e3e8; }
+
+  /* 예상 교육비용 탭 내부 패널 */
+  .fee-panel { display: none; flex-direction: column; gap: 16px; }
+  .fee-panel.active { display: flex; }
+
+  /* 목록 내 회사명 클릭 링크 (상세로 진입) */
+  .fee-company-link {
+    color: var(--primary);
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .fee-company-link:hover { color: #0d47a1; }
+
+  /* 결제관리 상세뷰 상단 뒤로가기 */
+  .detail-section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 0;
+  }
+
+  /* 결제하기 모달 폼 */
+  .fee-form-grid {
+    display: grid; grid-template-columns: 110px 1fr;
+    gap: 0; border: 1px solid #e0e3e8; border-radius: 4px;
+    overflow: hidden;
+  }
+  .fee-form-grid > div {
+    padding: 10px 14px; font-size: 12.5px;
+    border-bottom: 1px solid #e0e3e8;
+  }
+  .fee-form-grid > div:nth-last-child(-n+2) { border-bottom: none; }
+  .fee-form-grid .form-label { background: #f5f6fa; font-weight: 600; color: #555; }
+  .fee-form-grid .form-value { background: #fff; }
+  .fee-form-grid .form-value input {
+    width: 100%; height: 28px;
+    border: 1px solid #ccc; border-radius: 3px;
+    padding: 0 8px; font-size: 12px;
+    font-family: inherit; outline: none;
+  }
+  .fee-form-grid .form-value input:focus { border-color: var(--primary); }
+  .fee-form-grid .form-value.strong { font-weight: 700; font-size: 14px; color: #1a1a2e; }
+
+  .pay-notice {
+    background: #e8f0fe;
+    border-left: 3px solid var(--primary);
+    padding: 12px 14px; margin-top: 16px;
+    font-size: 12px; color: #1a4480; line-height: 1.6;
+    border-radius: 3px;
+  }
+  .pay-notice strong { font-weight: 700; }
+
+  /* 입금현황 모달 섹션 */
+  .settle-section { margin-bottom: 20px; }
+  .settle-section:last-child { margin-bottom: 0; }
+  .settle-section-title {
+    font-size: 13px; font-weight: 700; color: #222;
+    margin-bottom: 8px; padding-left: 8px;
+    border-left: 3px solid var(--primary);
+  }
+  .settle-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .settle-table th {
+    background: var(--table-header); border: 1px solid var(--border);
+    padding: 8px 10px; font-weight: 600; color: #444;
+    text-align: center; white-space: nowrap;
+  }
+  .settle-table td {
+    border: 1px solid #e8eaed; padding: 7px 10px;
+    text-align: center; color: #333;
+  }
+  .settle-note { font-size: 11px; color: #888; margin-top: 6px; }
+
+  /* 노출 필드 설정 모달 */
+  .settings-grid {
+    display: grid; grid-template-columns: 1fr 40px 1fr 40px 1fr;
+    gap: 8px; align-items: stretch;
+  }
+  .settings-col {
+    border: 1px solid var(--border); border-radius: 4px;
+    display: flex; flex-direction: column;
+    min-height: 360px; background: #fff;
+  }
+  .settings-col h4 {
+    margin: 0; padding: 10px 12px;
+    background: #f5f6fa;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px; font-weight: 700; color: #333;
+  }
+  .settings-col h4 small {
+    display: block; font-weight: 400;
+    font-size: 10.5px; color: #888; margin-top: 2px;
+  }
+  .settings-list {
+    list-style: none; margin: 0; padding: 4px 0;
+    flex: 1; overflow-y: auto; font-size: 12px;
+  }
+  .settings-list li {
+    padding: 6px 12px; cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: background 0.12s;
+  }
+  .settings-list li:hover { background: #f4f6ff; }
+  .settings-list li.selected {
+    background: #e8f0fe; border-left-color: var(--primary);
+    color: #1a5cc8; font-weight: 600;
+  }
+  .settings-list li.required {
+    color: #aaa; font-style: italic; cursor: not-allowed;
+  }
+  .settings-list li.required:hover { background: transparent; }
+  .settings-move {
+    display: flex; flex-direction: column;
+    gap: 6px; justify-content: center; align-items: center;
+  }
+  .settings-move button {
+    width: 32px; height: 32px;
+    border: 1px solid #ccc; background: #fff;
+    font-size: 14px; cursor: pointer;
+    border-radius: 3px; color: #555;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .settings-move button:hover {
+    background: var(--primary); color: #fff;
+    border-color: var(--primary);
+  }
+
+  /* 모달 푸터 공통(여러 버튼 우측 정렬) */
+  .modal-footer-end {
+    display: flex; justify-content: flex-end;
+    gap: 6px; padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    background: #fafbfc;
+    flex-shrink: 0;
+  }
+
+  /* 툴팁 */
+  .fee-tip {
+    position: relative; display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #aab3bb; color: #fff;
+    font-size: 10px; font-weight: 700;
+    cursor: help; font-style: normal; line-height: 1;
+    vertical-align: middle; margin-left: 2px;
+  }
+  .fee-tip:hover { background: var(--primary); }
+  .fee-tip::after {
+    content: attr(data-tip);
+    position: absolute; bottom: calc(100% + 8px);
+    left: 50%; transform: translateX(-50%);
+    background: #1a1a2e; color: #fff;
+    font-size: 11px; font-weight: 400;
+    padding: 8px 10px; border-radius: 4px;
+    white-space: normal; width: 240px;
+    text-align: left; line-height: 1.5;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.15s;
+    z-index: 500;
+  }
+  .fee-tip::before {
+    content: ""; position: absolute;
+    bottom: calc(100% + 2px); left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1a1a2e;
+    opacity: 0; transition: opacity 0.15s;
+    z-index: 500;
+  }
+  .fee-tip:hover::after, .fee-tip:hover::before { opacity: 1; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -1257,8 +1474,8 @@
         <span class="nav-arrow">▶</span>
       </div>
       <div class="nav-sub">
-        <a class="nav-item" data-page="" href="#">교육비용 현황</a>
-        <a class="nav-item" data-page="" href="#">교육비용 결제</a>
+        <a class="nav-item" data-page="expected" href="#">예상 교육비용</a>
+        <a class="nav-item" data-page="payment" href="#">교육비용 결제관리</a>
       </div>
     </div>
     <!-- 사외교육 -->
@@ -1414,9 +1631,11 @@
               <span class="multi-placeholder" id="p-company-placeholder">회사선택</span>
             </div>
             <div class="multi-dropdown" id="p-company-dropdown">
-              <div class="multi-option" data-value="회사1">회사1</div>
-              <div class="multi-option" data-value="회사2">회사2</div>
-              <div class="multi-option" data-value="회사3">회사3</div>
+              <div class="multi-option" data-value="휴넷">휴넷</div>
+              <div class="multi-option" data-value="프라임">프라임</div>
+              <div class="multi-option" data-value="A기업">A기업</div>
+              <div class="multi-option" data-value="B기업명">B기업명</div>
+              <div class="multi-option" data-value="C기업명">C기업명</div>
             </div>
           </div>
           <div class="row-divider"></div>
@@ -1454,7 +1673,7 @@
         <div class="result-header">
           <div class="result-count">검색결과 <strong id="p-result-count-text">0</strong>건</div>
           <div class="result-right">
-            <button class="btn-excel" id="p-btn-excel">📥 엑셀다운로드</button>
+            <button class="btn-excel" id="p-btn-excel">엑셀다운로드</button>
           </div>
         </div>
         <table class="main-table">
@@ -1566,7 +1785,7 @@
         <div class="result-header">
           <div class="result-count">검색결과 <strong id="c-result-count-text">0</strong>건</div>
           <div class="result-right">
-            <button class="btn-excel" id="c-btn-excel">📥 엑셀다운로드</button>
+            <button class="btn-excel" id="c-btn-excel">엑셀다운로드</button>
           </div>
         </div>
         <table class="main-table">
@@ -1676,9 +1895,11 @@
               <span class="multi-placeholder" id="sp-company-placeholder">회사선택</span>
             </div>
             <div class="multi-dropdown" id="sp-company-dropdown">
-              <div class="multi-option" data-value="회사1">회사1</div>
-              <div class="multi-option" data-value="회사2">회사2</div>
-              <div class="multi-option" data-value="회사3">회사3</div>
+              <div class="multi-option" data-value="휴넷">휴넷</div>
+              <div class="multi-option" data-value="프라임">프라임</div>
+              <div class="multi-option" data-value="A기업">A기업</div>
+              <div class="multi-option" data-value="B기업명">B기업명</div>
+              <div class="multi-option" data-value="C기업명">C기업명</div>
             </div>
           </div>
           <div class="label-auto" style="margin-left:6px">부서검색</div>
@@ -2065,9 +2286,11 @@
                 <span class="multi-placeholder" id="cr-p-company-placeholder">회사선택</span>
               </div>
               <div class="multi-dropdown" id="cr-p-company-dropdown">
-                <div class="multi-option" data-value="(주)휴넷">(주)휴넷</div>
-                <div class="multi-option" data-value="LABS플랫폼">LABS플랫폼</div>
-                <div class="multi-option" data-value="테스트기업">테스트기업</div>
+                <div class="multi-option" data-value="휴넷">휴넷</div>
+                <div class="multi-option" data-value="프라임">프라임</div>
+                <div class="multi-option" data-value="A기업">A기업</div>
+                <div class="multi-option" data-value="B기업명">B기업명</div>
+                <div class="multi-option" data-value="C기업명">C기업명</div>
               </div>
             </div>
           </div>
@@ -2162,9 +2385,11 @@
                 <span class="multi-placeholder" id="cr-c-company-placeholder">회사선택</span>
               </div>
               <div class="multi-dropdown" id="cr-c-company-dropdown">
-                <div class="multi-option" data-value="(주)휴넷">(주)휴넷</div>
-                <div class="multi-option" data-value="LABS플랫폼">LABS플랫폼</div>
-                <div class="multi-option" data-value="테스트기업">테스트기업</div>
+                <div class="multi-option" data-value="휴넷">휴넷</div>
+                <div class="multi-option" data-value="프라임">프라임</div>
+                <div class="multi-option" data-value="A기업">A기업</div>
+                <div class="multi-option" data-value="B기업명">B기업명</div>
+                <div class="multi-option" data-value="C기업명">C기업명</div>
               </div>
             </div>
           </div>
@@ -2252,9 +2477,11 @@
                 <span class="multi-placeholder" id="cr-m-company-placeholder">회사선택</span>
               </div>
               <div class="multi-dropdown" id="cr-m-company-dropdown">
-                <div class="multi-option" data-value="(주)휴넷">(주)휴넷</div>
-                <div class="multi-option" data-value="LABS플랫폼">LABS플랫폼</div>
-                <div class="multi-option" data-value="테스트기업">테스트기업</div>
+                <div class="multi-option" data-value="휴넷">휴넷</div>
+                <div class="multi-option" data-value="프라임">프라임</div>
+                <div class="multi-option" data-value="A기업">A기업</div>
+                <div class="multi-option" data-value="B기업명">B기업명</div>
+                <div class="multi-option" data-value="C기업명">C기업명</div>
               </div>
             </div>
           </div>
@@ -3072,6 +3299,636 @@
         <button class="btn-edit-red" id="rr-submit-btn">등록</button>
       </div>
     </div><!-- /page-restrict-register -->
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 예상 교육비용                            -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-expected">
+
+      <div class="page-header-row">
+        <div class="page-header-title">예상 교육비용</div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">교육비용</a> &gt; 예상 교육비용</div>
+      </div>
+
+
+      <!-- 검색 폼 -->
+      <div class="card">
+        <div class="search-row">
+          <div class="label">학습시작일</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="fc-period-mode" value="month" checked onchange="toggleFcPeriodMode()"> 월 선택</label>
+            <label class="radio-label"><input type="radio" name="fc-period-mode" value="range" onchange="toggleFcPeriodMode()"> 기간검색</label>
+          </div>
+          <!-- 월 선택 모드 -->
+          <span id="fc-period-month" style="display:inline-flex;gap:6px;align-items:center">
+            <select class="select" style="min-width:90px">
+              <option>2026년</option><option>2025년</option>
+            </select>
+            <select class="select" style="min-width:80px">
+              <option>4월</option><option>3월</option><option>2월</option><option>1월</option>
+            </select>
+          </span>
+          <!-- 기간검색 모드 -->
+          <span id="fc-period-range" style="display:none;gap:6px;align-items:center">
+            <div class="date-wrap">
+              <input type="text" class="input-date" id="fc-date-from" value="2026-01-01" readonly>
+              <span class="cal-icon">📅</span>
+            </div>
+            <span class="date-sep">~</span>
+            <div class="date-wrap">
+              <input type="text" class="input-date" id="fc-date-to" value="2026-04-30" readonly>
+              <span class="cal-icon">📅</span>
+            </div>
+          </span>
+        </div>
+        <div class="search-row">
+          <div class="label">회사검색</div>
+          <label class="checkbox-row"><input type="checkbox" id="fc-chk-company"> 선택한 회사만 검색</label>
+          <div class="multi-select-wrap" id="fc-company-wrap">
+            <div class="multi-tags-box" id="fc-company-box">
+              <span class="multi-placeholder" id="fc-company-placeholder">회사선택</span>
+            </div>
+            <div class="multi-dropdown" id="fc-company-dropdown">
+              <div class="multi-option" data-value="휴넷">휴넷</div>
+              <div class="multi-option" data-value="프라임">프라임</div>
+              <div class="multi-option" data-value="A기업">A기업</div>
+              <div class="multi-option" data-value="B기업명">B기업명</div>
+              <div class="multi-option" data-value="C기업명">C기업명</div>
+            </div>
+          </div>
+          <div class="search-actions">
+            <button class="btn btn-primary">검색</button>
+            <button class="btn btn-reset">초기화</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 검색결과 요약 -->
+      <div class="card">
+        <div class="card-title">검색결과 요약</div>
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>전체 회사 수</th>
+              <th>전체 과정 수</th>
+              <th>전체 학습자 수</th>
+              <th>수료자 수</th>
+              <th>예상 청구액</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>6개사</td>
+              <td>42개</td>
+              <td>1,284명</td>
+              <td>921명</td>
+              <td><strong>134,520,000원</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 리스트 -->
+      <div class="card">
+        <div class="result-header">
+          <div class="result-count">검색결과 <strong>6</strong>개 기업</div>
+          <div class="result-right">
+            <button class="btn-excel">엑셀 다운로드</button>
+          </div>
+        </div>
+        <table class="main-table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>회사명</th>
+              <th>전체 학습자 수</th>
+              <th>전체 과정 수</th>
+              <th>온라인</th>
+              <th>오프라인</th>
+              <th>하이브리드</th>
+              <th>마이크로러닝</th>
+              <th>수료자 수</th>
+              <th>예상 청구액</th>
+              <th>전월 대비</th>
+              <th>상세</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td class="fee-left"><strong>휴넷</strong></td>
+              <td class="fee-num">280</td>
+              <td class="fee-num">10</td>
+              <td class="fee-num">6</td>
+              <td class="fee-num">2</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">218</td>
+              <td class="fee-num"><strong>45,000,000</strong></td>
+              <td class="fee-num" style="color:#e53935">▲ 5.2%</td>
+              <td><button class="btn-xs" onclick="goToPaymentWithCompany('휴넷')">결제관리</button></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td class="fee-left"><strong>프라임</strong></td>
+              <td class="fee-num">160</td>
+              <td class="fee-num">7</td>
+              <td class="fee-num">4</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">120</td>
+              <td class="fee-num"><strong>32,000,000</strong></td>
+              <td class="fee-num" style="color:#e53935">▲ 3.1%</td>
+              <td><button class="btn-xs" onclick="goToPaymentWithCompany('프라임')">결제관리</button></td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td class="fee-left"><strong>B기업명</strong></td>
+              <td class="fee-num">310</td>
+              <td class="fee-num">9</td>
+              <td class="fee-num">5</td>
+              <td class="fee-num">2</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">245</td>
+              <td class="fee-num"><strong>28,500,000</strong></td>
+              <td class="fee-num" style="color:var(--primary)">▼ 1.4%</td>
+              <td><button class="btn-xs" onclick="goToPaymentWithCompany('B기업명')">결제관리</button></td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td class="fee-left"><strong>A기업</strong></td>
+              <td class="fee-num">220</td>
+              <td class="fee-num">8</td>
+              <td class="fee-num">4</td>
+              <td class="fee-num">2</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">156</td>
+              <td class="fee-num"><strong>15,200,000</strong></td>
+              <td class="fee-num" style="color:#e53935">▲ 8.7%</td>
+              <td><button class="btn-xs" onclick="goToPaymentWithCompany('A기업')">결제관리</button></td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td class="fee-left"><strong>C기업명</strong></td>
+              <td class="fee-num">180</td>
+              <td class="fee-num">6</td>
+              <td class="fee-num">3</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">130</td>
+              <td class="fee-num"><strong>10,320,000</strong></td>
+              <td class="fee-num" style="color:#888">― 0.2%</td>
+              <td><button class="btn-xs" onclick="goToPaymentWithCompany('C기업명')">결제관리</button></td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td class="fee-left"><strong>기타</strong> <span class="fee-note">(미분류 2사)</span></td>
+              <td class="fee-num">134</td>
+              <td class="fee-num">2</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">1</td>
+              <td class="fee-num">0</td>
+              <td class="fee-num">0</td>
+              <td class="fee-num">72</td>
+              <td class="fee-num"><strong>3,500,000</strong></td>
+              <td class="fee-num" style="color:#888">―</td>
+              <td class="fee-dim">-</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-footer">
+          <div class="page-size-wrap">
+            <select class="select">
+              <option value="30">30개씩 보기</option>
+              <option value="50" selected>50개씩 보기</option>
+              <option value="100">100개씩 보기</option>
+              <option value="200">200개씩 보기</option>
+            </select>
+          </div>
+          <div class="pagination">
+            <button class="pg-btn" disabled>&laquo;</button>
+            <button class="pg-btn" disabled>&lsaquo;</button>
+            <button class="pg-btn active">1</button>
+            <button class="pg-btn" disabled>&rsaquo;</button>
+            <button class="pg-btn" disabled>&raquo;</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-expected -->
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 교육비용 결제관리                        -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-payment">
+
+      <div class="page-header-row">
+        <div class="page-header-title">교육비용 결제관리</div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">교육비용</a> &gt; 교육비용 결제관리</div>
+      </div>
+
+      <!-- LIST VIEW -->
+      <div id="payment-list">
+
+        <!-- 검색 폼 -->
+        <div class="card">
+          <div class="search-row">
+            <div class="label">학습시작일</div>
+            <div class="radio-group">
+              <label class="radio-label"><input type="radio" name="fp-period-mode" value="month" checked onchange="toggleFpPeriodMode()"> 월 선택</label>
+              <label class="radio-label"><input type="radio" name="fp-period-mode" value="range" onchange="toggleFpPeriodMode()"> 기간검색</label>
+            </div>
+            <!-- 월 선택 모드 -->
+            <span id="fp-period-month" style="display:inline-flex;gap:6px;align-items:center">
+              <select class="select" style="min-width:90px">
+                <option>2026년</option><option>2025년</option>
+              </select>
+              <select class="select" style="min-width:80px">
+                <option>전체</option><option>4월</option><option>3월</option><option>2월</option><option>1월</option>
+              </select>
+            </span>
+            <!-- 기간검색 모드 -->
+            <span id="fp-period-range" style="display:none;gap:6px;align-items:center">
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="fp-date-from" value="2026-01-01" readonly>
+                <span class="cal-icon">📅</span>
+              </div>
+              <span class="date-sep">~</span>
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="fp-date-to" value="2026-04-30" readonly>
+                <span class="cal-icon">📅</span>
+              </div>
+            </span>
+          </div>
+          <div class="search-row">
+            <div class="label">결제</div>
+            <span class="label-auto">결제방법</span>
+            <select class="select" style="min-width:110px">
+              <option value="">전체</option>
+              <option value="Bank">일괄납입</option>
+              <option value="Card">신용카드</option>
+              <option value="Prepaid">선수금 차감</option>
+            </select>
+            <span class="row-divider"></span>
+            <span class="label-auto">결제상태</span>
+            <select class="select" style="min-width:110px">
+              <option value="">전체</option>
+              <option value="done">입금완료</option>
+              <option value="wait">입금대기</option>
+              <option value="cancel">입금취소</option>
+            </select>
+          </div>
+          <div class="search-row">
+            <div class="label">회사검색</div>
+            <label class="checkbox-row"><input type="checkbox" id="fp-chk-company"> 선택한 회사만 검색</label>
+            <div class="multi-select-wrap" id="fp-company-wrap">
+              <div class="multi-tags-box" id="fp-company-box">
+                <span class="multi-placeholder" id="fp-company-placeholder">회사선택</span>
+              </div>
+              <div class="multi-dropdown" id="fp-company-dropdown">
+                <div class="multi-option" data-value="휴넷">휴넷</div>
+                <div class="multi-option" data-value="프라임">프라임</div>
+                <div class="multi-option" data-value="A기업">A기업</div>
+                <div class="multi-option" data-value="B기업명">B기업명</div>
+                <div class="multi-option" data-value="C기업명">C기업명</div>
+              </div>
+            </div>
+            <div class="search-actions">
+              <button class="btn btn-primary">검색</button>
+              <button class="btn btn-reset">초기화</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 리스트 -->
+        <div class="card">
+          <div class="result-header">
+            <div class="result-count">검색결과 <strong>32</strong>건</div>
+            <div class="result-right">
+              <button class="btn-excel">엑셀 다운로드</button>
+            </div>
+          </div>
+          <table class="main-table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>회사</th>
+                <th>학습시작일</th>
+                <th>정산유형</th>
+                <th>총 과정수</th>
+                <th>총 학습자 수</th>
+                <th>총 교육비</th>
+                <th>결제방법</th>
+                <th>결제상태</th>
+                <th>카드결제</th>
+                <th>결제 증빙서류</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>32</td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail()">휴넷</span></td>
+                <td class="fee-mono">2026.04</td>
+                <td>고객사 교육비</td>
+                <td class="fee-num">2</td>
+                <td class="fee-num">4</td>
+                <td class="fee-num">12,000</td>
+                <td>일괄납입</td>
+                <td><span class="fee-status fee-status-done">입금완료</span></td>
+                <td><button class="btn-xs" disabled>결제하기</button></td>
+                <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
+              </tr>
+              <tr>
+                <td>31</td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail()">프라임</span></td>
+                <td class="fee-mono">2026.04</td>
+                <td>고객사 교육비</td>
+                <td class="fee-num">7</td>
+                <td class="fee-num">160</td>
+                <td class="fee-num">45,000,000</td>
+                <td class="fee-dim">-</td>
+                <td><span class="fee-status fee-status-wait">입금대기</span></td>
+                <td><button class="btn-xs" onclick="openModal('modal-payment')">결제하기</button></td>
+                <td><button class="btn-xs" onclick="openSettlementModal('Pending')">서류보기</button></td>
+              </tr>
+              <tr>
+                <td>30</td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail()">B기업명</span></td>
+                <td class="fee-mono">2026.03</td>
+                <td>기타(통합)</td>
+                <td class="fee-num">9</td>
+                <td class="fee-num">310</td>
+                <td class="fee-num">6,329,000</td>
+                <td>일괄납입</td>
+                <td><span class="fee-status fee-status-done">입금완료</span></td>
+                <td><button class="btn-xs" disabled>결제하기</button></td>
+                <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
+              </tr>
+              <tr>
+                <td>29</td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail()">C기업명</span></td>
+                <td class="fee-mono">2026.03</td>
+                <td>고객사 교육비</td>
+                <td class="fee-num">6</td>
+                <td class="fee-num">180</td>
+                <td class="fee-num">3,840,000</td>
+                <td>신용카드</td>
+                <td><span class="fee-status fee-status-done">입금완료</span></td>
+                <td><button class="btn-xs" disabled>결제하기</button></td>
+                <td><button class="btn-xs" onclick="openSettlementModal('Card')">서류보기</button></td>
+              </tr>
+              <tr>
+                <td>28</td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail()">D기업명</span></td>
+                <td class="fee-mono">2026.02</td>
+                <td>고객사 교육비</td>
+                <td class="fee-num">4</td>
+                <td class="fee-num">95</td>
+                <td class="fee-num">1,250,000</td>
+                <td>일괄납입</td>
+                <td><span class="fee-status fee-status-cancel">입금취소</span></td>
+                <td><button class="btn-xs" disabled>결제하기</button></td>
+                <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-footer">
+            <div class="page-size-wrap">
+              <select class="select">
+                <option value="30">30개씩 보기</option>
+                <option value="50" selected>50개씩 보기</option>
+                <option value="100">100개씩 보기</option>
+                <option value="200">200개씩 보기</option>
+              </select>
+            </div>
+            <div class="pagination">
+              <button class="pg-btn" disabled>&laquo;</button>
+              <button class="pg-btn" disabled>&lsaquo;</button>
+              <button class="pg-btn active">1</button>
+              <button class="pg-btn">2</button>
+              <button class="pg-btn">3</button>
+              <button class="pg-btn">&rsaquo;</button>
+              <button class="pg-btn">&raquo;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DETAIL VIEW -->
+      <div id="payment-detail" style="display:none">
+
+        <!-- 결제 요약정보 카드 (상단) -->
+        <div class="card">
+          <div class="detail-section-header" style="margin-bottom:14px">
+            <div class="card-title" style="margin-bottom:0">결제 요약정보</div>
+            <div style="display:flex; gap:6px">
+              <button class="btn btn-outline" onclick="closePaymentDetail()">목록</button>
+              <button class="btn btn-outline" onclick="closePaymentDetail()">이전</button>
+            </div>
+          </div>
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>회사</th>
+                <th>학습시작일</th>
+                <th>정산유형</th>
+                <th>총 과정수</th>
+                <th>총 학습자수</th>
+                <th>총 교육비</th>
+                <th>결제방법</th>
+                <th>결제상태</th>
+                <th>결제 증빙서류</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>휴넷</td>
+                <td>2026.04</td>
+                <td>고객사 교육비</td>
+                <td>12</td>
+                <td>32</td>
+                <td><strong>6,329,000원</strong></td>
+                <td>일괄납입</td>
+                <td><span class="fee-status fee-status-done">입금완료</span></td>
+                <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 결제 상세내역 (임직원 목록) -->
+        <div class="card">
+          <div class="card-title">결제 상세내역</div>
+
+          <!-- 검색 박스 (과정별 학습현황 상세와 동일 패턴) -->
+          <div style="border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px">
+            <!-- 과정검색 -->
+            <div class="search-form-row" style="margin-bottom:14px">
+              <div class="field-group" style="min-width:380px">
+                <div class="field-label">과정검색</div>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <select class="select" style="min-width:90px">
+                    <option value="name">과정명</option>
+                    <option value="code">과정코드</option>
+                  </select>
+                  <input type="text" class="input" placeholder="검색어를 입력해주세요." style="min-width:280px">
+                </div>
+              </div>
+            </div>
+            <!-- 학습자/회사/부서 검색 -->
+            <div class="search-form-row" style="gap:28px">
+              <div class="field-group">
+                <div class="field-label">학습자검색</div>
+                <div style="display:flex;gap:6px;align-items:center">
+                  <select class="select" style="min-width:70px">
+                    <option value="name">이름</option>
+                    <option value="id">아이디</option>
+                    <option value="empno">사번</option>
+                  </select>
+                  <input type="text" class="input" placeholder="검색어를 입력해주세요." style="min-width:200px">
+                </div>
+              </div>
+              <div class="field-group">
+                <div class="field-label">회사검색</div>
+                <div style="display:flex;gap:10px;align-items:center">
+                  <label class="checkbox-row"><input type="checkbox" id="fpd-chk-company"> 선택한 회사만 검색</label>
+                  <div class="multi-select-wrap" id="fpd-company-wrap">
+                    <div class="multi-tags-box" id="fpd-company-box">
+                      <span class="multi-placeholder" id="fpd-company-placeholder">회사선택</span>
+                    </div>
+                    <div class="multi-dropdown" id="fpd-company-dropdown">
+                      <div class="multi-option" data-value="휴넷">휴넷</div>
+                      <div class="multi-option" data-value="프라임">프라임</div>
+                      <div class="multi-option" data-value="A기업">A기업</div>
+                      <div class="multi-option" data-value="B기업명">B기업명</div>
+                      <div class="multi-option" data-value="C기업명">C기업명</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="field-group">
+                <div class="field-label">부서검색</div>
+                <input type="text" class="input" placeholder="부서명을 입력해주세요." style="min-width:200px">
+              </div>
+            </div>
+            <div class="search-form-actions" style="margin-top:14px">
+              <button class="btn btn-primary">검색</button>
+              <button class="btn btn-reset">초기화</button>
+            </div>
+          </div>
+
+          <!-- 리스트 -->
+          <div class="result-header">
+            <div class="result-count">검색결과 <strong>32</strong>건</div>
+            <div class="result-right">
+              <button class="btn-excel">엑셀 다운로드</button>
+            </div>
+          </div>
+          <table class="main-table">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>이름</th>
+                <th>아이디</th>
+                <th>사번</th>
+                <th>회사명</th>
+                <th>부서명</th>
+                <th>과정명</th>
+                <th>학습자 학습기간</th>
+                <th>교육비</th>
+                <th>수료여부</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>홍길동</td>
+                <td class="fee-mono">sample-hong</td>
+                <td class="fee-mono">12356</td>
+                <td>휴넷</td>
+                <td>기획팀</td>
+                <td class="fee-left">초급자 Prep 과정 (1:1 멘토 집중관리)_필리핀 영어</td>
+                <td class="fee-mono">2026.04.01 ~ 2026.04.30</td>
+                <td class="fee-num">35,000</td>
+                <td>수료</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>김민수</td>
+                <td class="fee-mono">sample-kim</td>
+                <td class="fee-mono">12357</td>
+                <td>휴넷</td>
+                <td>개발팀</td>
+                <td class="fee-left">New 회사가 원하는 신입사원_태도 편</td>
+                <td class="fee-mono">2026.04.01 ~ 2026.04.30</td>
+                <td class="fee-num">70,000</td>
+                <td>수료</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>이수진</td>
+                <td class="fee-mono">sample-lee</td>
+                <td class="fee-mono">12358</td>
+                <td>휴넷</td>
+                <td>인사팀</td>
+                <td class="fee-left">실무자를 위한 데이터 리터러시</td>
+                <td class="fee-mono">2026.04.01 ~ 2026.05.31</td>
+                <td class="fee-num">95,000</td>
+                <td>수료</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>박정호</td>
+                <td class="fee-mono">sample-park</td>
+                <td class="fee-mono">12359</td>
+                <td>휴넷</td>
+                <td>재무팀</td>
+                <td class="fee-left">HR 담당자를 위한 노동법 기초</td>
+                <td class="fee-mono">2026.04.10 ~ 2026.05.09</td>
+                <td class="fee-num">85,000</td>
+                <td>미수료</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>최영희</td>
+                <td class="fee-mono">sample-choi</td>
+                <td class="fee-mono">12360</td>
+                <td>휴넷</td>
+                <td>영업팀</td>
+                <td class="fee-left">영업관리자 리더십 워크숍</td>
+                <td class="fee-mono">2026.03.15 ~ 2026.04.14</td>
+                <td class="fee-num">120,000</td>
+                <td>수료</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-footer">
+            <div class="page-size-wrap">
+              <select class="select">
+                <option value="30">30개씩 보기</option>
+                <option value="50" selected>50개씩 보기</option>
+                <option value="100">100개씩 보기</option>
+                <option value="200">200개씩 보기</option>
+              </select>
+            </div>
+            <div class="pagination">
+              <button class="pg-btn" disabled>&laquo;</button>
+              <button class="pg-btn" disabled>&lsaquo;</button>
+              <button class="pg-btn active">1</button>
+              <button class="pg-btn">2</button>
+              <button class="pg-btn">3</button>
+              <button class="pg-btn">&rsaquo;</button>
+              <button class="pg-btn">&raquo;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-payment -->
 
   </main>
 </div>
@@ -5337,7 +6194,13 @@ document.querySelectorAll('.nav-item').forEach(item => {
     e.preventDefault();
     activateNavItem(item);
     const page = item.dataset.page;
-    if (page) showPage(page);
+    if (page) {
+      showPage(page);
+      // 결제관리 진입 시 리스트뷰로 초기화 (상세뷰 열려있던 경우 대비)
+      if (page === 'payment' && typeof closePaymentDetail === 'function') {
+        closePaymentDetail();
+      }
+    }
   });
 });
 
@@ -6124,6 +6987,83 @@ rrOnChange();
 
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ═══════════════════════════════════════════════
+// 교육비용 관리 전용 JS
+// ═══════════════════════════════════════════════
+
+// 회사별 리스트의 '결제관리' 버튼 → 결제관리 페이지로 이동
+// 프로토타입에서는 사이드바 메뉴 활성화 + 페이지 전환만. 실제 구현 시 회사 필터 자동 적용 필요.
+function goToPaymentWithCompany(companyName) {
+  const paymentNav = document.querySelector('[data-page="payment"]');
+  if (paymentNav) {
+    activateNavItem(paymentNav);
+    showPage('payment');
+  }
+  closePaymentDetail();
+  setTimeout(() => {
+    alert(`[프로토타입 동작] "${companyName}" 회사로 결제관리 페이지가 필터링됩니다. (실제 구현 시 상태 전달)`);
+  }, 300);
+}
+
+// 결제관리 상세뷰 전환
+function openPaymentDetail() {
+  document.getElementById('payment-list').style.display = 'none';
+  document.getElementById('payment-detail').style.display = 'block';
+  const main = document.querySelector('.main');
+  if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function closePaymentDetail() {
+  const list = document.getElementById('payment-list');
+  const detail = document.getElementById('payment-detail');
+  if (list) list.style.display = 'block';
+  if (detail) detail.style.display = 'none';
+}
+
+// 서류보기 모달 오픈 — 결제방법에 따라 섹션2 행 렌더링 분기
+// Bank: 거래명세서·입금증·수납확인서 버튼 활성, 신용카드 전표 비활성
+// Card: 거래명세서·입금증·수납확인서 버튼 비활성, 신용카드 전표 활성
+// Prepaid(선수금 차감): 거래명세서·입금증·수납확인서 버튼 활성, 신용카드 전표 비활성
+// Pending(입금대기/결제방법 미정): 섹션2 데이터 없음 (세금계산서만 발행됨)
+function openSettlementModal(method) {
+  const body = document.getElementById('settle-body');
+  if (!body) return;
+  openModal('modal-settlement');
+
+  if (method === 'Pending') {
+    body.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align:center;color:#999;padding:20px">
+          결제 대기 중입니다. 결제 완료 후 입금 정보가 표시됩니다.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  const methodLabel = {
+    'Bank':    '일괄납입',
+    'Card':    '신용카드',
+    'Prepaid': '선수금 차감'
+  }[method] || method;
+
+  const isCard = method === 'Card';
+  const isBankOrPrepaid = method === 'Bank' || method === 'Prepaid';
+  const btnActive = '<button class="btn-xs">출력하기</button>';
+  const btnDisabled = '<button class="btn-xs" disabled>출력하기</button>';
+
+  body.innerHTML = `
+    <tr>
+      <td>${methodLabel}</td>
+      <td>40,428,500원</td>
+      <td>2026.02.27</td>
+      <td>${isBankOrPrepaid ? btnActive : btnDisabled}</td>
+      <td>${isBankOrPrepaid ? btnActive : btnDisabled}</td>
+      <td>${isBankOrPrepaid ? btnActive : btnDisabled}</td>
+      <td>${isCard ? btnActive : btnDisabled}</td>
+    </tr>
+  `;
+}
 
 // ── 조건 옵션 정의 ──
 const COND_TARGET_OPTIONS = {
@@ -6913,6 +7853,41 @@ function initRrCondState() {
 // switchMTab 등 기존 함수 중 modal 관련 stub
 function switchMTab() {}
 
+// ── 교육비용: 노출 필드 설정 모달 — 리스트 항목 클릭 시 선택 토글 ──
+document.querySelectorAll('#modal-fee-settings .settings-list li:not(.required)').forEach(li => {
+  li.addEventListener('click', function() {
+    this.parentElement.querySelectorAll('li').forEach(l => l.classList.remove('selected'));
+    this.classList.add('selected');
+  });
+});
+
+// ── 교육비용: 회사검색 multi-select 초기화 ──
+// 개인별 신청현황 등 기존 화면과 동일한 표준 initMultiSelect 함수 사용
+// prefix는 각 wrap의 id에서 '-company-wrap' 앞부분 (fc / fp / fpd)
+const COMPANY_OPTIONS_FEE = ['휴넷', '프라임', 'A기업', 'B기업명', 'C기업명'];
+if (document.getElementById('fc-company-wrap')) initMultiSelect('fc', COMPANY_OPTIONS_FEE);
+if (document.getElementById('fp-company-wrap')) initMultiSelect('fp', COMPANY_OPTIONS_FEE);
+if (document.getElementById('fpd-company-wrap')) initMultiSelect('fpd', COMPANY_OPTIONS_FEE);
+
+// ── 교육비용: 학습시작일 월 선택/기간검색 토글 ──
+function toggleFcPeriodMode() {
+  const mode = document.querySelector('input[name="fc-period-mode"]:checked').value;
+  document.getElementById('fc-period-month').style.display = mode === 'month' ? 'inline-flex' : 'none';
+  document.getElementById('fc-period-range').style.display = mode === 'range' ? 'inline-flex' : 'none';
+}
+function toggleFpPeriodMode() {
+  const mode = document.querySelector('input[name="fp-period-mode"]:checked').value;
+  document.getElementById('fp-period-month').style.display = mode === 'month' ? 'inline-flex' : 'none';
+  document.getElementById('fp-period-range').style.display = mode === 'range' ? 'inline-flex' : 'none';
+}
+
+// ── ESC 키로 열린 모든 모달 닫기 ──
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+  }
+});
+
 </script>
 <!-- ══════════════════════════════════════════ -->
 <!-- MODAL: 제한 대상관리 — 3-column 레이아웃    -->
@@ -7065,6 +8040,170 @@ function switchMTab() {}
   </div>
 </div>
 
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- MODAL: 입금현황 (교육비용 결제관리)              -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-settlement" onclick="if(event.target===this)closeModal('modal-settlement')">
+  <div class="modal-container" style="max-width:880px">
+    <div class="modal-header">
+      <h3>결제 증빙서류</h3>
+      <button class="modal-close" onclick="closeModal('modal-settlement')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="settle-section">
+        <div class="settle-section-title">세금계산서/거래명세서</div>
+        <table class="settle-table">
+          <thead>
+            <tr>
+              <th>발행방법</th>
+              <th>공급가액</th>
+              <th>발행일</th>
+              <th>출력</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>trusbill</td>
+              <td>40,428,500원</td>
+              <td>2026.02.27</td>
+              <td><button class="btn-xs">출력하기</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="settle-section">
+        <div class="settle-section-title">입금증/수납확인서/신용카드 전표</div>
+        <table class="settle-table">
+          <thead>
+            <tr>
+              <th>결제방법</th>
+              <th>결제금액</th>
+              <th>결제일</th>
+              <th>거래명세서</th>
+              <th>입금증</th>
+              <th>수납확인서</th>
+              <th>신용카드 전표</th>
+            </tr>
+          </thead>
+          <tbody id="settle-body">
+            <!-- JS에서 결제방법(Bank/Card)에 따라 출력하기 버튼 활성/비활성 렌더링 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-footer-end">
+      <button class="btn btn-reset" onclick="closeModal('modal-settlement')">닫기</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- MODAL: 결제하기 (교육비용 결제관리)              -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-payment" onclick="if(event.target===this)closeModal('modal-payment')">
+  <div class="modal-container" style="max-width:520px">
+    <div class="modal-header">
+      <h3>결제하기</h3>
+      <button class="modal-close" onclick="closeModal('modal-payment')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="fee-form-grid">
+        <div class="form-label">교육비</div>
+        <div class="form-value">온라인 교육비</div>
+
+        <div class="form-label">금액</div>
+        <div class="form-value strong">45,000,000 원</div>
+
+        <div class="form-label">회사명</div>
+        <div class="form-value">프라임</div>
+
+        <div class="form-label">사업자번호</div>
+        <div class="form-value">111-11-11111</div>
+
+        <div class="form-label">결제자</div>
+        <div class="form-value"><input type="text" placeholder="결제자 이름"></div>
+
+        <div class="form-label">이메일</div>
+        <div class="form-value"><input type="email" placeholder="email@company.com"></div>
+
+        <div class="form-label">휴대폰</div>
+        <div class="form-value"><input type="text" placeholder="010-0000-0000"></div>
+      </div>
+      <div class="pay-notice">
+        <strong>법인카드 결제를 권장합니다.</strong><br>
+        세금계산서 발행 및 증빙 처리를 위해 법인카드로 결제해 주시기 바랍니다.
+      </div>
+    </div>
+    <div class="modal-footer-end">
+      <button class="btn btn-reset" onclick="closeModal('modal-payment')">취소</button>
+      <button class="btn btn-primary" onclick="alert('신용카드 결제창이 오픈됩니다. (프로토타입에서는 생략)');closeModal('modal-payment');">결제하기</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- MODAL: 노출 필드 설정 (교육비용)                  -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-fee-settings" onclick="if(event.target===this)closeModal('modal-fee-settings')">
+  <div class="modal-container" style="max-width:960px">
+    <div class="modal-header">
+      <h3>노출 필드 설정</h3>
+      <button class="modal-close" onclick="closeModal('modal-fee-settings')">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:12px; color:#666; margin-bottom:14px; line-height:1.6">
+        LIST 노출과 엑셀 다운로드의 항목·순서를 각각 따로 설정할 수 있습니다.
+        (＋)/(−) 버튼으로 필드를 이동하고, 목록 안에서 드래그하여 순서를 조정합니다.
+      </div>
+      <div class="settings-grid">
+        <div class="settings-col">
+          <h4>전체 필드목록<small>선택 가능한 모든 필드</small></h4>
+          <ul class="settings-list">
+            <li class="required">CUSTID (필수)</li>
+            <li>이름</li><li>아이디</li><li>사번</li><li>회사명</li><li>부서</li>
+            <li>직급</li><li>직책</li><li>직종</li><li>직무</li>
+            <li>과정구분</li><li>과정유형</li>
+            <li class="selected">과정명</li>
+            <li>과정코드</li><li>과목명</li><li>과목코드</li>
+            <li>학습기간</li><li>교육비</li><li>학습상태</li><li>수료여부</li>
+          </ul>
+        </div>
+        <div class="settings-move">
+          <button title="추가">＋</button>
+          <button title="제거">−</button>
+        </div>
+        <div class="settings-col">
+          <h4>LIST 노출 필드<small>화면 리스트에 표시</small></h4>
+          <ul class="settings-list">
+            <li>이름</li><li>아이디</li><li>사번</li><li>회사명</li><li>부서</li>
+            <li class="selected">과정명</li>
+            <li>과목명</li><li>학습기간</li><li>교육비</li><li>학습상태</li><li>수료여부</li>
+          </ul>
+        </div>
+        <div class="settings-move">
+          <button title="추가">＋</button>
+          <button title="제거">−</button>
+        </div>
+        <div class="settings-col">
+          <h4>다운로드 필드<small>엑셀 다운로드 포함</small></h4>
+          <ul class="settings-list">
+            <li>CUSTID</li><li>이름</li><li>아이디</li><li>사번</li><li>회사명</li><li>부서</li>
+            <li>직급</li><li>직책</li><li>과정구분</li><li>과정유형</li>
+            <li>과정명</li><li>과정코드</li><li>과목명</li><li>과목코드</li>
+            <li>학습기간</li><li>교육비</li><li>학습상태</li><li>수료여부</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer-end">
+      <button class="btn btn-reset" onclick="closeModal('modal-fee-settings')">취소</button>
+      <button class="btn btn-primary" onclick="alert('등록되었습니다.');closeModal('modal-fee-settings');">등록</button>
+    </div>
+  </div>
+</div>
 
 
 </body>
