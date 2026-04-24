@@ -6643,25 +6643,52 @@ function activateNavItem(item) {
   }
 }
 
+// ────────────────────────────────────────────
+// 페이지 진입 통합 함수
+// 사이드바 클릭, URL 해시 변경, 초기 진입 시 공통 사용
+// ────────────────────────────────────────────
+function navigateToPage(page) {
+  const navItem = document.querySelector(`[data-page="${page}"]`);
+  if (!navItem) return false;
+  activateNavItem(navItem);
+  showPage(page);
+  // 결제 진입 시 리스트뷰로 초기화 (상세뷰 열려있던 경우 대비)
+  if (page === 'payment' && typeof closePaymentDetail === 'function') {
+    closePaymentDetail();
+  }
+  return true;
+}
+
+// 사이드바 클릭 → URL 해시 변경 → hashchange가 navigateToPage 호출
 document.querySelectorAll('.nav-item').forEach(item => {
   item.addEventListener('click', e => {
     e.preventDefault();
-    activateNavItem(item);
     const page = item.dataset.page;
-    if (page) {
-      showPage(page);
-      // 결제관리 진입 시 리스트뷰로 초기화 (상세뷰 열려있던 경우 대비)
-      if (page === 'payment' && typeof closePaymentDetail === 'function') {
-        closePaymentDetail();
-      }
+    if (!page) return;
+    if (location.hash === '#' + page) {
+      // 동일 해시면 hashchange 이벤트가 발생하지 않으므로 직접 호출
+      navigateToPage(page);
+    } else {
+      // 해시 변경하면 hashchange 이벤트 자동 발생
+      location.hash = page;
     }
   });
 });
 
-// 초기 페이지: 개인별 신청현황 (수강신청 그룹 열린 상태)
-const personalNav = document.querySelector('[data-page="personal"]');
-activateNavItem(personalNav);
-showPage('personal');
+// 해시 변경 감지 (URL 직접 입력, 브라우저 앞/뒤 가기, 사이드바 클릭 모두 대응)
+window.addEventListener('hashchange', () => {
+  const page = location.hash.slice(1);
+  if (page && !navigateToPage(page)) {
+    // 잘못된 해시 → 기본 페이지로 폴백
+    navigateToPage('personal');
+  }
+});
+
+// 초기 페이지: URL 해시 우선, 없으면 개인별 신청현황
+const initialPage = location.hash.slice(1) || 'personal';
+if (!navigateToPage(initialPage)) {
+  navigateToPage('personal');
+}
 pUpdateSummary();
 pRenderTable();
 cUpdateSummary();
