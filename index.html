@@ -1201,7 +1201,7 @@
   }
 
   /* ══════════════════════════════════════════ */
-  /* 교육비용 관리 전용 스타일                      */
+  /* 교육비용 현황 전용 스타일                      */
   /* ══════════════════════════════════════════ */
 
   /* 결제 상태 뱃지 */
@@ -1237,9 +1237,112 @@
   .btn-xs:disabled { background: #f5f6fa; color: #bbb; cursor: not-allowed; border-color: #e0e3e8; }
   .btn-xs:disabled:hover { background: #f5f6fa; color: #bbb; border-color: #e0e3e8; }
 
-  /* 예상 교육비용 탭 내부 패널 */
+  /* 교육비용 결제 탭 내부 패널 */
   .fee-panel { display: none; flex-direction: column; gap: 16px; }
   .fee-panel.active { display: flex; }
+
+  /* ── 교육비용 현황: KPI 카드 그리드 ── */
+  .fa-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .fa-kpi-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 18px;
+  }
+  .fa-kpi-label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 8px;
+  }
+  .fa-kpi-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.2;
+  }
+  .fa-kpi-unit {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+    margin-left: 3px;
+  }
+  .fa-kpi-compare {
+    font-size: 11px;
+    margin-top: 8px;
+  }
+
+  /* ── 교육비용 현황: 집계 탭 버튼 ── */
+  .fa-tabs {
+    display: inline-flex;
+    gap: 4px;
+    background: #f5f6fa;
+    padding: 3px;
+    border-radius: 4px;
+  }
+  .fa-tab {
+    padding: 6px 16px;
+    font-size: 13px;
+    font-family: inherit;
+    background: transparent;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.15s;
+  }
+  .fa-tab:hover { color: var(--primary); }
+  .fa-tab.active {
+    background: #fff;
+    color: var(--primary);
+    font-weight: 600;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  /* 집계 테이블 합계 행 강조 (회사별·부서별 공통) */
+  .main-table tbody tr.fa-pivot-total td {
+    background: #f5f6fa !important;
+    border-top: 2px solid #dde1e7;
+  }
+
+  /* 기간 프리셋 버튼 */
+  .fa-presets { display: inline-flex; gap: 4px; align-items: center; }
+  .fa-preset-btn {
+    padding: 4px 10px;
+    font-size: 11px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #444;
+    font-family: inherit;
+    transition: all 0.15s;
+  }
+  .fa-preset-btn:hover {
+    background: #f0f4ff;
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  /* 집계 안내 문구 */
+  .fa-table-note {
+    font-size: 11px;
+    color: #888;
+    margin-top: 6px;
+    padding-left: 2px;
+  }
+  /* 검색 영역 제한 안내 */
+  .fa-search-note {
+    font-size: 11px;
+    color: #888;
+    padding: 8px 0 0 0;
+    margin-top: 8px;
+    border-top: 1px dashed #e5e7ec;
+  }
 
   /* 목록 내 회사명 클릭 링크 (상세로 진입) */
   .fee-company-link {
@@ -1474,8 +1577,8 @@
         <span class="nav-arrow">▶</span>
       </div>
       <div class="nav-sub">
-        <a class="nav-item" data-page="expected" href="#">예상 교육비용</a>
-        <a class="nav-item" data-page="payment" href="#">교육비용 결제관리</a>
+        <a class="nav-item" data-page="analysis" href="#">교육비용 현황</a>
+        <a class="nav-item" data-page="payment" href="#">교육비용 결제</a>
       </div>
     </div>
     <!-- 사외교육 -->
@@ -2502,7 +2605,7 @@
             <thead>
               <tr>
                 <th>No.</th><th>연도</th><th>월</th>
-                <th>온라인</th><th>마이크로러닝</th>
+                <th>온라인</th><th>오프라인</th><th>하이브리드</th><th>마이크로러닝</th>
                 <th>전체 과정 수</th><th>총 교육비</th>
                 <th>전체 학습자 수</th><th>수료자 수</th><th>미수료자 수</th><th>수료율</th>
               </tr>
@@ -2825,7 +2928,7 @@
             <col style="width:5.5%"><col style="width:5.5%"><col style="width:5.5%"><col style="width:5.5%"><col style="width:6.5%"><col style="width:6.5%"> <!-- 개인별 6 -->
             <col style="width:5.5%"><col style="width:5.5%"><col style="width:5.5%"><col style="width:5.5%"><col style="width:6.5%"><col style="width:6.5%"> <!-- 과정별 6 -->
             <col style="width:9%">  <!-- 미수료 -->
-            <col style="width:9%">  <!-- 중복과정 -->
+            <col style="width:9%">  <!-- 동일과정 -->
           </colgroup>
           <thead>
             <tr>
@@ -2833,7 +2936,7 @@
               <th colspan="6">개인별 개수/금액 신청제한</th>
               <th colspan="6">과정별 개수/금액 신청제한</th>
               <th rowspan="2">미수료<br>신청제한</th>
-              <th rowspan="2">중복과정<br>신청제한</th>
+              <th rowspan="2">동일과정<br>신청제한</th>
             </tr>
             <tr>
               <th>월<br>개수</th>
@@ -2867,7 +2970,7 @@
           <button class="tab-btn active" data-tab="personal-course">개수/금액 신청제한</button>
           <button class="tab-btn" data-tab="course-restrict">개인별 과정 신청제한</button>
           <button class="tab-btn" data-tab="fail">미수료 신청제한</button>
-          <button class="tab-btn" data-tab="dup">중복과정 신청제한</button>
+          <button class="tab-btn" data-tab="dup">동일과정 신청제한</button>
         </div>
 
         <div class="tab-desc" id="restrict-tab-desc"></div>
@@ -2971,7 +3074,7 @@
                 <span class="rd-unit">개 미수료시, 신청제한 시작</span>
               </td>
             </tr>
-            <!-- 중복과정 전용 필드 -->
+            <!-- 동일과정 전용 필드 -->
             <tr id="rd-dup-checkrange-row" style="display:none">
               <th>이력 조회기간</th>
               <td>
@@ -2986,16 +3089,14 @@
               </td>
             </tr>
             <tr id="rd-dup-status-row" style="display:none">
-              <th>학습상태</th>
+              <th>수료상태</th>
               <td>
                 <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
                   <label class="rr-chk-label"><input type="checkbox" class="rd-dup-status" value="수료" checked> 수료</label>
                   <label class="rr-chk-label"><input type="checkbox" class="rd-dup-status" value="미수료" checked> 미수료</label>
                   <label class="rr-chk-label"><input type="checkbox" class="rd-dup-status" value="수료확정중" checked> 수료확정중</label>
-                  <label class="rr-chk-label"><input type="checkbox" class="rd-dup-status" value="학습중" checked> 학습중</label>
-                  <label class="rr-chk-label"><input type="checkbox" class="rd-dup-status" value="대기중" checked> 대기중</label>
                 </div>
-                <div style="font-size:11px;color:#888;margin-top:5px">※ 선택하지 않으면 학습상태에 무관하게 동일 과정 전체를 중복으로 간주합니다.</div>
+                <div style="font-size:11px;color:#888;margin-top:5px">※ 선택하지 않으면 수료상태에 무관하게 동일 과정 전체를 중복으로 간주합니다.</div>
               </td>
             </tr>
             <tr id="rd-dup-progress-row" style="display:none">
@@ -3175,7 +3276,7 @@
               </td>
             </tr>
             <!-- 신청제한 개월수 (미수료 탭) -->
-            <!-- 중복과정 전용 필드 -->
+            <!-- 동일과정 전용 필드 -->
             <tr id="rr-dup-checkrange-row" style="display:none">
               <th>이력 조회기간</th>
               <td>
@@ -3190,16 +3291,14 @@
               </td>
             </tr>
             <tr id="rr-dup-status-row" style="display:none">
-              <th>학습상태</th>
+              <th>수료상태</th>
               <td>
                 <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
                   <label class="rr-chk-label"><input type="checkbox" class="rr-dup-status" value="수료" checked> 수료</label>
                   <label class="rr-chk-label"><input type="checkbox" class="rr-dup-status" value="미수료" checked> 미수료</label>
                   <label class="rr-chk-label"><input type="checkbox" class="rr-dup-status" value="수료확정중" checked> 수료확정중</label>
-                  <label class="rr-chk-label"><input type="checkbox" class="rr-dup-status" value="학습중" checked> 학습중</label>
-                  <label class="rr-chk-label"><input type="checkbox" class="rr-dup-status" value="대기중" checked> 대기중</label>
                 </div>
-                <div style="font-size:11px;color:#888;margin-top:5px">※ 선택하지 않으면 학습상태에 무관하게 동일 과정 전체를 중복으로 간주합니다.</div>
+                <div style="font-size:11px;color:#888;margin-top:5px">※ 선택하지 않으면 수료상태에 무관하게 동일 과정 전체를 중복으로 간주합니다.</div>
               </td>
             </tr>
             <tr id="rr-dup-progress-row" style="display:none">
@@ -3301,234 +3400,13 @@
     </div><!-- /page-restrict-register -->
 
     <!-- ══════════════════════════════════════════ -->
-    <!-- PAGE: 예상 교육비용                            -->
-    <!-- ══════════════════════════════════════════ -->
-    <div class="page-section" id="page-expected">
-
-      <div class="page-header-row">
-        <div class="page-header-title">예상 교육비용</div>
-        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">교육비용</a> &gt; 예상 교육비용</div>
-      </div>
-
-
-      <!-- 검색 폼 -->
-      <div class="card">
-        <div class="search-row">
-          <div class="label">학습시작일</div>
-          <div class="radio-group">
-            <label class="radio-label"><input type="radio" name="fc-period-mode" value="month" checked onchange="toggleFcPeriodMode()"> 월 선택</label>
-            <label class="radio-label"><input type="radio" name="fc-period-mode" value="range" onchange="toggleFcPeriodMode()"> 기간검색</label>
-          </div>
-          <!-- 월 선택 모드 -->
-          <span id="fc-period-month" style="display:inline-flex;gap:6px;align-items:center">
-            <select class="select" style="min-width:90px">
-              <option>2026년</option><option>2025년</option>
-            </select>
-            <select class="select" style="min-width:80px">
-              <option>4월</option><option>3월</option><option>2월</option><option>1월</option>
-            </select>
-          </span>
-          <!-- 기간검색 모드 -->
-          <span id="fc-period-range" style="display:none;gap:6px;align-items:center">
-            <div class="date-wrap">
-              <input type="text" class="input-date" id="fc-date-from" value="2026-01-01" readonly>
-              <span class="cal-icon">📅</span>
-            </div>
-            <span class="date-sep">~</span>
-            <div class="date-wrap">
-              <input type="text" class="input-date" id="fc-date-to" value="2026-04-30" readonly>
-              <span class="cal-icon">📅</span>
-            </div>
-          </span>
-        </div>
-        <div class="search-row">
-          <div class="label">회사검색</div>
-          <label class="checkbox-row"><input type="checkbox" id="fc-chk-company"> 선택한 회사만 검색</label>
-          <div class="multi-select-wrap" id="fc-company-wrap">
-            <div class="multi-tags-box" id="fc-company-box">
-              <span class="multi-placeholder" id="fc-company-placeholder">회사선택</span>
-            </div>
-            <div class="multi-dropdown" id="fc-company-dropdown">
-              <div class="multi-option" data-value="휴넷">휴넷</div>
-              <div class="multi-option" data-value="프라임">프라임</div>
-              <div class="multi-option" data-value="A기업">A기업</div>
-              <div class="multi-option" data-value="B기업명">B기업명</div>
-              <div class="multi-option" data-value="C기업명">C기업명</div>
-            </div>
-          </div>
-          <div class="search-actions">
-            <button class="btn btn-primary">검색</button>
-            <button class="btn btn-reset">초기화</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- 검색결과 요약 -->
-      <div class="card">
-        <div class="card-title">검색결과 요약</div>
-        <table class="summary-table">
-          <thead>
-            <tr>
-              <th>전체 회사 수</th>
-              <th>전체 과정 수</th>
-              <th>전체 학습자 수</th>
-              <th>수료자 수</th>
-              <th>예상 청구액</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>6개사</td>
-              <td>42개</td>
-              <td>1,284명</td>
-              <td>921명</td>
-              <td><strong>134,520,000원</strong></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 리스트 -->
-      <div class="card">
-        <div class="result-header">
-          <div class="result-count">검색결과 <strong>6</strong>개 기업</div>
-          <div class="result-right">
-            <button class="btn-excel">엑셀 다운로드</button>
-          </div>
-        </div>
-        <table class="main-table">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>회사명</th>
-              <th>전체 학습자 수</th>
-              <th>전체 과정 수</th>
-              <th>온라인</th>
-              <th>오프라인</th>
-              <th>하이브리드</th>
-              <th>마이크로러닝</th>
-              <th>수료자 수</th>
-              <th>예상 청구액</th>
-              <th>전월 대비</th>
-              <th>상세</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td class="fee-left"><strong>휴넷</strong></td>
-              <td class="fee-num">280</td>
-              <td class="fee-num">10</td>
-              <td class="fee-num">6</td>
-              <td class="fee-num">2</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">218</td>
-              <td class="fee-num"><strong>45,000,000</strong></td>
-              <td class="fee-num" style="color:#e53935">▲ 5.2%</td>
-              <td><button class="btn-xs" onclick="goToPaymentWithCompany('휴넷')">결제관리</button></td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td class="fee-left"><strong>프라임</strong></td>
-              <td class="fee-num">160</td>
-              <td class="fee-num">7</td>
-              <td class="fee-num">4</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">120</td>
-              <td class="fee-num"><strong>32,000,000</strong></td>
-              <td class="fee-num" style="color:#e53935">▲ 3.1%</td>
-              <td><button class="btn-xs" onclick="goToPaymentWithCompany('프라임')">결제관리</button></td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td class="fee-left"><strong>B기업명</strong></td>
-              <td class="fee-num">310</td>
-              <td class="fee-num">9</td>
-              <td class="fee-num">5</td>
-              <td class="fee-num">2</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">245</td>
-              <td class="fee-num"><strong>28,500,000</strong></td>
-              <td class="fee-num" style="color:var(--primary)">▼ 1.4%</td>
-              <td><button class="btn-xs" onclick="goToPaymentWithCompany('B기업명')">결제관리</button></td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td class="fee-left"><strong>A기업</strong></td>
-              <td class="fee-num">220</td>
-              <td class="fee-num">8</td>
-              <td class="fee-num">4</td>
-              <td class="fee-num">2</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">156</td>
-              <td class="fee-num"><strong>15,200,000</strong></td>
-              <td class="fee-num" style="color:#e53935">▲ 8.7%</td>
-              <td><button class="btn-xs" onclick="goToPaymentWithCompany('A기업')">결제관리</button></td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td class="fee-left"><strong>C기업명</strong></td>
-              <td class="fee-num">180</td>
-              <td class="fee-num">6</td>
-              <td class="fee-num">3</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">130</td>
-              <td class="fee-num"><strong>10,320,000</strong></td>
-              <td class="fee-num" style="color:#888">― 0.2%</td>
-              <td><button class="btn-xs" onclick="goToPaymentWithCompany('C기업명')">결제관리</button></td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td class="fee-left"><strong>기타</strong> <span class="fee-note">(미분류 2사)</span></td>
-              <td class="fee-num">134</td>
-              <td class="fee-num">2</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">1</td>
-              <td class="fee-num">0</td>
-              <td class="fee-num">0</td>
-              <td class="fee-num">72</td>
-              <td class="fee-num"><strong>3,500,000</strong></td>
-              <td class="fee-num" style="color:#888">―</td>
-              <td class="fee-dim">-</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="table-footer">
-          <div class="page-size-wrap">
-            <select class="select">
-              <option value="30">30개씩 보기</option>
-              <option value="50" selected>50개씩 보기</option>
-              <option value="100">100개씩 보기</option>
-              <option value="200">200개씩 보기</option>
-            </select>
-          </div>
-          <div class="pagination">
-            <button class="pg-btn" disabled>&laquo;</button>
-            <button class="pg-btn" disabled>&lsaquo;</button>
-            <button class="pg-btn active">1</button>
-            <button class="pg-btn" disabled>&rsaquo;</button>
-            <button class="pg-btn" disabled>&raquo;</button>
-          </div>
-        </div>
-      </div>
-    </div><!-- /page-expected -->
-
-
-    <!-- ══════════════════════════════════════════ -->
-    <!-- PAGE: 교육비용 결제관리                        -->
+    <!-- PAGE: 교육비용 결제                        -->
     <!-- ══════════════════════════════════════════ -->
     <div class="page-section" id="page-payment">
 
       <div class="page-header-row">
-        <div class="page-header-title">교육비용 결제관리</div>
-        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">교육비용</a> &gt; 교육비용 결제관리</div>
+        <div class="page-header-title">교육비용 결제</div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">교육비용</a> &gt; 교육비용 결제</div>
       </div>
 
       <!-- LIST VIEW -->
@@ -3539,43 +3417,46 @@
           <div class="search-row">
             <div class="label">학습시작일</div>
             <div class="radio-group">
-              <label class="radio-label"><input type="radio" name="fp-period-mode" value="month" checked onchange="toggleFpPeriodMode()"> 월 선택</label>
-              <label class="radio-label"><input type="radio" name="fp-period-mode" value="range" onchange="toggleFpPeriodMode()"> 기간검색</label>
+              <label class="radio-label"><input type="radio" name="fp-period-mode" value="month" checked onchange="toggleFpPeriodMode()"> 월 단위</label>
+              <label class="radio-label"><input type="radio" name="fp-period-mode" value="range" onchange="toggleFpPeriodMode()"> 월 범위</label>
             </div>
-            <!-- 월 선택 모드 -->
+            <!-- 월 단위 모드 -->
             <span id="fp-period-month" style="display:inline-flex;gap:6px;align-items:center">
               <select class="select" style="min-width:90px">
                 <option>2026년</option><option>2025년</option>
               </select>
               <select class="select" style="min-width:80px">
-                <option>전체</option><option>4월</option><option>3월</option><option>2월</option><option>1월</option>
+                <option>4월</option><option>3월</option><option>2월</option><option>1월</option>
               </select>
             </span>
-            <!-- 기간검색 모드 -->
+            <!-- 월 범위 모드 -->
             <span id="fp-period-range" style="display:none;gap:6px;align-items:center">
-              <div class="date-wrap">
-                <input type="text" class="input-date" id="fp-date-from" value="2026-01-01" readonly>
-                <span class="cal-icon">📅</span>
-              </div>
+              <select class="select" style="min-width:90px">
+                <option>2026년</option><option>2025년</option>
+              </select>
+              <select class="select" style="min-width:80px">
+                <option>1월</option><option>2월</option><option>3월</option><option>4월</option>
+              </select>
               <span class="date-sep">~</span>
-              <div class="date-wrap">
-                <input type="text" class="input-date" id="fp-date-to" value="2026-04-30" readonly>
-                <span class="cal-icon">📅</span>
-              </div>
+              <select class="select" style="min-width:90px">
+                <option>2026년</option><option>2025년</option>
+              </select>
+              <select class="select" style="min-width:80px">
+                <option>4월</option><option>3월</option><option>2월</option><option>1월</option>
+              </select>
             </span>
           </div>
           <div class="search-row">
-            <div class="label">결제</div>
-            <span class="label-auto">결제방법</span>
-            <select class="select" style="min-width:110px">
+            <div class="label">결제 정보</div>
+            <select class="select" style="min-width:140px">
+              <option value="" disabled selected>결제방법</option>
               <option value="">전체</option>
               <option value="Bank">일괄납입</option>
               <option value="Card">신용카드</option>
               <option value="Prepaid">선수금 차감</option>
             </select>
-            <span class="row-divider"></span>
-            <span class="label-auto">결제상태</span>
-            <select class="select" style="min-width:110px">
+            <select class="select" style="min-width:140px">
+              <option value="" disabled selected>결제상태</option>
               <option value="">전체</option>
               <option value="done">입금완료</option>
               <option value="wait">입금대기</option>
@@ -3604,12 +3485,37 @@
           </div>
         </div>
 
+        <!-- 검색결과 요약 카드 -->
+        <div class="card">
+          <div class="card-title">검색결과 요약</div>
+          <table class="summary-table">
+            <thead>
+              <tr>
+                <th>전체 회사 수</th>
+                <th>전체 결제 건 수</th>
+                <th>전체 과정 수</th>
+                <th>전체 학습자 수</th>
+                <th>총 교육비</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>5개사</td>
+                <td>7건</td>
+                <td>37개</td>
+                <td>954명</td>
+                <td><strong>116,931,000원</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <!-- 리스트 -->
         <div class="card">
           <div class="result-header">
             <div class="result-count">검색결과 <strong>32</strong>건</div>
             <div class="result-right">
-              <button class="btn-excel">엑셀 다운로드</button>
+              <button class="btn-excel" onclick="openExcelModal()">엑셀 다운로드</button>
             </div>
           </div>
           <table class="main-table">
@@ -3629,9 +3535,9 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr data-month="2026.04">
                 <td>32</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail()">휴넷</span></td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('휴넷', '2026.04')">휴넷</span></td>
                 <td class="fee-mono">2026.04</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">2</td>
@@ -3642,9 +3548,9 @@
                 <td><button class="btn-xs" disabled>결제하기</button></td>
                 <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
               </tr>
-              <tr>
+              <tr data-month="2026.04">
                 <td>31</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail()">프라임</span></td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('프라임', '2026.04')">프라임</span></td>
                 <td class="fee-mono">2026.04</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">7</td>
@@ -3655,9 +3561,9 @@
                 <td><button class="btn-xs" onclick="openModal('modal-payment')">결제하기</button></td>
                 <td><button class="btn-xs" onclick="openSettlementModal('Pending')">서류보기</button></td>
               </tr>
-              <tr>
+              <tr data-month="2026.03">
                 <td>30</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail()">B기업명</span></td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('B기업명', '2026.03')">B기업명</span></td>
                 <td class="fee-mono">2026.03</td>
                 <td>기타(통합)</td>
                 <td class="fee-num">9</td>
@@ -3668,9 +3574,9 @@
                 <td><button class="btn-xs" disabled>결제하기</button></td>
                 <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
               </tr>
-              <tr>
+              <tr data-month="2026.03">
                 <td>29</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail()">C기업명</span></td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('C기업명', '2026.03')">C기업명</span></td>
                 <td class="fee-mono">2026.03</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">6</td>
@@ -3681,9 +3587,9 @@
                 <td><button class="btn-xs" disabled>결제하기</button></td>
                 <td><button class="btn-xs" onclick="openSettlementModal('Card')">서류보기</button></td>
               </tr>
-              <tr>
+              <tr data-month="2026.02">
                 <td>28</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail()">D기업명</span></td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('D기업명', '2026.02')">D기업명</span></td>
                 <td class="fee-mono">2026.02</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">4</td>
@@ -3693,6 +3599,32 @@
                 <td><span class="fee-status fee-status-cancel">입금취소</span></td>
                 <td><button class="btn-xs" disabled>결제하기</button></td>
                 <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
+              </tr>
+              <tr data-month="2026.03">
+                <td>27</td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('휴넷', '2026.03')">휴넷</span></td>
+                <td class="fee-mono">2026.03</td>
+                <td>고객사 교육비</td>
+                <td class="fee-num">5</td>
+                <td class="fee-num">120</td>
+                <td class="fee-num">38,000,000</td>
+                <td>일괄납입</td>
+                <td><span class="fee-status fee-status-done">입금완료</span></td>
+                <td><button class="btn-xs" disabled>결제하기</button></td>
+                <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
+              </tr>
+              <tr data-month="2026.03">
+                <td>26</td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('프라임', '2026.03')">프라임</span></td>
+                <td class="fee-mono">2026.03</td>
+                <td>고객사 교육비</td>
+                <td class="fee-num">4</td>
+                <td class="fee-num">85</td>
+                <td class="fee-num">22,500,000</td>
+                <td>신용카드</td>
+                <td><span class="fee-status fee-status-done">입금완료</span></td>
+                <td><button class="btn-xs" disabled>결제하기</button></td>
+                <td><button class="btn-xs" onclick="openSettlementModal('Card')">서류보기</button></td>
               </tr>
             </tbody>
           </table>
@@ -3741,20 +3673,22 @@
                 <th>총 교육비</th>
                 <th>결제방법</th>
                 <th>결제상태</th>
+                <th>카드결제</th>
                 <th>결제 증빙서류</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>휴넷</td>
-                <td>2026.04</td>
-                <td>고객사 교육비</td>
-                <td>12</td>
-                <td>32</td>
-                <td><strong>6,329,000원</strong></td>
-                <td>일괄납입</td>
-                <td><span class="fee-status fee-status-done">입금완료</span></td>
-                <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
+                <td id="fpd-company">휴넷</td>
+                <td id="fpd-period">2026.04</td>
+                <td id="fpd-settlement">고객사 교육비</td>
+                <td id="fpd-courses">12</td>
+                <td id="fpd-learners">32</td>
+                <td><strong id="fpd-amount">6,329,000원</strong></td>
+                <td id="fpd-method">일괄납입</td>
+                <td id="fpd-status"><span class="fee-status fee-status-done">입금완료</span></td>
+                <td id="fpd-pay-btn"><button class="btn-xs" disabled>결제하기</button></td>
+                <td id="fpd-docs-btn"><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
               </tr>
             </tbody>
           </table>
@@ -3776,10 +3710,17 @@
                     <option value="code">과정코드</option>
                   </select>
                   <input type="text" class="input" placeholder="검색어를 입력해주세요." style="min-width:280px">
+                  <select class="select" style="min-width:100px">
+                    <option value="">과정유형</option>
+                    <option value="온라인">온라인</option>
+                    <option value="오프라인">오프라인</option>
+                    <option value="하이브리드">하이브리드</option>
+                    <option value="마이크로러닝">마이크로러닝</option>
+                  </select>
                 </div>
               </div>
             </div>
-            <!-- 학습자/회사/부서 검색 -->
+            <!-- 학습자/부서 검색 -->
             <div class="search-form-row" style="gap:28px">
               <div class="field-group">
                 <div class="field-label">학습자검색</div>
@@ -3790,24 +3731,17 @@
                     <option value="empno">사번</option>
                   </select>
                   <input type="text" class="input" placeholder="검색어를 입력해주세요." style="min-width:200px">
-                </div>
-              </div>
-              <div class="field-group">
-                <div class="field-label">회사검색</div>
-                <div style="display:flex;gap:10px;align-items:center">
-                  <label class="checkbox-row"><input type="checkbox" id="fpd-chk-company"> 선택한 회사만 검색</label>
-                  <div class="multi-select-wrap" id="fpd-company-wrap">
-                    <div class="multi-tags-box" id="fpd-company-box">
-                      <span class="multi-placeholder" id="fpd-company-placeholder">회사선택</span>
-                    </div>
-                    <div class="multi-dropdown" id="fpd-company-dropdown">
-                      <div class="multi-option" data-value="휴넷">휴넷</div>
-                      <div class="multi-option" data-value="프라임">프라임</div>
-                      <div class="multi-option" data-value="A기업">A기업</div>
-                      <div class="multi-option" data-value="B기업명">B기업명</div>
-                      <div class="multi-option" data-value="C기업명">C기업명</div>
-                    </div>
-                  </div>
+                  <select class="select" style="min-width:100px">
+                    <option value="">학습상태</option>
+                    <option value="pending">예정</option>
+                    <option value="doing">학습중</option>
+                    <option value="done">종료</option>
+                  </select>
+                  <select class="select" style="min-width:100px">
+                    <option value="">수료여부</option>
+                    <option value="pass">수료</option>
+                    <option value="fail">미수료</option>
+                  </select>
                 </div>
               </div>
               <div class="field-group">
@@ -3823,9 +3757,9 @@
 
           <!-- 리스트 -->
           <div class="result-header">
-            <div class="result-count">검색결과 <strong>32</strong>건</div>
+            <div class="result-count">검색결과 <strong id="fpd-count">32</strong>건</div>
             <div class="result-right">
-              <button class="btn-excel">엑셀 다운로드</button>
+              <button class="btn-excel" onclick="openExcelModal()">엑셀 다운로드</button>
             </div>
           </div>
           <table class="main-table">
@@ -3837,72 +3771,84 @@
                 <th>사번</th>
                 <th>회사명</th>
                 <th>부서명</th>
+                <th>과정유형</th>
                 <th>과정명</th>
                 <th>학습자 학습기간</th>
-                <th>교육비</th>
+                <th>학습상태</th>
                 <th>수료여부</th>
+                <th>교육비</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>1</td>
                 <td>홍길동</td>
-                <td class="fee-mono">sample-hong</td>
+                <td class="fee-mono">h*****@hunet.co.kr</td>
                 <td class="fee-mono">12356</td>
                 <td>휴넷</td>
                 <td>기획팀</td>
+                <td>온라인</td>
                 <td class="fee-left">초급자 Prep 과정 (1:1 멘토 집중관리)_필리핀 영어</td>
                 <td class="fee-mono">2026.04.01 ~ 2026.04.30</td>
+                <td>학습중</td>
+                <td class="fee-dim">-</td>
                 <td class="fee-num">35,000</td>
-                <td>수료</td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>김민수</td>
-                <td class="fee-mono">sample-kim</td>
+                <td class="fee-mono">k****@hunet.co.kr</td>
                 <td class="fee-mono">12357</td>
                 <td>휴넷</td>
                 <td>개발팀</td>
+                <td>온라인</td>
                 <td class="fee-left">New 회사가 원하는 신입사원_태도 편</td>
                 <td class="fee-mono">2026.04.01 ~ 2026.04.30</td>
+                <td>학습중</td>
+                <td class="fee-dim">-</td>
                 <td class="fee-num">70,000</td>
-                <td>수료</td>
               </tr>
               <tr>
                 <td>3</td>
                 <td>이수진</td>
-                <td class="fee-mono">sample-lee</td>
+                <td class="fee-mono">l****@hunet.co.kr</td>
                 <td class="fee-mono">12358</td>
                 <td>휴넷</td>
                 <td>인사팀</td>
+                <td>하이브리드</td>
                 <td class="fee-left">실무자를 위한 데이터 리터러시</td>
                 <td class="fee-mono">2026.04.01 ~ 2026.05.31</td>
+                <td>학습중</td>
+                <td class="fee-dim">-</td>
                 <td class="fee-num">95,000</td>
-                <td>수료</td>
               </tr>
               <tr>
                 <td>4</td>
                 <td>박정호</td>
-                <td class="fee-mono">sample-park</td>
+                <td class="fee-mono">p*****@hunet.co.kr</td>
                 <td class="fee-mono">12359</td>
                 <td>휴넷</td>
                 <td>재무팀</td>
+                <td>마이크로러닝</td>
                 <td class="fee-left">HR 담당자를 위한 노동법 기초</td>
                 <td class="fee-mono">2026.04.10 ~ 2026.05.09</td>
+                <td>학습중</td>
+                <td class="fee-dim">-</td>
                 <td class="fee-num">85,000</td>
-                <td>미수료</td>
               </tr>
               <tr>
                 <td>5</td>
                 <td>최영희</td>
-                <td class="fee-mono">sample-choi</td>
+                <td class="fee-mono">c*****@hunet.co.kr</td>
                 <td class="fee-mono">12360</td>
                 <td>휴넷</td>
                 <td>영업팀</td>
+                <td>오프라인</td>
                 <td class="fee-left">영업관리자 리더십 워크숍</td>
                 <td class="fee-mono">2026.03.15 ~ 2026.04.14</td>
-                <td class="fee-num">120,000</td>
+                <td>종료</td>
                 <td>수료</td>
+                <td class="fee-num">120,000</td>
               </tr>
             </tbody>
           </table>
@@ -3929,6 +3875,512 @@
       </div>
 
     </div><!-- /page-payment -->
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 교육비용 현황                        -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-analysis">
+
+      <div class="page-header-row">
+        <div class="page-header-title">교육비용 현황</div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">교육비용</a> &gt; 교육비용 현황</div>
+      </div>
+
+      <!-- 검색 폼 -->
+      <div class="card">
+        <!-- 집계 단위 -->
+        <div class="search-row">
+          <div class="label">집계 단위</div>
+          <div class="radio-group">
+            <label class="radio-label"><input type="radio" name="fa-unit" value="month" checked onchange="changeFaUnit()"> 월별</label>
+            <label class="radio-label"><input type="radio" name="fa-unit" value="quarter" onchange="changeFaUnit()"> 분기별</label>
+            <label class="radio-label"><input type="radio" name="fa-unit" value="year" onchange="changeFaUnit()"> 연도별</label>
+          </div>
+        </div>
+        <!-- 학습시작일 + 프리셋 -->
+        <div class="search-row">
+          <div class="label">학습시작일</div>
+          <!-- 월별·분기별: 년/월 ~ 년/월 -->
+          <span id="fa-period-monthly" style="display:inline-flex;gap:6px;align-items:center">
+            <select class="select" id="fa-m-from-y" style="min-width:90px">
+              <option selected>2026년</option><option>2025년</option><option>2024년</option>
+            </select>
+            <select class="select" id="fa-m-from-m" style="min-width:80px">
+              <option selected>1월</option>
+              <option>2월</option>
+              <option>3월</option>
+              <option>4월</option>
+              <option>5월</option>
+              <option>6월</option>
+              <option>7월</option>
+              <option>8월</option>
+              <option>9월</option>
+              <option>10월</option>
+              <option>11월</option>
+              <option>12월</option>
+            </select>
+            <span class="date-sep">~</span>
+            <select class="select" id="fa-m-to-y" style="min-width:90px">
+              <option selected>2026년</option><option>2025년</option><option>2024년</option>
+            </select>
+            <select class="select" id="fa-m-to-m" style="min-width:80px">
+              <option>1월</option>
+              <option>2월</option>
+              <option>3월</option>
+              <option>4월</option>
+              <option>5월</option>
+              <option>6월</option>
+              <option>7월</option>
+              <option>8월</option>
+              <option>9월</option>
+              <option>10월</option>
+              <option>11월</option>
+              <option selected>12월</option>
+            </select>
+          </span>
+          <!-- 연도별: 년 ~ 년 -->
+          <span id="fa-period-yearly" style="display:none;gap:6px;align-items:center">
+            <select class="select" id="fa-y-from" style="min-width:90px">
+              <option>2022년</option><option>2023년</option><option selected>2024년</option><option>2025년</option><option>2026년</option>
+            </select>
+            <span class="date-sep">~</span>
+            <select class="select" id="fa-y-to" style="min-width:90px">
+              <option>2022년</option><option>2023년</option><option>2024년</option><option>2025년</option><option selected>2026년</option>
+            </select>
+          </span>
+          <!-- 프리셋 버튼 (단위별) -->
+          <div class="fa-presets" id="fa-presets-month-quarter">
+            <button type="button" class="fa-preset-btn" onclick="setFaPeriod('lastYear')">전년도</button>
+            <button type="button" class="fa-preset-btn" onclick="setFaPeriod('last12m')">최근 12개월</button>
+          </div>
+          <div class="fa-presets" id="fa-presets-year" style="display:none">
+            <button type="button" class="fa-preset-btn" onclick="setFaPeriod('last3y')">최근 3년</button>
+            <button type="button" class="fa-preset-btn" onclick="setFaPeriod('last5y')">최근 5년</button>
+          </div>
+          <div class="search-actions">
+            <button class="btn btn-primary">검색</button>
+            <button class="btn btn-reset">초기화</button>
+          </div>
+        </div>
+        <div class="fa-search-note" id="fa-search-note-mq">ℹ️ 월별·분기별 집계는 최대 12개월 범위까지 조회할 수 있습니다.</div>
+        <div class="fa-search-note" id="fa-search-note-y" style="display:none">ℹ️ 연도별 집계는 연도 범위로 조회합니다.</div>
+      </div>
+
+      <!-- KPI 카드 4개 -->
+      <div class="fa-kpi-grid">
+        <div class="fa-kpi-card">
+          <div class="fa-kpi-label">총 교육비</div>
+          <div class="fa-kpi-value">167,231,000<span class="fa-kpi-unit">원</span></div>
+          <div class="fa-kpi-compare" style="color:#e53935">▲ 전년 대비 12.8%</div>
+        </div>
+        <div class="fa-kpi-card">
+          <div class="fa-kpi-label">총 과정 수</div>
+          <div class="fa-kpi-value">55<span class="fa-kpi-unit">개</span></div>
+          <div class="fa-kpi-compare" style="color:#e53935">▲ 전년 대비 7개</div>
+        </div>
+        <div class="fa-kpi-card">
+          <div class="fa-kpi-label">총 학습자 수</div>
+          <div class="fa-kpi-value">1,404<span class="fa-kpi-unit">명</span></div>
+          <div class="fa-kpi-compare" style="color:#e53935">▲ 전년 대비 185명</div>
+        </div>
+        <div class="fa-kpi-card">
+          <div class="fa-kpi-label">1인당 평균 교육비</div>
+          <div class="fa-kpi-value">119,110<span class="fa-kpi-unit">원</span></div>
+          <div class="fa-kpi-compare" style="color:var(--primary)">▼ 전년 대비 3,450원</div>
+        </div>
+      </div>
+
+      <!-- 교육비 집계 -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px">
+          <div class="card-title" style="margin-bottom:0">교육비 집계</div>
+          <div class="fa-tabs">
+            <button class="fa-tab active" data-fa-tab="company" onclick="switchFaTab('company')">회사별 집계</button>
+            <button class="fa-tab" data-fa-tab="dept" onclick="switchFaTab('dept')">부서별 집계</button>
+          </div>
+        </div>
+        <div class="result-header">
+          <div class="result-count">검색결과 <strong id="fa-count">5</strong>건</div>
+          <div class="result-right">
+            <button class="btn-excel" onclick="openExcelModal()">엑셀 다운로드</button>
+          </div>
+        </div>
+
+        <!-- ─ 회사별 × 월별 (기본 노출) ─ -->
+        <table class="main-table fa-pivot-tbl" id="fa-pivot-company-month">
+          <thead>
+            <tr>
+              <th>회사</th>
+              <th>2026.01</th>
+              <th>2026.02</th>
+              <th>2026.03</th>
+              <th>2026.04</th>
+              <th>합계</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fee-left"><strong>프라임</strong></td>
+              <td class="fee-num">18,000,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num">22,500,000</td>
+              <td class="fee-num">45,000,000</td>
+              <td class="fee-num"><strong>85,500,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>휴넷</strong></td>
+              <td class="fee-num">25,000,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num">38,000,000</td>
+              <td class="fee-num">12,000</td>
+              <td class="fee-num"><strong>63,012,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>B기업명</strong></td>
+              <td class="fee-num">5,200,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num">6,329,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>11,529,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>C기업명</strong></td>
+              <td class="fee-num">2,100,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num">3,840,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>5,940,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>D기업명</strong></td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num">1,250,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>1,250,000</strong></td>
+            </tr>
+            <tr class="fa-pivot-total">
+              <td class="fee-left"><strong>합계</strong></td>
+              <td class="fee-num"><strong>50,300,000</strong></td>
+              <td class="fee-num"><strong>1,250,000</strong></td>
+              <td class="fee-num"><strong>70,669,000</strong></td>
+              <td class="fee-num"><strong>45,012,000</strong></td>
+              <td class="fee-num"><strong>167,231,000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ─ 회사별 × 분기별 ─ -->
+        <table class="main-table fa-pivot-tbl" id="fa-pivot-company-quarter" style="display:none">
+          <thead>
+            <tr>
+              <th>회사</th>
+              <th>2026 Q1</th>
+              <th>2026 Q2</th>
+              <th>2026 Q3</th>
+              <th>2026 Q4</th>
+              <th>합계</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fee-left"><strong>프라임</strong></td>
+              <td class="fee-num">40,500,000</td>
+              <td class="fee-num">45,000,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>85,500,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>휴넷</strong></td>
+              <td class="fee-num">63,000,000</td>
+              <td class="fee-num">12,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>63,012,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>B기업명</strong></td>
+              <td class="fee-num">11,529,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>11,529,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>C기업명</strong></td>
+              <td class="fee-num">5,940,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>5,940,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>D기업명</strong></td>
+              <td class="fee-num">1,250,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>1,250,000</strong></td>
+            </tr>
+            <tr class="fa-pivot-total">
+              <td class="fee-left"><strong>합계</strong></td>
+              <td class="fee-num"><strong>122,219,000</strong></td>
+              <td class="fee-num"><strong>45,012,000</strong></td>
+              <td class="fee-num"><strong>-</strong></td>
+              <td class="fee-num"><strong>-</strong></td>
+              <td class="fee-num"><strong>167,231,000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ─ 회사별 × 연도별 ─ -->
+        <table class="main-table fa-pivot-tbl" id="fa-pivot-company-year" style="display:none">
+          <thead>
+            <tr>
+              <th>회사</th>
+              <th>2024</th>
+              <th>2025</th>
+              <th>2026</th>
+              <th>합계</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fee-left"><strong>프라임</strong></td>
+              <td class="fee-num">70,000,000</td>
+              <td class="fee-num">77,500,000</td>
+              <td class="fee-num">85,500,000</td>
+              <td class="fee-num"><strong>233,000,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>휴넷</strong></td>
+              <td class="fee-num">52,000,000</td>
+              <td class="fee-num">58,500,000</td>
+              <td class="fee-num">63,012,000</td>
+              <td class="fee-num"><strong>173,512,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>B기업명</strong></td>
+              <td class="fee-num">8,500,000</td>
+              <td class="fee-num">9,800,000</td>
+              <td class="fee-num">11,529,000</td>
+              <td class="fee-num"><strong>29,829,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>C기업명</strong></td>
+              <td class="fee-num">5,000,000</td>
+              <td class="fee-num">5,500,000</td>
+              <td class="fee-num">5,940,000</td>
+              <td class="fee-num"><strong>16,440,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>D기업명</strong></td>
+              <td class="fee-num">1,500,000</td>
+              <td class="fee-num">1,350,000</td>
+              <td class="fee-num">1,250,000</td>
+              <td class="fee-num"><strong>4,100,000</strong></td>
+            </tr>
+            <tr class="fa-pivot-total">
+              <td class="fee-left"><strong>합계</strong></td>
+              <td class="fee-num"><strong>137,000,000</strong></td>
+              <td class="fee-num"><strong>152,650,000</strong></td>
+              <td class="fee-num"><strong>167,231,000</strong></td>
+              <td class="fee-num"><strong>456,881,000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ─ 부서별 × 월별 ─ -->
+        <table class="main-table fa-pivot-tbl" id="fa-pivot-dept-month" style="display:none">
+          <thead>
+            <tr>
+              <th>부서</th>
+              <th>2026.01</th>
+              <th>2026.02</th>
+              <th>2026.03</th>
+              <th>2026.04</th>
+              <th>합계</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fee-left"><strong>개발팀</strong></td>
+              <td class="fee-num">12,000,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num">22,000,000</td>
+              <td class="fee-num">14,000,000</td>
+              <td class="fee-num"><strong>48,000,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>기획팀</strong></td>
+              <td class="fee-num">15,000,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num">18,500,000</td>
+              <td class="fee-num">11,000,000</td>
+              <td class="fee-num"><strong>44,500,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>재무팀</strong></td>
+              <td class="fee-num">7,500,000</td>
+              <td class="fee-num">450,000</td>
+              <td class="fee-num">12,000,000</td>
+              <td class="fee-num">8,500,000</td>
+              <td class="fee-num"><strong>28,450,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>인사팀</strong></td>
+              <td class="fee-num">8,500,000</td>
+              <td class="fee-num">800,000</td>
+              <td class="fee-num">9,500,000</td>
+              <td class="fee-num">7,000,000</td>
+              <td class="fee-num"><strong>25,800,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>영업팀</strong></td>
+              <td class="fee-num">7,300,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num">8,669,000</td>
+              <td class="fee-num">4,512,000</td>
+              <td class="fee-num"><strong>20,481,000</strong></td>
+            </tr>
+            <tr class="fa-pivot-total">
+              <td class="fee-left"><strong>합계</strong></td>
+              <td class="fee-num"><strong>50,300,000</strong></td>
+              <td class="fee-num"><strong>1,250,000</strong></td>
+              <td class="fee-num"><strong>70,669,000</strong></td>
+              <td class="fee-num"><strong>45,012,000</strong></td>
+              <td class="fee-num"><strong>167,231,000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ─ 부서별 × 분기별 ─ -->
+        <table class="main-table fa-pivot-tbl" id="fa-pivot-dept-quarter" style="display:none">
+          <thead>
+            <tr>
+              <th>부서</th>
+              <th>2026 Q1</th>
+              <th>2026 Q2</th>
+              <th>2026 Q3</th>
+              <th>2026 Q4</th>
+              <th>합계</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fee-left"><strong>개발팀</strong></td>
+              <td class="fee-num">34,000,000</td>
+              <td class="fee-num">14,000,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>48,000,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>기획팀</strong></td>
+              <td class="fee-num">33,500,000</td>
+              <td class="fee-num">11,000,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>44,500,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>재무팀</strong></td>
+              <td class="fee-num">19,950,000</td>
+              <td class="fee-num">8,500,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>28,450,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>인사팀</strong></td>
+              <td class="fee-num">18,800,000</td>
+              <td class="fee-num">7,000,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>25,800,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>영업팀</strong></td>
+              <td class="fee-num">15,969,000</td>
+              <td class="fee-num">4,512,000</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-dim">-</td>
+              <td class="fee-num"><strong>20,481,000</strong></td>
+            </tr>
+            <tr class="fa-pivot-total">
+              <td class="fee-left"><strong>합계</strong></td>
+              <td class="fee-num"><strong>122,219,000</strong></td>
+              <td class="fee-num"><strong>45,012,000</strong></td>
+              <td class="fee-num"><strong>-</strong></td>
+              <td class="fee-num"><strong>-</strong></td>
+              <td class="fee-num"><strong>167,231,000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- ─ 부서별 × 연도별 ─ -->
+        <table class="main-table fa-pivot-tbl" id="fa-pivot-dept-year" style="display:none">
+          <thead>
+            <tr>
+              <th>부서</th>
+              <th>2024</th>
+              <th>2025</th>
+              <th>2026</th>
+              <th>합계</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fee-left"><strong>개발팀</strong></td>
+              <td class="fee-num">40,000,000</td>
+              <td class="fee-num">44,000,000</td>
+              <td class="fee-num">48,000,000</td>
+              <td class="fee-num"><strong>132,000,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>기획팀</strong></td>
+              <td class="fee-num">38,000,000</td>
+              <td class="fee-num">41,200,000</td>
+              <td class="fee-num">44,500,000</td>
+              <td class="fee-num"><strong>123,700,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>재무팀</strong></td>
+              <td class="fee-num">22,000,000</td>
+              <td class="fee-num">25,000,000</td>
+              <td class="fee-num">28,450,000</td>
+              <td class="fee-num"><strong>75,450,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>인사팀</strong></td>
+              <td class="fee-num">21,000,000</td>
+              <td class="fee-num">23,400,000</td>
+              <td class="fee-num">25,800,000</td>
+              <td class="fee-num"><strong>70,200,000</strong></td>
+            </tr>
+            <tr>
+              <td class="fee-left"><strong>영업팀</strong></td>
+              <td class="fee-num">16,000,000</td>
+              <td class="fee-num">19,050,000</td>
+              <td class="fee-num">20,481,000</td>
+              <td class="fee-num"><strong>55,531,000</strong></td>
+            </tr>
+            <tr class="fa-pivot-total">
+              <td class="fee-left"><strong>합계</strong></td>
+              <td class="fee-num"><strong>137,000,000</strong></td>
+              <td class="fee-num"><strong>152,650,000</strong></td>
+              <td class="fee-num"><strong>167,231,000</strong></td>
+              <td class="fee-num"><strong>456,881,000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="fa-table-note">ℹ️ 집계에 포함된 결제 건이 없는 구간은 '-'로 표시됩니다. 합계 기준 내림차순 정렬.</div>
+      </div>
+
+    </div><!-- /page-analysis -->
 
   </main>
 </div>
@@ -4257,7 +4709,7 @@ document.getElementById('p-sel-page-size').addEventListener('change', function()
   pPageSize = parseInt(this.value); pCurrentPage = 1; pRenderTable();
 });
 document.getElementById('p-btn-excel').addEventListener('click', () => {
-  alert(`필터된 ${pFilteredData.length}건을 엑셀로 다운로드합니다.`);
+  openExcelModal();
 });
 
 setupDatePicker('p-date-from','p-cal-from');
@@ -4380,7 +4832,7 @@ document.getElementById('c-sel-page-size').addEventListener('change', function()
   cPageSize = parseInt(this.value); cCurrentPage = 1; cRenderTable();
 });
 document.getElementById('c-btn-excel').addEventListener('click', () => {
-  alert(`필터된 ${cFilteredData.length}건을 엑셀로 다운로드합니다.`);
+  openExcelModal();
 });
 
 setupDatePicker('c-date-from','c-cal-from');
@@ -4527,7 +4979,7 @@ document.getElementById('sp-sel-page-size').addEventListener('change', function(
   spPageSize = parseInt(this.value); spCurrentPage = 1; spRenderTable();
 });
 document.getElementById('sp-btn-excel').addEventListener('click', () => {
-  alert(`필터된 ${spFilteredData.length}건을 엑셀로 다운로드합니다.`);
+  openExcelModal();
 });
 
 // 과정구분 셀렉박스 → 정시일 때만 날짜+셀렉 활성화
@@ -5266,7 +5718,7 @@ document.getElementById('sc-det-page-size').addEventListener('change', function(
   scDetPageSize = parseInt(this.value); scDetCurrentPage = 1; scDetRenderTable();
 });
 document.getElementById('sc-det-btn-excel').addEventListener('click', () => {
-  alert(`필터된 ${scDetFilteredData.length}건을 엑셀로 다운로드합니다.`);
+  openExcelModal();
 });
 
 function scUpdateSummary() {
@@ -5311,7 +5763,7 @@ document.getElementById('sc-sel-page-size').addEventListener('change', function(
   scPageSize = parseInt(this.value); scCurrentPage = 1; scRenderTable();
 });
 document.getElementById('sc-btn-excel').addEventListener('click', () => {
-  alert(`필터된 ${scFilteredData.length}건을 엑셀로 다운로드합니다.`);
+  openExcelModal();
 });
 
 // 과정구분 → 정시일 때만 날짜+셀렉 활성화
@@ -5447,10 +5899,10 @@ const CR_COURSE_DATA = CR_COURSES.map((c, i) => {
 
 // 월별 수료결과 데이터
 const CR_MONTHLY_DATA = [
-  { no:4, year:'2026', month:'04', online:18, micro:4, courses:22, totalFee:3280000, total:198, pass:163, fail:35, rate:'82.3%' },
-  { no:3, year:'2026', month:'03', online:20, micro:5, courses:25, totalFee:3850000, total:203, pass:172, fail:31, rate:'84.7%' },
-  { no:2, year:'2026', month:'02', online:16, micro:5, courses:21, totalFee:2940000, total:168, pass:135, fail:33, rate:'80.4%' },
-  { no:1, year:'2026', month:'01', online:14, micro:4, courses:18, totalFee:2560000, total:142, pass:119, fail:23, rate:'83.8%' },
+  { no:4, year:'2026', month:'04', online:18, offline:2, hybrid:1, micro:4, courses:25, totalFee:3280000, total:198, pass:163, fail:35, rate:'82.3%' },
+  { no:3, year:'2026', month:'03', online:20, offline:3, hybrid:2, micro:5, courses:30, totalFee:3850000, total:203, pass:172, fail:31, rate:'84.7%' },
+  { no:2, year:'2026', month:'02', online:16, offline:1, hybrid:1, micro:5, courses:23, totalFee:2940000, total:168, pass:135, fail:33, rate:'80.4%' },
+  { no:1, year:'2026', month:'01', online:14, offline:2, hybrid:0, micro:4, courses:20, totalFee:2560000, total:142, pass:119, fail:23, rate:'83.8%' },
 ];
 
 // ── 개인별 수료결과 ──
@@ -5555,7 +6007,7 @@ document.getElementById('cr-p-page-size').addEventListener('change', function() 
   crPPageSize = parseInt(this.value); crPCurrentPage = 1; crPRenderTable();
 });
 document.getElementById('cr-p-btn-excel').addEventListener('click', () => {
-  alert(`필터된 ${crPFilteredData.length}건을 엑셀로 다운로드합니다.`);
+  openExcelModal();
 });
 
 setupDatePicker('cr-p-date-from','cr-p-cal-from');
@@ -5646,7 +6098,7 @@ document.getElementById('cr-c-page-size').addEventListener('change', function() 
   crCPageSize = parseInt(this.value); crCCurrentPage = 1; crCRenderTable();
 });
 document.getElementById('cr-c-btn-excel').addEventListener('click', () => {
-  alert(`필터된 ${crCFilteredData.length}건을 엑셀로 다운로드합니다.`);
+  openExcelModal();
 });
 setupDatePicker('cr-c-date-from','cr-c-cal-from');
 setupDatePicker('cr-c-date-to','cr-c-cal-to');
@@ -5662,7 +6114,7 @@ function crMRenderTable() {
   const slice = crMFilteredData.slice(start, start+crMPageSize);
   document.getElementById('cr-m-count').textContent = crMFilteredData.length.toLocaleString();
   if (!slice.length) {
-    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:40px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:40px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
     document.getElementById('cr-m-pagination').innerHTML = '';
     return;
   }
@@ -5671,6 +6123,8 @@ function crMRenderTable() {
     <td>${r.year}</td>
     <td>${r.month}</td>
     <td>${r.online}</td>
+    <td>${r.offline}</td>
+    <td>${r.hybrid}</td>
     <td>${r.micro}</td>
     <td>${r.courses}</td>
     <td style="text-align:right;padding-right:10px">${r.totalFee.toLocaleString()}</td>
@@ -5736,7 +6190,7 @@ document.getElementById('cr-m-page-size').addEventListener('change', function() 
   crMPageSize = parseInt(this.value); crMCurrentPage = 1; crMRenderTable();
 });
 document.getElementById('cr-m-btn-excel').addEventListener('click', () => {
-  alert(`${crMFilteredData.length}건을 엑셀로 다운로드합니다.`);
+  openExcelModal();
 });
 
 // ── 탭 전환 ──
@@ -5878,7 +6332,7 @@ document.getElementById('rv-page-size').addEventListener('change', function() {
 });
 
 document.getElementById('rv-btn-excel').addEventListener('click', () => {
-  alert(`${rvFilteredData.length}건을 엑셀로 다운로드합니다.`);
+  openExcelModal();
 });
 
 // [목록] → 결과보고서 목록 복귀 (보고서 목록 데이터는 유지)
@@ -6434,7 +6888,7 @@ const RESTRICT_COND_SAMPLES = {
       except: [],
     },
   },
-  171: { // 중복과정 전사
+  171: { // 동일과정 전사
     target: {
       apply:  [{ type: '전체', values: ['전체 임직원'] }],
       except: [],
@@ -6444,7 +6898,7 @@ const RESTRICT_COND_SAMPLES = {
       except: [{ type: '과정유형', values: ['마이크로러닝'] }],
     },
   },
-  170: { // 중복과정 온라인
+  170: { // 동일과정 온라인
     target: {
       apply:  [{ type: '전체', values: ['전체 임직원'] }],
       except: [],
@@ -6480,7 +6934,7 @@ const RESTRICT_DATA_FAIL = [
   },
 ];
 
-// 탭4: 중복과정 신청제한
+// 탭4: 동일과정 신청제한
 const RESTRICT_DATA_DUP = [
   {
     no: 171, div: '중복과정', unit: '-', period: '-',
@@ -6696,7 +7150,7 @@ function openRestrictDetail(no) {
   // 페이지 타이틀 업데이트
   const rdTitle = document.getElementById('rd-page-title');
   if (rdTitle) {
-    const titleMap = { '미수료':'미수료 신청제한', '중복과정':'중복과정 신청제한',
+    const titleMap = { '미수료':'미수료 신청제한', '중복과정':'동일과정 신청제한',
       '개인별':'개수/금액 신청제한', '과정별':'개수/금액 신청제한' };
     const isCourseUnit = r.unit === '과정';
     rdTitle.textContent = isCourseUnit ? '개인별 과정 신청제한 상세' : (titleMap[r.div] || '수강신청 제한설정') + ' 상세';
@@ -6759,7 +7213,7 @@ function openRestrictDetail(no) {
     if (fc) fc.value = r.failCount || 1;
   }
 
-  // 중복과정 전용 필드
+  // 동일과정 전용 필드
   showEl('rd-dup-checkrange-row', isDup);
   showEl('rd-dup-status-row',     isDup);
   showEl('rd-dup-progress-row',   isDup);
@@ -6816,7 +7270,7 @@ const RESTRICT_TAB_TITLE = {
   'personal-course': '개수/금액 신청제한',
   'course-restrict':  '개인별 과정 신청제한',
   'fail':             '미수료 신청제한',
-  'dup':              '중복과정 신청제한',
+  'dup':              '동일과정 신청제한',
 };
 
 // 탭별 안내 문구
@@ -6877,7 +7331,7 @@ function rrOnChange() {
     if (pSpecific) pSpecific.style.display = '';
     if (pMonthly)  pMonthly.style.display  = '';
     if (pDaily)    pDaily.style.display    = '';
-    if (pNone)     pNone.style.display     = 'none';
+    if (pNone)     pNone.style.display     = '';
     if (period === '-') {
       const specInput = document.querySelector('#rr-period-specific input');
       if (specInput) specInput.checked = true;
@@ -6908,7 +7362,7 @@ function rrOnChange() {
   const failNote = document.getElementById('rr-period-note-fail');
   if (failNote) failNote.style.display = isFail ? '' : 'none';
 
-  // 중복과정 전용
+  // 동일과정 전용
   show('rr-dup-checkrange-row', isDup);
   show('rr-dup-status-row',     isDup);
   show('rr-dup-progress-row',   isDup);
@@ -6989,7 +7443,7 @@ function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
 // ═══════════════════════════════════════════════
-// 교육비용 관리 전용 JS
+// 교육비용 현황 전용 JS
 // ═══════════════════════════════════════════════
 
 // 회사별 리스트의 '결제관리' 버튼 → 결제관리 페이지로 이동
@@ -7007,7 +7461,52 @@ function goToPaymentWithCompany(companyName) {
 }
 
 // 결제관리 상세뷰 전환
-function openPaymentDetail() {
+// ──────────────────────────────────────────
+// 교육비용 결제 상세 데이터 매핑
+// 목록과 상세 요약/카운트의 정합성을 보장하기 위해
+// 목록에서 클릭 시 해당 키의 데이터로 상세를 동적 갱신
+// ──────────────────────────────────────────
+
+// 교육비용 결제: 회사명+월 → 결제 건 요약 데이터
+// 목록의 7개 샘플 결제 건과 1:1 매핑 — 목록/상세 요약 정합성 보장
+const FP_DETAIL_MAP = {
+  '휴넷|2026.04':    { settlement:'고객사 교육비', courses:2, learners:4,   amount:'12,000원',       method:'일괄납입', status:'done',   methodKey:'Bank' },
+  '프라임|2026.04':  { settlement:'고객사 교육비', courses:7, learners:160, amount:'45,000,000원',   method:'-',        status:'wait',   methodKey:'Pending' },
+  'B기업명|2026.03': { settlement:'기타(통합)',    courses:9, learners:310, amount:'6,329,000원',    method:'일괄납입', status:'done',   methodKey:'Bank' },
+  'C기업명|2026.03': { settlement:'고객사 교육비', courses:6, learners:180, amount:'3,840,000원',    method:'신용카드', status:'done',   methodKey:'Card' },
+  'D기업명|2026.02': { settlement:'고객사 교육비', courses:4, learners:95,  amount:'1,250,000원',    method:'일괄납입', status:'cancel', methodKey:'Bank' },
+  '휴넷|2026.03':    { settlement:'고객사 교육비', courses:5, learners:120, amount:'38,000,000원',   method:'일괄납입', status:'done',   methodKey:'Bank' },
+  '프라임|2026.03':  { settlement:'고객사 교육비', courses:4, learners:85,  amount:'22,500,000원',   method:'신용카드', status:'done',   methodKey:'Card' }
+};
+
+const FEE_STATUS_LABEL = { done:'입금완료', wait:'입금대기', cancel:'입금취소' };
+
+function openPaymentDetail(company, month) {
+  // 파라미터 없이 호출되는 경우 (이전 호환성) 휴넷 2026.04로 디폴트
+  if (!company) { company = '휴넷'; month = '2026.04'; }
+  const key = `${company}|${month}`;
+  const data = FP_DETAIL_MAP[key];
+  if (data) {
+    document.getElementById('fpd-company').textContent = company;
+    document.getElementById('fpd-period').textContent = month;
+    document.getElementById('fpd-settlement').textContent = data.settlement;
+    document.getElementById('fpd-courses').textContent = data.courses;
+    document.getElementById('fpd-learners').textContent = data.learners;
+    document.getElementById('fpd-amount').textContent = data.amount;
+    document.getElementById('fpd-method').textContent = data.method;
+    // 결제상태 뱃지
+    const statusEl = document.getElementById('fpd-status');
+    statusEl.innerHTML = `<span class="fee-status fee-status-${data.status}">${FEE_STATUS_LABEL[data.status]}</span>`;
+    // 결제하기 버튼 활성화 조건: 입금대기 + 결제방법 미정('-')
+    const payBtnEl = document.getElementById('fpd-pay-btn');
+    const canPay = (data.status === 'wait' && data.method === '-');
+    payBtnEl.innerHTML = `<button class="btn-xs"${canPay ? '' : ' disabled'}>결제하기</button>`;
+    // 서류보기 버튼은 결제방법에 따라 모달 분기
+    const docsBtnEl = document.getElementById('fpd-docs-btn');
+    docsBtnEl.innerHTML = `<button class="btn-xs" onclick="openSettlementModal('${data.methodKey}')">서류보기</button>`;
+    // 검색결과 건수 = 총 학습자 수 (한 학습자 1과정 기본 가정)
+    document.getElementById('fpd-count').textContent = data.learners;
+  }
   document.getElementById('payment-list').style.display = 'none';
   document.getElementById('payment-detail').style.display = 'block';
   const main = document.querySelector('.main');
@@ -7861,25 +8360,131 @@ document.querySelectorAll('#modal-fee-settings .settings-list li:not(.required)'
   });
 });
 
-// ── 교육비용: 회사검색 multi-select 초기화 ──
-// 개인별 신청현황 등 기존 화면과 동일한 표준 initMultiSelect 함수 사용
-// prefix는 각 wrap의 id에서 '-company-wrap' 앞부분 (fc / fp / fpd)
+// ── 교육비용 결제: 회사검색 multi-select 초기화 ──
 const COMPANY_OPTIONS_FEE = ['휴넷', '프라임', 'A기업', 'B기업명', 'C기업명'];
-if (document.getElementById('fc-company-wrap')) initMultiSelect('fc', COMPANY_OPTIONS_FEE);
 if (document.getElementById('fp-company-wrap')) initMultiSelect('fp', COMPANY_OPTIONS_FEE);
-if (document.getElementById('fpd-company-wrap')) initMultiSelect('fpd', COMPANY_OPTIONS_FEE);
 
-// ── 교육비용: 학습시작일 월 선택/기간검색 토글 ──
-function toggleFcPeriodMode() {
-  const mode = document.querySelector('input[name="fc-period-mode"]:checked').value;
-  document.getElementById('fc-period-month').style.display = mode === 'month' ? 'inline-flex' : 'none';
-  document.getElementById('fc-period-range').style.display = mode === 'range' ? 'inline-flex' : 'none';
+// ── 교육비용 현황: 집계 상태 관리 (탭 + 단위) ──
+let faState = { tab: 'company', unit: 'month' };
+
+function switchFaTab(tab) {
+  faState.tab = tab;
+  document.querySelectorAll('.fa-tab').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.querySelector(`[data-fa-tab="${tab}"]`);
+  if (activeBtn) activeBtn.classList.add('active');
+  updateFaTable();
 }
+
+function changeFaUnit() {
+  const unit = document.querySelector('input[name="fa-unit"]:checked')?.value;
+  if (!unit) return;
+  faState.unit = unit;
+  // 학습시작일 UI 전환: 월/분기별은 년/월, 연도별은 년도만
+  const monthlyUi = document.getElementById('fa-period-monthly');
+  const yearlyUi = document.getElementById('fa-period-yearly');
+  if (monthlyUi) monthlyUi.style.display = (unit === 'year') ? 'none' : 'inline-flex';
+  if (yearlyUi) yearlyUi.style.display = (unit === 'year') ? 'inline-flex' : 'none';
+  // 프리셋 세트 전환: 월/분기별은 공통, 연도별은 별도
+  const mqPresets = document.getElementById('fa-presets-month-quarter');
+  const yPresets = document.getElementById('fa-presets-year');
+  if (mqPresets) mqPresets.style.display = (unit === 'year') ? 'none' : 'inline-flex';
+  if (yPresets) yPresets.style.display = (unit === 'year') ? 'inline-flex' : 'none';
+  // 검색 안내 문구 전환
+  const mqNote = document.getElementById('fa-search-note-mq');
+  const yNote = document.getElementById('fa-search-note-y');
+  if (mqNote) mqNote.style.display = (unit === 'year') ? 'none' : 'block';
+  if (yNote) yNote.style.display = (unit === 'year') ? 'block' : 'none';
+  // 테이블 전환
+  updateFaTable();
+}
+
+function updateFaTable() {
+  document.querySelectorAll('.fa-pivot-tbl').forEach(el => el.style.display = 'none');
+  const targetId = `fa-pivot-${faState.tab}-${faState.unit}`;
+  const target = document.getElementById(targetId);
+  if (target) target.style.display = '';
+}
+
+// 기간 프리셋 — 클릭 시 드롭다운 값을 직접 설정
+// 월별·분기별: 최대 12개월 범위 / 연도별: 연도 범위
+function setFaPeriod(preset) {
+  const setVal = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  };
+  if (preset === 'lastYear') {
+    // 전년도: 2025.01 ~ 2025.12
+    setVal('fa-m-from-y', '2025년');
+    setVal('fa-m-from-m', '1월');
+    setVal('fa-m-to-y', '2025년');
+    setVal('fa-m-to-m', '12월');
+  } else if (preset === 'last12m') {
+    // 최근 12개월: 2025.05 ~ 2026.04 (오늘 기준 12개월)
+    setVal('fa-m-from-y', '2025년');
+    setVal('fa-m-from-m', '5월');
+    setVal('fa-m-to-y', '2026년');
+    setVal('fa-m-to-m', '4월');
+  } else if (preset === 'last3y') {
+    // 최근 3년: 2024 ~ 2026
+    setVal('fa-y-from', '2024년');
+    setVal('fa-y-to', '2026년');
+  } else if (preset === 'last5y') {
+    // 최근 5년: 2022 ~ 2026
+    setVal('fa-y-from', '2022년');
+    setVal('fa-y-to', '2026년');
+  }
+}
+
+// 엑셀 다운로드 공통 확인 모달
+function openExcelModal() {
+  openModal('modal-excel-confirm');
+}
+
 function toggleFpPeriodMode() {
   const mode = document.querySelector('input[name="fp-period-mode"]:checked').value;
   document.getElementById('fp-period-month').style.display = mode === 'month' ? 'inline-flex' : 'none';
   document.getElementById('fp-period-range').style.display = mode === 'range' ? 'inline-flex' : 'none';
+  filterFpRows();
 }
+
+// ── 결제관리 목록 필터링 ──
+// 월 단위: 선택된 월(기본 2026.04)에 해당하는 행만 표시
+// 월 범위: 선택된 월 범위에 해당하는 모든 행 표시
+function filterFpRows() {
+  const mode = document.querySelector('input[name="fp-period-mode"]:checked');
+  if (!mode) return;
+  const modeValue = mode.value;
+
+  // 월 단위 모드에서 선택된 월 (프로토타입에서는 첫 번째 월 선택값 = 2026.04)
+  // 실제 구현에서는 드롭다운의 현재 선택값을 파싱해서 YYYY.MM 형태로 조합
+  const selectedMonth = '2026.04';
+
+  // 월 범위 모드에서 선택된 범위 (기본: 2026.01 ~ 2026.04)
+  const rangeFrom = '2026.01';
+  const rangeTo = '2026.04';
+
+  const rows = document.querySelectorAll('#payment-list tbody tr[data-month]');
+  rows.forEach(tr => {
+    const m = tr.dataset.month;
+    if (modeValue === 'month') {
+      tr.style.display = (m === selectedMonth) ? '' : 'none';
+    } else {
+      tr.style.display = (m >= rangeFrom && m <= rangeTo) ? '' : 'none';
+    }
+  });
+
+  // 결과 카운트 갱신 (프로토타입 시연용)
+  const visibleCount = document.querySelectorAll('#payment-list tbody tr[data-month]:not([style*="display: none"])').length;
+  const countEl = document.querySelector('#payment-list .result-count strong');
+  if (countEl) countEl.textContent = visibleCount;
+}
+
+// 페이지 로드 후 초기 필터 적용 (기본 모드: 월 단위)
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.querySelector('input[name="fp-period-mode"]')) {
+    filterFpRows();
+  }
+});
 
 // ── ESC 키로 열린 모든 모달 닫기 ──
 document.addEventListener('keydown', e => {
@@ -8042,7 +8647,7 @@ document.addEventListener('keydown', e => {
 
 
 <!-- ══════════════════════════════════════════════ -->
-<!-- MODAL: 입금현황 (교육비용 결제관리)              -->
+<!-- MODAL: 입금현황 (교육비용 결제)              -->
 <!-- ══════════════════════════════════════════════ -->
 <div class="modal-overlay" id="modal-settlement" onclick="if(event.target===this)closeModal('modal-settlement')">
   <div class="modal-container" style="max-width:880px">
@@ -8100,7 +8705,7 @@ document.addEventListener('keydown', e => {
 
 
 <!-- ══════════════════════════════════════════════ -->
-<!-- MODAL: 결제하기 (교육비용 결제관리)              -->
+<!-- MODAL: 결제하기 (교육비용 결제)              -->
 <!-- ══════════════════════════════════════════════ -->
 <div class="modal-overlay" id="modal-payment" onclick="if(event.target===this)closeModal('modal-payment')">
   <div class="modal-container" style="max-width:520px">
@@ -8201,6 +8806,25 @@ document.addEventListener('keydown', e => {
     <div class="modal-footer-end">
       <button class="btn btn-reset" onclick="closeModal('modal-fee-settings')">취소</button>
       <button class="btn btn-primary" onclick="alert('등록되었습니다.');closeModal('modal-fee-settings');">등록</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MODAL: 엑셀 다운로드 안내 (공통)           -->
+<!-- ══════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-excel-confirm" onclick="if(event.target===this)closeModal('modal-excel-confirm')">
+  <div class="modal-container" style="width:440px;max-width:440px">
+    <div class="modal-header" style="justify-content:center;border-bottom:none;padding-bottom:0">
+      <h3 style="margin:0">안내</h3>
+    </div>
+    <div style="padding:24px 24px 28px;text-align:center;color:#333;font-size:14px">
+      엑셀 다운로드 페이지로 이동하시겠습니까?
+    </div>
+    <div class="modal-footer-end" style="display:flex;gap:8px;padding:0 20px 20px">
+      <button class="btn btn-reset" style="flex:1" onclick="closeModal('modal-excel-confirm')">아니오</button>
+      <button class="btn btn-primary" style="flex:3" onclick="closeModal('modal-excel-confirm')">예</button>
     </div>
   </div>
 </div>
