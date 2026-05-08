@@ -149,6 +149,7 @@
   .input:focus, .select:focus { border-color: var(--primary); }
   .input { min-width: 140px; }
   .select { cursor: pointer; }
+  .select option:disabled { color: #c0c0c0; background-color: #f5f5f5; }
   .date-sep { color: #aaa; font-size: 12px; }
 
   /* RADIO */
@@ -635,6 +636,7 @@
   }
   .link-cell,
   .main-table td.link-cell { color: var(--primary); text-decoration: none; cursor: pointer; }
+  .main-table td.cell-wrap { white-space: normal; word-break: break-word; line-height: 1.5; }
   .link-cell:hover,
   .main-table td.link-cell:hover { color: var(--primary); }
 
@@ -1508,10 +1510,412 @@
     z-index: 500;
   }
   .fee-tip:hover::after, .fee-tip:hover::before { opacity: 1; }
+
+  /* ── 변경/추가 작업 표시 배지 ──────────────────────── */
+  .change-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    margin-left: 6px;
+    border-radius: 999px;
+    background: #ff6b35;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    vertical-align: top;
+    position: relative;
+    top: -8px;
+    line-height: 1;
+    user-select: none;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+    transition: transform 0.12s, background 0.12s;
+    flex-shrink: 0;
+    box-sizing: border-box;
+  }
+  .change-badge:hover { background: #e55a2b; transform: scale(1.1) translateY(-1px); }
+  .change-badge.in-th { margin-left: 4px; top: -6px; }
+
+  /* 셀렉트 위에 배지 띄우기 */
+  .badge-wrap { position: relative; display: inline-block; }
+  .badge-wrap > .change-badge {
+    position: absolute;
+    top: -10px;
+    right: -8px;
+    margin-left: 0;
+  }
+  .badge-wrap > .change-badge:hover { transform: scale(1.1); }
+
+  /* 변경 배지 팝오버 */
+  .change-popover {
+    position: absolute;
+    z-index: 9999;
+    min-width: 280px;
+    max-width: 420px;
+    background: #fff;
+    border: 1px solid #ff6b35;
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #333;
+    display: none;
+  }
+  .change-popover.show { display: block; }
+  .change-popover .cp-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px dashed #eee;
+    font-weight: 700;
+    color: #ff6b35;
+    font-size: 12px;
+  }
+  .change-popover .cp-head .cp-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: #ff6b35;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .change-popover .cp-close {
+    margin-left: auto;
+    cursor: pointer;
+    color: #999;
+    font-weight: 400;
+    font-size: 14px;
+  }
+  .change-popover .cp-body { color: #444; white-space: pre-line; }
+  .change-popover::before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 16px;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-left: 1px solid #ff6b35;
+    border-top: 1px solid #ff6b35;
+    transform: rotate(45deg);
+  }
+
+  /* ── 과정정보 모달 ──────────────────────────────── */
+  .course-info-modal {
+    background: #fff; border-radius: 6px; width: 90%; max-width: 560px;
+    max-height: 85vh; display: flex; flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+    overflow: hidden;
+  }
+  /* 다크 헤더 (시스템 표준) */
+  .course-info-modal .preview-modal-header {
+    background: #1a1a2e;
+    border-bottom: none;
+    padding: 14px 20px;
+  }
+  .course-info-modal .preview-modal-header h3 {
+    color: #fff; font-size: 15px; font-weight: 700;
+  }
+  .course-info-modal .preview-modal-header .ci-x {
+    width: 24px; height: 24px; border: none; background: transparent;
+    color: #fff; cursor: pointer; font-size: 16px; line-height: 1;
+    padding: 0; opacity: 0.85;
+  }
+  .course-info-modal .preview-modal-header .ci-x:hover { opacity: 1; }
+  /* 푸터 - 닫기 버튼만 우측 정렬 */
+  .course-info-modal .preview-modal-footer {
+    padding: 12px 20px;
+    justify-content: flex-end;
+  }
+  .course-info-modal .ci-close-btn {
+    height: 32px; padding: 0 18px; border: 1px solid #ccc;
+    background: #fff; color: #333; border-radius: 4px;
+    font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .course-info-modal .ci-close-btn:hover { border-color: #888; background: #f7f7f7; }
+  .course-info-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+    border: 1px solid #eee; border-radius: 4px; overflow: hidden;
+  }
+  .course-info-table th,
+  .course-info-table td {
+    padding: 10px 14px; border-bottom: 1px solid #eee; text-align: left;
+    vertical-align: middle;
+  }
+  .course-info-table th {
+    width: 110px; background: #f7f8fa; color: #555; font-weight: 600;
+  }
+  .course-info-table td { color: #222; word-break: break-word; }
+  .course-info-table tr:last-child th,
+  .course-info-table tr:last-child td { border-bottom: none; }
+
+  /* ── 수료기준 섹션 (분리) ───────────────────────── */
+  .course-pass-section { margin-top: 22px; }
+  .course-pass-title {
+    font-size: 14px; font-weight: 700; color: #1a1a2e;
+    margin-bottom: 10px;
+  }
+  .course-pass-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+    border: 1px solid #eee; border-radius: 4px; overflow: hidden;
+  }
+  .course-pass-table thead th {
+    padding: 12px 14px; background: #fff; color: #888; font-weight: 500;
+    text-align: left; border-bottom: 1px solid #eee;
+  }
+  .course-pass-table tbody td {
+    padding: 14px; border-bottom: 1px solid #f1f1f1;
+    text-align: left; color: #222;
+  }
+  .course-pass-table tbody tr:last-child td { border-bottom: 1px solid #ddd; }
+  .course-pass-table tbody td:first-child { color: #1a1a2e; font-weight: 500; }
+  .course-pass-table tfoot td {
+    padding: 14px; background: #fafafa; font-weight: 700; color: #1a1a2e;
+    text-align: left;
+  }
+  .course-pass-table tfoot td:first-child { width: 25%; }
+
+  /* ── 성적 현황 표 (개인별 학습현황 상세) ─────────── */
+  .grade-result-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+    border: 1px solid #e8eaed; border-radius: 4px; overflow: hidden;
+  }
+  .grade-result-table thead th {
+    padding: 10px 12px; background: #f7f8fa; color: #555; font-weight: 600;
+    text-align: center; border-bottom: 1px solid #e8eaed;
+  }
+  .grade-result-table tbody td {
+    padding: 12px; border-bottom: 1px solid #f1f1f1;
+    text-align: center; color: #333;
+  }
+  .grade-result-table tbody td.gr-item { text-align: left; padding-left: 16px; font-weight: 500; }
+  .grade-result-table tbody tr.row-met        td.gr-result { color: #1f8a3d; font-weight: 600; }
+  .grade-result-table tbody tr.row-unmet      td.gr-result { color: #d92d4a; font-weight: 600; }
+  .grade-result-table tbody tr.row-inprogress td.gr-result { color: #b87100; font-weight: 600; }
+  .grade-result-table tfoot td {
+    padding: 14px 12px; background: #fafafa; font-weight: 700; color: #1a1a2e;
+    text-align: center; border-top: 1px solid #ddd;
+  }
+  .grade-result-table tfoot td.gr-item { text-align: left; padding-left: 16px; }
+  .grade-result-table tfoot td.gr-total-met   { color: #1f8a3d; }
+  .grade-result-table tfoot td.gr-total-unmet { color: #d92d4a; }
+  .grade-result-table tfoot td.gr-total-pending { color: #b87100; }
+
+  /* ── 신청현황 상세 카드용 key-value 표 (main-table와 시각 통일) ───── */
+  .apply-detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .apply-detail-table th,
+  .apply-detail-table td {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  .apply-detail-table th {
+    background: var(--table-header);
+    color: #444;
+    font-weight: 600;
+  }
+  .apply-detail-table td { color: #333; background: #fff; }
+
+  /* ── 상태 배지 (결제상태 등) ───────────── */
+  .status-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  .status-badge.success  { color: #1f8a3d; border-color: #c8e8d0; background: #f0faf3; }
+  .status-badge.pending  { color: #b87100; border-color: #f0d4a0; background: #fdf6ed; }
+  .status-badge.fail     { color: #d92d4a; border-color: #f0c0c8; background: #fde8eb; }
+  .status-badge.neutral  { color: #666;    border-color: #ddd;    background: #f5f5f5; }
+
+  /* ── 과정 구성 상세 / 성적 현황 모달 (카드 → 모달 이관) ───── */
+  .composition-modal,
+  .grade-result-modal {
+    background: #fff; border-radius: 6px; width: 90%;
+    max-height: 85vh; display: flex; flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+    overflow: hidden;
+  }
+  .composition-modal   { max-width: 620px; }
+  .grade-result-modal  { max-width: 780px; }
+
+  .composition-modal .preview-modal-header,
+  .grade-result-modal .preview-modal-header {
+    background: #1a1a2e; border-bottom: none; padding: 14px 20px;
+  }
+  .composition-modal .preview-modal-header h3,
+  .grade-result-modal .preview-modal-header h3 {
+    color: #fff; font-size: 15px; font-weight: 700;
+    display: flex; align-items: baseline; gap: 8px;
+  }
+  .composition-modal .preview-modal-header h3 .modal-subtitle,
+  .grade-result-modal .preview-modal-header h3 .modal-subtitle {
+    color: #c8c8d6; font-size: 12px; font-weight: 400;
+  }
+  .composition-modal .preview-modal-header .ci-x,
+  .grade-result-modal .preview-modal-header .ci-x {
+    width: 24px; height: 24px; border: none; background: transparent;
+    color: #fff; cursor: pointer; font-size: 16px; line-height: 1;
+    padding: 0; opacity: 0.85;
+  }
+  .composition-modal .preview-modal-header .ci-x:hover,
+  .grade-result-modal .preview-modal-header .ci-x:hover { opacity: 1; }
+  .composition-modal .preview-modal-footer,
+  .grade-result-modal .preview-modal-footer {
+    padding: 12px 20px; justify-content: flex-end;
+  }
+  .composition-modal .ci-close-btn,
+  .grade-result-modal .ci-close-btn {
+    height: 32px; padding: 0 18px; border: 1px solid #ccc;
+    background: #fff; color: #333; border-radius: 4px;
+    font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .composition-modal .ci-close-btn:hover,
+  .grade-result-modal .ci-close-btn:hover { border-color: #888; background: #f7f7f7; }
+
+  /* 액션 컬럼 미니 버튼 (수료증 출력과 동일 톤) */
+  .btn-detail-sm {
+    height: 26px; padding: 0 10px; border: 1px solid #d4d4d8;
+    background: #fff; color: #555; border-radius: 4px;
+    font-size: 12px; cursor: pointer; font-family: inherit;
+  }
+  .btn-detail-sm:hover { border-color: #1a1a2e; color: #1a1a2e; background: #f7f8fa; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
+
+<!-- 변경/추가 작업 배지용 공통 팝오버 -->
+<div class="change-popover" id="change-popover">
+  <div class="cp-head">
+    <span class="cp-num" id="cp-num">1</span>
+    <span>추가 작업 항목</span>
+    <span class="cp-close" id="cp-close">✕</span>
+  </div>
+  <div class="cp-body" id="cp-body"></div>
+</div>
+
+<!-- 과정정보 모달 (개인별 학습현황 상세 - 과정명 클릭 시) -->
+<div class="preview-modal-overlay" id="course-info-overlay">
+  <div class="course-info-modal">
+    <div class="preview-modal-header">
+      <h3>과정 정보</h3>
+      <button class="ci-x" id="course-info-close" aria-label="닫기">✕</button>
+    </div>
+    <div class="preview-modal-body">
+      <table class="course-info-table">
+        <tbody>
+          <tr><th>과정명</th><td id="ci-name">-</td></tr>
+          <tr><th>과정분류</th><td id="ci-cat">-</td></tr>
+          <tr><th>과정코드</th><td id="ci-code">-</td></tr>
+          <tr><th>과정구분</th><td id="ci-div">-</td></tr>
+          <tr><th>과정유형</th><td id="ci-type">-</td></tr>
+          <tr><th>신청기간</th><td id="ci-apply">-</td></tr>
+          <tr><th>학습기간</th><td id="ci-period">-</td></tr>
+          <tr><th>복습종료일</th><td id="ci-review">-</td></tr>
+          <tr><th>수강료</th><td id="ci-fee">-</td></tr>
+          <tr><th>교재유무<span class="change-badge" data-num="22" data-memo="- 있음: Y (교재명)
+- 없음: N">22</span></th><td id="ci-book">-</td></tr>
+          <tr><th>학점</th><td id="ci-credit">-</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="preview-modal-footer">
+      <button class="ci-close-btn" id="course-info-ok">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 과정 구성 상세 모달 (과정별 학습현황 상세 - 액션 컬럼) -->
+<div class="preview-modal-overlay" id="composition-overlay">
+  <div class="composition-modal">
+    <div class="preview-modal-header">
+      <h3>수료기준</h3>
+      <button class="ci-x" id="comp-close" aria-label="닫기">✕</button>
+    </div>
+    <div class="preview-modal-body">
+      <table class="grade-result-table">
+        <colgroup>
+          <col style="width:18%">  <!-- 평가항목 -->
+          <col style="width:18%">  <!-- 포함 콘텐츠 수 -->
+          <col style="width:14%">  <!-- 필수여부 -->
+          <col style="width:14%">  <!-- 평가비중 -->
+          <col>                     <!-- 수료기준 -->
+        </colgroup>
+        <thead>
+          <tr>
+            <th>평가항목</th>
+            <th>포함 콘텐츠 수</th>
+            <th>필수여부</th>
+            <th>평가비중</th>
+            <th>수료기준</th>
+          </tr>
+        </thead>
+        <tbody id="comp-body"></tbody>
+        <tfoot id="comp-foot"></tfoot>
+      </table>
+    </div>
+    <div class="preview-modal-footer">
+      <button class="ci-close-btn" id="comp-ok">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- 성적 현황 모달 (개인별 학습현황 상세 - 액션 컬럼) -->
+<div class="preview-modal-overlay" id="grade-overlay">
+  <div class="grade-result-modal">
+    <div class="preview-modal-header">
+      <h3>성적 현황</h3>
+      <button class="ci-x" id="grade-close" aria-label="닫기">✕</button>
+    </div>
+    <div class="preview-modal-body">
+      <table class="grade-result-table">
+        <colgroup>
+          <col style="width:14%">
+          <col style="width:12%">
+          <col style="width:20%">
+          <col style="width:18%">
+          <col style="width:18%">
+          <col style="width:18%">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>평가항목</th>
+            <th>평가비중</th>
+            <th>수료기준</th>
+            <th>진행율</th>
+            <th>원점수</th>
+            <th>획득점수</th>
+          </tr>
+        </thead>
+        <tbody id="grade-body"></tbody>
+        <tfoot id="grade-foot"></tfoot>
+      </table>
+    </div>
+    <div class="preview-modal-footer">
+      <button class="ci-close-btn" id="grade-ok">닫기</button>
+    </div>
+  </div>
+</div>
 
 <header class="top-header">
   <div class="logo"><span>LABS</span> New EDMS</div>
@@ -1676,78 +2080,106 @@
         <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">수강신청</a> &gt; 개인별 신청현황</div>
       </div>
       <div class="card">
-        <div class="search-row">
-          <div class="label">신청일</div>
-          <div class="date-wrap">
-            <input type="text" class="input-date" id="p-date-from" value="2025-01-01" readonly>
-            <span class="cal-icon">📅</span>
-            <div class="cal-popup" id="p-cal-from"></div>
-          </div>
-          <span class="date-sep">~</span>
-          <div class="date-wrap">
-            <input type="text" class="input-date" id="p-date-to" value="2025-01-31" readonly>
-            <span class="cal-icon">📅</span>
-            <div class="cal-popup" id="p-cal-to"></div>
-          </div>
-        </div>
-        <div class="search-row">
-          <div class="label">학습자검색</div>
-          <select class="select" id="p-sel-learner-type">
-            <option value="name">이름</option>
-            <option value="id">아이디</option>
-            <option value="empno">사번</option>
-          </select>
-          <input type="text" class="input" id="p-input-learner" placeholder="검색어를 입력해주세요.">
-          <select class="select" id="p-sel-approval">
-            <option value="">학습자 승인상태</option>
-            <option value="승인">승인</option>
-            <option value="승인대기">승인대기</option>
-            <option value="취소">취소</option>
-          </select>
-        </div>
-        <div class="search-row">
-          <div class="label">과정검색</div>
-          <select class="select" id="p-sel-course-type">
-            <option value="name">과정명</option>
-            <option value="code">과정코드</option>
-          </select>
-          <input type="text" class="input" id="p-input-course" placeholder="검색어를 입력해주세요.">
-          <select class="select" id="p-sel-course-form">
-            <option value="">과정유형</option>
-            <option value="온라인">온라인</option>
-            <option value="오프라인">오프라인</option>
-            <option value="하이브리드">하이브리드</option>
-            <option value="마이크로러닝">마이크로러닝</option>
-          </select>
-          <select class="select" id="p-sel-course-cat">
-            <option value="">과정분류</option>
-            <option value="경영">경영</option>
-            <option value="IT">IT</option>
-            <option value="어학">어학</option>
-          </select>
-        </div>
-        <div class="search-row">
-          <div class="label">회사검색</div>
-          <label class="checkbox-row"><input type="checkbox" id="p-chk-company"> 선택한 회사만 검색</label>
-          <div class="multi-select-wrap" id="p-company-wrap">
-            <div class="multi-tags-box" id="p-company-box">
-              <span class="multi-placeholder" id="p-company-placeholder">회사선택</span>
-            </div>
-            <div class="multi-dropdown" id="p-company-dropdown">
-              <div class="multi-option" data-value="휴넷">휴넷</div>
-              <div class="multi-option" data-value="프라임">프라임</div>
-              <div class="multi-option" data-value="A기업">A기업</div>
-              <div class="multi-option" data-value="B기업명">B기업명</div>
-              <div class="multi-option" data-value="C기업명">C기업명</div>
+        <!-- 신청일 -->
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group">
+            <div class="field-label">신청일</div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="p-date-from" value="2025-01-01" readonly>
+                <span class="cal-icon">📅</span>
+                <div class="cal-popup" id="p-cal-from"></div>
+              </div>
+              <span class="date-sep">~</span>
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="p-date-to" value="2025-01-31" readonly>
+                <span class="cal-icon">📅</span>
+                <div class="cal-popup" id="p-cal-to"></div>
+              </div>
             </div>
           </div>
-          <div class="row-divider"></div>
-          <div class="label-auto">부서검색</div>
-          <input type="text" class="input" id="p-input-dept" placeholder="부서명을 입력해주세요.">
-          <div class="search-actions">
-            <button class="btn btn-primary" id="p-btn-search">검색</button>
-            <button class="btn btn-reset" id="p-btn-reset">초기화</button>
+        </div>
+
+        <!-- 학습자검색 + 과정검색 (같은 줄) -->
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group" style="min-width:520px">
+            <div class="field-label">학습자검색<span class="change-badge" data-num="1" data-memo="- 옵션: 재직상태 전체 / 재직 / 모니터링
+- 디폴트: 재직">1</span></div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap">
+              <select class="select" id="p-sel-learner-type" style="min-width:80px">
+                <option value="name">이름</option>
+                <option value="id">아이디</option>
+                <option value="empno">사번</option>
+              </select>
+              <input type="text" class="input" id="p-input-learner" placeholder="검색어를 입력해주세요." style="width:200px">
+              <select class="select" id="p-sel-approval" style="min-width:120px">
+                <option value="">승인상태 전체</option>
+                <option value="승인">승인</option>
+                <option value="승인대기">승인대기</option>
+                <option value="취소">취소</option>
+              </select>
+              <select class="select" id="p-sel-employment" style="min-width:120px">
+                <option value="">재직상태 전체</option>
+                <option value="재직" selected>재직</option>
+                <option value="모니터링">모니터링</option>
+              </select>
+            </div>
           </div>
+          <div class="field-group" style="min-width:560px">
+            <div class="field-label">과정검색</div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap">
+              <select class="select" id="p-sel-course-type" style="min-width:80px">
+                <option value="name">과정명</option>
+                <option value="code">과정코드</option>
+              </select>
+              <input type="text" class="input" id="p-input-course" placeholder="검색어를 입력해주세요." style="width:200px">
+              <select class="select" id="p-sel-course-form" style="min-width:120px">
+                <option value="">과정유형 전체</option>
+                <option value="온라인">온라인</option>
+                <option value="오프라인">오프라인</option>
+                <option value="하이브리드">하이브리드</option>
+                <option value="마이크로러닝">마이크로러닝</option>
+              </select>
+              <select class="select" id="p-sel-course-cat" style="min-width:120px">
+                <option value="">과정분류 전체</option>
+                <option value="경영">경영</option>
+                <option value="IT">IT</option>
+                <option value="어학">어학</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 회사검색 + 부서검색 -->
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group">
+            <div class="field-label">회사검색</div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <label class="checkbox-row"><input type="checkbox" id="p-chk-company"> 선택한 회사만 검색</label>
+              <div class="multi-select-wrap" id="p-company-wrap">
+                <div class="multi-tags-box" id="p-company-box">
+                  <span class="multi-placeholder" id="p-company-placeholder">회사선택</span>
+                </div>
+                <div class="multi-dropdown" id="p-company-dropdown">
+                  <div class="multi-option" data-value="휴넷">휴넷</div>
+                  <div class="multi-option" data-value="프라임">프라임</div>
+                  <div class="multi-option" data-value="A기업">A기업</div>
+                  <div class="multi-option" data-value="B기업명">B기업명</div>
+                  <div class="multi-option" data-value="C기업명">C기업명</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">부서검색</div>
+            <input type="text" class="input" id="p-input-dept" placeholder="부서명을 입력해주세요." style="min-width:200px">
+          </div>
+        </div>
+
+        <!-- 검색 / 초기화 -->
+        <div class="search-form-actions">
+          <button class="btn btn-primary" id="p-btn-search">검색</button>
+          <button class="btn btn-reset" id="p-btn-reset">초기화</button>
         </div>
       </div>
 
@@ -1783,6 +2215,7 @@
           <thead>
             <tr>
               <th>No.</th><th>이름</th><th>아이디</th><th>과정유형</th><th>과정명</th>
+              <th>과정코드<span class="change-badge in-th" data-num="2" data-memo="- 데이터: ProductID">2</span></th>
               <th>학습자 학습기간</th><th>교육비(청구)</th><th>신청일</th>
               <th>승인상태</th><th>승인일</th><th>회사명</th><th>부서명</th>
             </tr>
@@ -1803,6 +2236,65 @@
       </div>
     </div><!-- /page-personal -->
 
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 개인별 신청현황 상세                  -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-personal-detail">
+      <div class="page-header-row">
+        <div class="page-header-title">개인별 신청현황 상세</div>
+        <div class="breadcrumb">
+          <a href="#">홈</a> &gt; <a href="#">수강신청</a> &gt;
+          <a href="#" id="p-detail-breadcrumb-back">개인별 신청현황</a> &gt; 상세
+        </div>
+      </div>
+
+      <!-- Card 1: 신청자 정보 한 행 -->
+      <div class="card">
+        <div class="detail-section-header">
+          <div class="detail-section-title">신청 정보</div>
+          <div style="display:flex;gap:6px">
+            <button class="mbtn mbtn-gray" id="p-detail-back-btn">목록</button>
+            <button class="mbtn mbtn-gray" id="p-detail-prev-btn">이전</button>
+          </div>
+        </div>
+        <table class="main-table">
+          <thead>
+            <tr>
+              <th>이름</th><th>아이디</th><th>사번</th><th>과정유형</th>
+              <th>과정명</th><th>과정코드</th><th>학습자 학습기간</th>
+              <th>교육비(청구)</th><th>신청일</th><th>승인상태</th>
+              <th>승인일</th><th>회사명</th><th>부서명</th>
+            </tr>
+          </thead>
+          <tbody id="p-detail-summary-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Card 2: 교육비 결제 상세 -->
+      <div class="card">
+        <div class="detail-section-title" style="margin-bottom:14px">교육비 결제 상세</div>
+        <table class="course-info-table apply-detail-table">
+          <colgroup>
+            <col style="width:200px">
+            <col>
+          </colgroup>
+          <tbody>
+            <tr><th>결제금액</th> <td id="p-detail-pay-amount">-</td></tr>
+            <tr><th>결제방법<span class="change-badge" data-num="3" data-memo="결제방법 옵션 (교육비용 결제 메뉴 기준)
+- 일괄납입: 회사 단위 일괄 결제
+- 신용카드: 카드 결제
+- 선수금 차감: 사전 적립금에서 차감
+- 결제상태가 ‘입금완료’가 아닌 경우 ‘-’ 표시">3</span></th> <td id="p-detail-pay-method">-</td></tr>
+            <tr><th>결제상태<span class="change-badge" data-num="4" data-memo="결제상태 옵션 (교육비용 결제 메뉴 기준)
+- 입금완료: 결제 처리 완료
+- 입금대기: 결제 진행 중
+- 입금취소: 결제 취소·환불">4</span></th> <td id="p-detail-pay-status">-</td></tr>
+            <tr><th>결제일시</th> <td id="p-detail-pay-date">-</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div><!-- /page-personal-detail -->
+
 
     <!-- ══════════════════════════════════════════ -->
     <!-- PAGE: 과정별 신청현황                        -->
@@ -1813,51 +2305,58 @@
         <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">수강신청</a> &gt; 과정별 신청현황</div>
       </div>
       <div class="card">
-        <!-- 신청기간 -->
-        <div class="search-row">
-          <div class="label">신청기간</div>
-          <select class="select" id="c-sel-date-type" style="min-width:100px">
-            <option value="period">기간 검색</option>
-            <option value="start" selected>신청시작일</option>
-            <option value="end">신청종료일</option>
-          </select>
-          <div class="date-wrap">
-            <input type="text" class="input-date" id="c-date-from" value="2025-01-01" readonly>
-            <span class="cal-icon">📅</span>
-            <div class="cal-popup" id="c-cal-from"></div>
+        <!-- 신청기간 + 과정검색 (같은 줄) -->
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group">
+            <div class="field-label">신청기간</div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <select class="select" id="c-sel-date-type" style="min-width:100px">
+                <option value="period">기간 검색</option>
+                <option value="start" selected>신청시작일</option>
+                <option value="end">신청종료일</option>
+              </select>
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="c-date-from" value="2025-01-01" readonly>
+                <span class="cal-icon">📅</span>
+                <div class="cal-popup" id="c-cal-from"></div>
+              </div>
+              <span class="date-sep">~</span>
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="c-date-to" value="2025-01-31" readonly>
+                <span class="cal-icon">📅</span>
+                <div class="cal-popup" id="c-cal-to"></div>
+              </div>
+            </div>
           </div>
-          <span class="date-sep">~</span>
-          <div class="date-wrap">
-            <input type="text" class="input-date" id="c-date-to" value="2025-01-31" readonly>
-            <span class="cal-icon">📅</span>
-            <div class="cal-popup" id="c-cal-to"></div>
+          <div class="field-group">
+            <div class="field-label">과정검색</div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+              <select class="select" id="c-sel-course-type" style="min-width:80px">
+                <option value="name">과정명</option>
+                <option value="code">과정코드</option>
+              </select>
+              <input type="text" class="input" id="c-input-course" placeholder="검색어를 입력해주세요." style="width:200px">
+              <select class="select" id="c-sel-course-form" style="min-width:120px">
+                <option value="">과정유형 전체</option>
+                <option value="온라인">온라인</option>
+                <option value="오프라인">오프라인</option>
+                <option value="하이브리드">하이브리드</option>
+                <option value="마이크로러닝">마이크로러닝</option>
+              </select>
+              <select class="select" id="c-sel-course-cat" style="min-width:120px">
+                <option value="">과정분류 전체</option>
+                <option value="경영">경영</option>
+                <option value="IT">IT</option>
+                <option value="어학">어학</option>
+              </select>
+            </div>
           </div>
         </div>
-        <!-- 과정검색 -->
-        <div class="search-row">
-          <div class="label">과정검색</div>
-          <select class="select" id="c-sel-course-type">
-            <option value="name">과정명</option>
-            <option value="code">과정코드</option>
-          </select>
-          <input type="text" class="input" id="c-input-course" placeholder="검색어를 입력해주세요.">
-          <select class="select" id="c-sel-course-form">
-            <option value="">과정유형</option>
-            <option value="온라인">온라인</option>
-            <option value="오프라인">오프라인</option>
-            <option value="하이브리드">하이브리드</option>
-            <option value="마이크로러닝">마이크로러닝</option>
-          </select>
-          <select class="select" id="c-sel-course-cat" style="min-width:200px">
-            <option value="">과정분류</option>
-            <option value="경영">경영</option>
-            <option value="IT">IT</option>
-            <option value="어학">어학</option>
-          </select>
-          <div class="search-actions">
-            <button class="btn btn-primary" id="c-btn-search">검색</button>
-            <button class="btn btn-reset" id="c-btn-reset">초기화</button>
-          </div>
+
+        <!-- 검색 / 초기화 -->
+        <div class="search-form-actions">
+          <button class="btn btn-primary" id="c-btn-search">검색</button>
+          <button class="btn btn-reset" id="c-btn-reset">초기화</button>
         </div>
       </div>
 
@@ -1894,7 +2393,9 @@
         <table class="main-table">
           <thead>
             <tr>
-              <th>No.</th><th>과정유형</th><th>과정명</th><th>과정분류</th>
+              <th>No.</th><th>과정유형</th><th>과정명</th>
+              <th>과정분류</th>
+              <th>과정코드<span class="change-badge in-th" data-num="5" data-memo="- 데이터: ProductID">5</span></th>
               <th>과정 신청기간</th><th>과정 학습기간</th>
               <th>1인 교육비(청구)</th><th>신청 수</th><th>승인 수</th>
               <th>승인대기 수</th><th>취소 수</th><th>총 교육비</th>
@@ -1917,6 +2418,126 @@
     </div><!-- /page-course -->
 
     <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 과정별 신청현황 상세                  -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-course-detail">
+      <div class="page-header-row">
+        <div class="page-header-title">과정별 신청현황 상세</div>
+        <div class="breadcrumb">
+          <a href="#">홈</a> &gt; <a href="#">수강신청</a> &gt;
+          <a href="#" id="c-detail-breadcrumb-back">과정별 신청현황</a> &gt; 상세
+        </div>
+      </div>
+
+      <!-- Card 1: 과정 신청 정보 한 행 -->
+      <div class="card">
+        <div class="detail-section-header">
+          <div class="detail-section-title">과정 신청현황</div>
+          <div style="display:flex;gap:6px">
+            <button class="mbtn mbtn-gray" id="c-detail-back-btn">목록</button>
+            <button class="mbtn mbtn-gray" id="c-detail-prev-btn">이전</button>
+          </div>
+        </div>
+        <table class="main-table">
+          <thead>
+            <tr>
+              <th>과정유형</th><th>과정명</th><th>과정분류</th><th>과정코드</th>
+              <th>과정 신청기간</th><th>과정 학습기간</th>
+              <th>1인 교육비(청구)</th><th>신청 수</th><th>승인 수</th>
+              <th>승인대기 수</th><th>취소 수</th><th>총 교육비</th>
+            </tr>
+          </thead>
+          <tbody id="c-detail-course-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Card 2: 신청자 목록 -->
+      <div class="card">
+        <div class="detail-section-title" style="margin-bottom:14px">신청자 목록</div>
+
+        <!-- 검색 박스 -->
+        <div style="border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px">
+          <!-- 첫 줄: 학습자 검색 -->
+          <div class="search-form-row" style="gap:28px">
+            <div class="field-group">
+              <div class="field-label">학습자검색</div>
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+                <select class="select" id="c-det-search-key" style="min-width:70px">
+                  <option value="name">이름</option>
+                  <option value="id">아이디</option>
+                  <option value="empno">사번</option>
+                </select>
+                <input type="text" class="input" id="c-det-search-val" placeholder="검색어를 입력해주세요." style="width:200px">
+                <select class="select" id="c-det-status-sel" style="min-width:150px">
+                  <option value="">승인상태 전체</option>
+                  <option>승인</option>
+                  <option>승인대기</option>
+                  <option>취소</option>
+                </select>
+                <select class="select" id="c-det-emp-sel" style="min-width:150px">
+                  <option value="">재직상태 전체</option>
+                  <option selected>재직</option>
+                  <option>모니터링</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- 둘째 줄: 회사검색 / 부서검색 -->
+          <div class="search-row" style="margin-top:14px">
+            <div class="label">회사검색</div>
+            <label class="checkbox-row"><input type="checkbox" id="cdet-chk-company"> 선택한 회사만 검색</label>
+            <div class="multi-select-wrap" id="cdet-company-wrap">
+              <div class="multi-tags-box" id="cdet-company-box">
+                <span class="multi-placeholder" id="cdet-company-placeholder">회사선택</span>
+              </div>
+              <div class="multi-dropdown" id="cdet-company-dropdown">
+                <div class="multi-option" data-value="휴넷">휴넷</div>
+                <div class="multi-option" data-value="프라임">프라임</div>
+                <div class="multi-option" data-value="A기업">A기업</div>
+                <div class="multi-option" data-value="B기업명">B기업명</div>
+                <div class="multi-option" data-value="C기업명">C기업명</div>
+              </div>
+            </div>
+            <div class="row-divider"></div>
+            <div class="label-auto">부서검색</div>
+            <input type="text" class="input" id="c-det-dept-input" placeholder="부서명을 입력해주세요." style="min-width:200px">
+          </div>
+          <div class="search-form-actions" style="margin-top:14px">
+            <button class="btn btn-primary" id="c-det-search-btn">검색</button>
+            <button class="btn btn-reset" id="c-det-reset-btn">초기화</button>
+          </div>
+        </div>
+
+        <div class="result-header">
+          <div class="result-count">검색결과 <strong id="c-det-count">0</strong>건</div>
+          <div class="result-right">
+            <button class="btn-excel" id="c-det-btn-excel">엑셀다운로드</button>
+          </div>
+        </div>
+        <table class="main-table">
+          <thead>
+            <tr>
+              <th>No.</th><th>이름</th><th>아이디</th><th>사번</th>
+              <th>신청일</th><th>교육비</th><th>승인상태</th><th>승인일</th>
+              <th>회사명</th><th>부서명</th>
+            </tr>
+          </thead>
+          <tbody id="c-det-learner-body"></tbody>
+        </table>
+        <div class="table-footer">
+          <div class="page-size-wrap">
+            <select class="select" id="c-det-page-size">
+              <option value="30">30개씩 보기</option>
+              <option value="50" selected>50개씩 보기</option>
+              <option value="100">100개씩 보기</option>
+            </select>
+          </div>
+          <div class="pagination" id="c-det-pagination"></div>
+        </div>
+      </div>
+    </div><!-- /page-course-detail -->
+
+    <!-- ══════════════════════════════════════════ -->
     <!-- PAGE: 개인별 학습현황                        -->
     <!-- ══════════════════════════════════════════ -->
     <div class="page-section" id="page-study-personal">
@@ -1926,91 +2547,133 @@
       </div>
       <div class="card">
 
-        <!-- 과정구분 + 과정학습기간 -->
-        <div class="search-row">
-          <div class="label">과정구분</div>
-          <select class="select" id="sp-sel-course-div" style="min-width:80px">
-            <option value="all">전체</option>
-            <option value="regular">정시</option>
-            <option value="rolling">수시</option>
-          </select>
-          <div class="label-auto">과정학습기간</div>
-          <select class="select" id="sp-sel-period-type" style="min-width:100px" disabled>
-            <option value="period">기간 검색</option>
-            <option value="start" selected>학습시작일</option>
-            <option value="end">학습종료일</option>
-          </select>
-          <div class="date-wrap">
-            <input type="text" class="input-date" id="sp-date-from" value="" placeholder="날짜 선택" readonly disabled>
-            <span class="cal-icon">📅</span>
-            <div class="cal-popup" id="sp-cal-from"></div>
+        <!-- 과정구분 + 학습기간 -->
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group">
+            <div class="field-label">과정구분</div>
+            <select class="select" id="sp-sel-course-div" style="min-width:80px">
+              <option value="all">전체</option>
+              <option value="regular">정시</option>
+              <option value="rolling">수시</option>
+            </select>
           </div>
-          <span class="date-sep">~</span>
-          <div class="date-wrap">
-            <input type="text" class="input-date" id="sp-date-to" value="" placeholder="날짜 선택" readonly disabled>
-            <span class="cal-icon">📅</span>
-            <div class="cal-popup" id="sp-cal-to"></div>
+          <div class="field-group" style="min-width:500px">
+            <div class="field-label">학습기간<span class="change-badge" data-num="1" data-memo="- 기준: 학습자 학습기간 (디폴트) / 과정 학습기간
+- 정시 과정: 과정 학습기간 선택 가능
+- 전체/수시 과정: 과정 학습기간 선택 불가 (비활성)
+- 학습자 학습기간은 과정구분 무관 항상 활성">1</span></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+              <label class="radio-row" style="display:inline-flex;align-items:center;gap:4px;cursor:pointer">
+                <input type="radio" name="sp-period-base" value="learner" checked> 학습자 학습기간
+              </label>
+              <label class="radio-row" id="sp-period-base-course-label" style="display:inline-flex;align-items:center;gap:4px;cursor:pointer">
+                <input type="radio" name="sp-period-base" value="course"> 과정 학습기간
+              </label>
+              <select class="select" id="sp-sel-period-type" style="min-width:100px">
+                <option value="period">기간 검색</option>
+                <option value="start" selected>학습시작일</option>
+                <option value="end">학습종료일</option>
+              </select>
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="sp-date-from" value="" placeholder="날짜 선택" readonly>
+                <span class="cal-icon">📅</span>
+                <div class="cal-popup" id="sp-cal-from"></div>
+              </div>
+              <span class="date-sep">~</span>
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="sp-date-to" value="" placeholder="날짜 선택" readonly>
+                <span class="cal-icon">📅</span>
+                <div class="cal-popup" id="sp-cal-to"></div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- 학습자검색 + 과정검색 -->
-        <div class="search-row">
-          <div class="label">학습자검색</div>
-          <select class="select" id="sp-sel-learner-type">
-            <option value="name">이름</option>
-            <option value="id">아이디</option>
-            <option value="empno">사번</option>
-          </select>
-          <input type="text" class="input" id="sp-input-learner" placeholder="검색어를 입력해주세요.">
-          <select class="select" id="sp-sel-complete">
-            <option value="">학습자 수료여부</option>
-            <option value="수료">수료</option>
-            <option value="미수료">미수료</option>
-            <option value="-">해당없음</option>
-          </select>
-          <div class="label-auto" style="margin-left:6px">과정검색</div>
-          <select class="select" id="sp-sel-course-type">
-            <option value="name">과정명</option>
-            <option value="code">과정코드</option>
-          </select>
-          <input type="text" class="input" id="sp-input-course" placeholder="검색어를 입력해주세요.">
-          <select class="select" id="sp-sel-course-form">
-            <option value="">과정유형</option>
-            <option value="온라인">온라인</option>
-            <option value="오프라인">오프라인</option>
-            <option value="하이브리드">하이브리드</option>
-            <option value="마이크로러닝">마이크로러닝</option>
-          </select>
-          <select class="select" id="sp-sel-course-cat" style="min-width:100px">
-            <option value="">과정분류</option>
-            <option value="경영">경영</option>
-            <option value="IT">IT</option>
-            <option value="어학">어학</option>
-          </select>
+        <!-- 학습자검색 + 과정검색 (같은 줄) -->
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group" style="min-width:460px">
+            <div class="field-label">학습자검색</div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap">
+              <select class="select" id="sp-sel-learner-type" style="min-width:80px">
+                <option value="name">이름</option>
+                <option value="id">아이디</option>
+                <option value="empno">사번</option>
+              </select>
+              <input type="text" class="input" id="sp-input-learner" placeholder="검색어를 입력해주세요." style="width:200px">
+              <span class="badge-wrap"><select class="select" id="sp-sel-complete" style="min-width:130px">
+                <option value="">수료여부 전체</option>
+                <option value="수료">수료</option>
+                <option value="미수료">미수료</option>
+                <option value="수료처리전">수료처리전</option>
+              </select><span class="change-badge" data-num="2" data-memo="placeholder: ‘수료여부 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 수료여부 전체 / 수료 / 미수료 / 수료처리전">2</span></span>
+              <span class="badge-wrap"><select class="select" id="sp-sel-status" style="min-width:130px">
+                <option value="">학습상태 전체</option>
+                <option value="예정">예정</option>
+                <option value="학습중">학습중</option>
+                <option value="종료">종료</option>
+              </select><span class="change-badge" data-num="3" data-memo="placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 학습상태 전체 / 예정 / 학습중 / 종료
+※ 1차 외 신규 추가 항목">3</span></span>
+            </div>
+          </div>
+          <div class="field-group" style="min-width:560px">
+            <div class="field-label">과정검색</div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap">
+              <select class="select" id="sp-sel-course-type" style="min-width:80px">
+                <option value="name">과정명</option>
+                <option value="code">과정코드</option>
+              </select>
+              <input type="text" class="input" id="sp-input-course" placeholder="검색어를 입력해주세요." style="width:200px">
+              <span class="badge-wrap"><select class="select" id="sp-sel-course-form" style="min-width:120px">
+                <option value="">과정유형 전체</option>
+                <option value="온라인">온라인</option>
+                <option value="오프라인">오프라인</option>
+                <option value="하이브리드">하이브리드</option>
+                <option value="마이크로러닝">마이크로러닝</option>
+              </select><span class="change-badge" data-num="4" data-memo="placeholder: ‘과정유형 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 과정유형 전체 / 온라인 / 오프라인 / 하이브리드 / 마이크로러닝">4</span></span>
+              <span class="badge-wrap"><select class="select" id="sp-sel-course-cat" style="min-width:120px">
+                <option value="">과정분류 전체</option>
+                <option value="경영">경영</option>
+                <option value="IT">IT</option>
+                <option value="어학">어학</option>
+              </select><span class="change-badge" data-num="5" data-memo="placeholder: ‘과정분류 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 과정분류 전체 / 경영 / IT / 어학">5</span></span>
+            </div>
+          </div>
         </div>
 
-        <!-- 회사/부서검색 -->
-        <div class="search-row">
-          <div class="label">회사검색</div>
-          <label class="checkbox-row"><input type="checkbox" id="sp-chk-company"> 선택한 회사만 검색</label>
-          <div class="multi-select-wrap" id="sp-company-wrap">
-            <div class="multi-tags-box" id="sp-company-box">
-              <span class="multi-placeholder" id="sp-company-placeholder">회사선택</span>
-            </div>
-            <div class="multi-dropdown" id="sp-company-dropdown">
-              <div class="multi-option" data-value="휴넷">휴넷</div>
-              <div class="multi-option" data-value="프라임">프라임</div>
-              <div class="multi-option" data-value="A기업">A기업</div>
-              <div class="multi-option" data-value="B기업명">B기업명</div>
-              <div class="multi-option" data-value="C기업명">C기업명</div>
+        <!-- 회사검색 + 부서검색 -->
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group">
+            <div class="field-label">회사검색</div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <label class="checkbox-row"><input type="checkbox" id="sp-chk-company"> 선택한 회사만 검색</label>
+              <div class="multi-select-wrap" id="sp-company-wrap">
+                <div class="multi-tags-box" id="sp-company-box">
+                  <span class="multi-placeholder" id="sp-company-placeholder">회사선택</span>
+                </div>
+                <div class="multi-dropdown" id="sp-company-dropdown">
+                  <div class="multi-option" data-value="휴넷">휴넷</div>
+                  <div class="multi-option" data-value="프라임">프라임</div>
+                  <div class="multi-option" data-value="A기업">A기업</div>
+                  <div class="multi-option" data-value="B기업명">B기업명</div>
+                  <div class="multi-option" data-value="C기업명">C기업명</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="label-auto" style="margin-left:6px">부서검색</div>
-          <input type="text" class="input" id="sp-input-dept" placeholder="부서명을 입력해주세요." style="min-width:160px">
-          <div class="search-actions">
-            <button class="btn btn-primary" id="sp-btn-search">검색</button>
-            <button class="btn btn-reset" id="sp-btn-reset">초기화</button>
+          <div class="field-group">
+            <div class="field-label">부서검색</div>
+            <input type="text" class="input" id="sp-input-dept" placeholder="부서명을 입력해주세요." style="min-width:200px">
           </div>
+        </div>
+
+        <!-- 검색 / 초기화 -->
+        <div class="search-form-actions">
+          <button class="btn btn-primary" id="sp-btn-search">검색</button>
+          <button class="btn btn-reset" id="sp-btn-reset">초기화</button>
         </div>
       </div>
 
@@ -2047,6 +2710,7 @@
           <thead>
             <tr>
               <th>No.</th><th>이름</th><th>아이디</th><th>과정유형</th><th>과정명</th>
+              <th>과정코드<span class="change-badge in-th" data-num="6" data-memo="- 데이터: ProductID">6</span></th>
               <th>학습자 학습기간</th><th>학습상태</th><th>총점</th>
               <th>수료여부</th><th>수료처리일</th><th>회사명</th><th>부서명</th>
             </tr>
@@ -2117,21 +2781,23 @@
                 <option value="name">과정명</option>
                 <option value="code">과정코드</option>
               </select>
-              <input type="text" class="input" id="sc-input-course" placeholder="검색어를 입력해주세요." style="min-width:200px">
-              <select class="select" id="sc-sel-course-form" style="min-width:100px">
-                <option value="">과정유형</option>
+              <input type="text" class="input" id="sc-input-course" placeholder="검색어를 입력해주세요." style="width:200px">
+              <span class="badge-wrap"><select class="select" id="sc-sel-course-form" style="min-width:100px">
+                <option value="">과정유형 전체</option>
                 <option value="온라인">온라인</option>
                 <option value="오프라인">오프라인</option>
                 <option value="하이브리드">하이브리드</option>
                 <option value="마이크로러닝">마이크로러닝</option>
-              </select>
-              <select class="select" id="sc-sel-course-cat" style="min-width:100px">
-                <option value="">과정분류</option>
+              </select><span class="change-badge" data-num="12" data-memo="placeholder: ‘과정유형 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 과정유형 전체 / 온라인 / 오프라인 / 하이브리드 / 마이크로러닝">12</span></span>
+              <span class="badge-wrap"><select class="select" id="sc-sel-course-cat" style="min-width:100px">
+                <option value="">과정분류 전체</option>
                 <option value="전문직무">전문직무</option>
                 <option value="직무공통">직무공통</option>
                 <option value="리더십">리더십</option>
                 <option value="법정">법정</option>
-              </select>
+              </select><span class="change-badge" data-num="13" data-memo="placeholder: ‘과정분류 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 과정분류 전체 / 전문직무 / 직무공통 / 리더십 / 법정">13</span></span>
             </div>
           </div>
         </div>
@@ -2173,7 +2839,9 @@
         <table class="main-table">
           <thead>
             <tr>
-              <th>No.</th><th>과정유형</th><th>과정명</th><th>과정분류</th>
+              <th>No.</th><th>과정유형</th><th>과정명</th>
+              <th>과정분류</th>
+              <th>과정코드<span class="change-badge in-th" data-num="14" data-memo="- 데이터: ProductID">14</span></th>
               <th>과정 학습기간</th><th>학습자 수</th>
               <th>예정</th><th>학습중</th><th>종료</th>
               <th>수료처리전</th><th>수료</th><th>미수료</th>
@@ -2220,9 +2888,15 @@
         <table class="main-table">
           <thead>
             <tr>
-              <th>과정유형</th><th>과정명</th><th>과정분류</th><th>과정 학습기간</th>
+              <th>과정유형</th><th>과정명<span class="change-badge in-th" data-num="15" data-memo="link화 (신규)
+- 클릭 시 과정 정보 모달 호출
+- 모달: 과정명·과정분류·과정코드·과정유형 등 메타 정보 표시">15</span></th><th>과정분류</th><th>과정 학습기간</th>
               <th>학습자 수</th><th>예정</th><th>학습중</th><th>종료</th>
-              <th>수료처리전</th><th>수료</th><th>미수료</th><th>수료율</th><th>수료중 출력</th>
+              <th>수료처리전</th><th>수료</th><th>미수료</th><th>수료율</th>
+              <th>수료기준<span class="change-badge in-th" data-num="16" data-memo="- 클릭 시 수료기준 모달 호출
+- 모달 컬럼: 평가항목 / 포함 콘텐츠 수 / 필수여부 / 평가비중 / 수료기준
+- 총점 행: 총합 100% / 과정 수료기준 (예: 70점 이상)">16</span></th>
+              <th>수료중 출력</th>
             </tr>
           </thead>
           <tbody id="sc-detail-course-body"></tbody>
@@ -2237,11 +2911,21 @@
         <div style="border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px">
           <!-- 목차 검색 -->
           <div class="search-form-row" style="margin-bottom:14px">
-            <div class="field-group" style="min-width:380px">
-              <div class="field-label">목차 검색</div>
-              <select class="select" id="sc-det-content-sel" style="min-width:380px">
-                <option value="">포함된 콘텐츠를 선택하세요.</option>
-              </select>
+            <div class="field-group" style="min-width:560px">
+              <div class="field-label">목차검색<span class="change-badge" data-num="17" data-memo="- 평가항목 변경 시 콘텐츠 옵션 자동 갱신
+- 데이터: course_index (LEARNING/EXAM/ASSIGNMENT/SURVEY ROOT)">17</span></div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <select class="select" id="sc-det-evalroot-sel" style="min-width:140px">
+                  <option value="">평가항목 전체</option>
+                  <option value="LEARNING_ROOT">학습</option>
+                  <option value="EXAM_ROOT">시험</option>
+                  <option value="ASSIGNMENT_ROOT">과제</option>
+                  <option value="SURVEY_ROOT">설문</option>
+                </select>
+                <select class="select" id="sc-det-content-sel" style="min-width:380px">
+                  <option value="">포함된 콘텐츠를 선택하세요.</option>
+                </select>
+              </div>
             </div>
           </div>
           <!-- 학습자/회사/부서 검색 -->
@@ -2254,7 +2938,7 @@
                   <option value="id">아이디</option>
                   <option value="empno">사번</option>
                 </select>
-                <input type="text" class="input" id="sc-det-learner-input" placeholder="검색어를 입력해주세요." style="min-width:200px">
+                <input type="text" class="input" id="sc-det-learner-input" placeholder="검색어를 입력해주세요." style="width:200px">
               </div>
             </div>
             <div class="field-group">
@@ -2283,10 +2967,27 @@
             <button class="mbtn mbtn-gray" id="sc-content-to-course-btn">과정 학습상세</button>
           </div>
           <table class="main-table">
+            <colgroup>
+              <col style="width:60px">   <!-- No. -->
+              <col style="width:80px">   <!-- 필수여부 -->
+              <col style="width:120px">  <!-- 평가항목 -->
+              <col style="width:140px">  <!-- 콘텐츠 유형 -->
+              <col>                       <!-- 콘텐츠명 -->
+              <col style="width:200px">  <!-- 콘텐츠 학습기간 -->
+              <col style="width:130px">  <!-- 콘텐츠 정보 -->
+              <col style="width:160px">  <!-- 완료기준 -->
+            </colgroup>
             <thead>
               <tr>
-                <th>No.</th><th>필수여부</th><th>콘텐츠 유형</th><th>콘텐츠명</th>
-                <th>콘텐츠 학습기간</th><th>콘텐츠 정보</th><th>완료기준</th>
+                <th>No.</th><th>필수여부</th>
+                <th>평가항목<span class="change-badge in-th" data-num="19" data-memo="- 데이터: course_index 루트
+- 표시값: 학습 / 시험 / 과제 / 설문">19</span></th>
+                <th>콘텐츠 유형</th><th>콘텐츠명</th>
+                <th>콘텐츠 학습기간</th><th>콘텐츠 정보<span class="change-badge in-th" data-num="20" data-memo="표기 룰 (6-1 데이터 표기 규칙 적용)
+- 동영상·유튜브: HH:MM:SS (전체 길이)
+- 이미지·PDF / 첨부파일 / 오프라인 / 시험·퀴즈: N장 / N개 / N일 / N문항
+- 단일 콘텐츠: 1개
+- 콘텐츠 유형 라벨 제거 (별도 콘텐츠 유형 컬럼이 같은 표에 있음)">20</span></th><th>완료기준</th>
               </tr>
             </thead>
             <tbody id="sc-content-detail-body"></tbody>
@@ -2880,9 +3581,14 @@
           <thead>
             <tr>
               <th>이름</th><th>아이디</th><th>과정유형</th>
-              <th>과정명</th><th>학습자 학습기간</th>
+              <th>과정명<span class="change-badge in-th" data-num="7" data-memo="link화 (신규)
+- 클릭 시 과정 정보 모달 호출
+- 모달: 과정명·과정분류·과정코드·과정유형 등 메타 정보 표시">7</span></th><th>학습자 학습기간</th>
               <th>학습상태</th><th>총점</th><th>수료여부</th>
               <th>수료처리일</th><th>회사명</th><th>부서명</th>
+              <th>학습성적<span class="change-badge in-th" data-num="8" data-memo="- 호출 가능 상태: 수료 / 미수료 / 수료처리전 모두">8</span></th>
+              <th>수료증 출력<span class="change-badge in-th" data-num="9" data-memo="- 활성 조건: 수료여부 = '수료'
+- 비활성: 미수료 / 수료처리전">9</span></th>
             </tr>
           </thead>
           <tbody id="detail-summary-body"></tbody>
@@ -2893,11 +3599,34 @@
       <div class="card">
         <div class="detail-section-title" style="margin-bottom:14px">콘텐츠별 학습</div>
         <table class="main-table">
+          <colgroup>
+            <col style="width:90px">   <!-- 평가항목 -->
+            <col style="width:100px">  <!-- 콘텐츠 유형 -->
+            <col>                       <!-- 콘텐츠명 (남는 공간 흡수) -->
+            <col style="width:80px">   <!-- 필수여부 -->
+            <col style="width:200px">  <!-- 학습자 콘텐츠 학습기간 -->
+            <col style="width:200px">  <!-- 학습한 정보 -->
+            <col style="width:90px">   <!-- 진행률 -->
+            <col style="width:90px">   <!-- 콘텐츠 점수 -->
+            <col style="width:80px">   <!-- 완료여부 -->
+            <col style="width:120px">  <!-- 최근 학습일 -->
+          </colgroup>
           <thead>
             <tr>
+              <th>평가항목<span class="change-badge in-th" data-num="10" data-memo="- 데이터: course_index 루트
+- 표시값: 학습 / 시험 / 과제 / 설문">10</span></th>
               <th>콘텐츠 유형</th><th>콘텐츠명</th><th>필수여부</th>
               <th>학습자 콘텐츠 학습기간</th>
-              <th>학습한 정보</th>
+              <th>학습한 정보<span class="change-badge in-th" data-num="11" data-memo="학습한 값 / 전체 값 의미
+- 동영상·유튜브: 학습한 최대 시간 / 전체 길이
+- 이미지·PDF: 확인한 페이지 수 / 전체 페이지 수
+- 첨부파일: 다운로드한 수 / 전체 수
+- 오프라인: 출석 일차 / 전체 일차
+- 시험·퀴즈: 응시 문항 / 전체 문항
+- 아티클·외부링크·과제·설문: 확인/제출 수 / 1 (그룹 X, 전체 1 고정)
+- 토론: 완료기준에 따라 분기
+   · 등록완료 기준: 등록수 / 1
+   · 제출완료 기준: 제출수 / 1">11</span></th>
               <th>진행률(%)</th>
               <th>콘텐츠 점수</th>
               <th>완료여부</th>
@@ -3414,74 +4143,89 @@
 
         <!-- 검색 폼 -->
         <div class="card">
-          <div class="search-row">
-            <div class="label">학습시작일</div>
-            <div class="radio-group">
-              <label class="radio-label"><input type="radio" name="fp-period-mode" value="month" checked onchange="toggleFpPeriodMode()"> 월 단위</label>
-              <label class="radio-label"><input type="radio" name="fp-period-mode" value="range" onchange="toggleFpPeriodMode()"> 월 범위</label>
-            </div>
-            <!-- 월 단위 모드 -->
-            <span id="fp-period-month" style="display:inline-flex;gap:6px;align-items:center">
-              <select class="select" style="min-width:90px">
-                <option>2026년</option><option>2025년</option>
-              </select>
-              <select class="select" style="min-width:80px">
-                <option>4월</option><option>3월</option><option>2월</option><option>1월</option>
-              </select>
-            </span>
-            <!-- 월 범위 모드 -->
-            <span id="fp-period-range" style="display:none;gap:6px;align-items:center">
-              <select class="select" style="min-width:90px">
-                <option>2026년</option><option>2025년</option>
-              </select>
-              <select class="select" style="min-width:80px">
-                <option>1월</option><option>2월</option><option>3월</option><option>4월</option>
-              </select>
-              <span class="date-sep">~</span>
-              <select class="select" style="min-width:90px">
-                <option>2026년</option><option>2025년</option>
-              </select>
-              <select class="select" style="min-width:80px">
-                <option>4월</option><option>3월</option><option>2월</option><option>1월</option>
-              </select>
-            </span>
-          </div>
-          <div class="search-row">
-            <div class="label">결제 정보</div>
-            <select class="select" style="min-width:140px">
-              <option value="" disabled selected>결제방법</option>
-              <option value="">전체</option>
-              <option value="Bank">일괄납입</option>
-              <option value="Card">신용카드</option>
-              <option value="Prepaid">선수금 차감</option>
-            </select>
-            <select class="select" style="min-width:140px">
-              <option value="" disabled selected>결제상태</option>
-              <option value="">전체</option>
-              <option value="done">입금완료</option>
-              <option value="wait">입금대기</option>
-              <option value="cancel">입금취소</option>
-            </select>
-          </div>
-          <div class="search-row">
-            <div class="label">회사검색</div>
-            <label class="checkbox-row"><input type="checkbox" id="fp-chk-company"> 선택한 회사만 검색</label>
-            <div class="multi-select-wrap" id="fp-company-wrap">
-              <div class="multi-tags-box" id="fp-company-box">
-                <span class="multi-placeholder" id="fp-company-placeholder">회사선택</span>
-              </div>
-              <div class="multi-dropdown" id="fp-company-dropdown">
-                <div class="multi-option" data-value="휴넷">휴넷</div>
-                <div class="multi-option" data-value="프라임">프라임</div>
-                <div class="multi-option" data-value="A기업">A기업</div>
-                <div class="multi-option" data-value="B기업명">B기업명</div>
-                <div class="multi-option" data-value="C기업명">C기업명</div>
+          <!-- 학습시작일 -->
+          <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+            <div class="field-group" style="min-width:480px">
+              <div class="field-label">학습시작일</div>
+              <div style="display:flex;gap:10px;align-items:center;flex-wrap:nowrap">
+                <div class="radio-group">
+                  <label class="radio-label"><input type="radio" name="fp-period-mode" value="month" checked onchange="toggleFpPeriodMode()"> 월 단위</label>
+                  <label class="radio-label"><input type="radio" name="fp-period-mode" value="range" onchange="toggleFpPeriodMode()"> 월 범위</label>
+                </div>
+                <!-- 월 단위 모드 -->
+                <span id="fp-period-month" style="display:inline-flex;gap:6px;align-items:center">
+                  <select class="select" style="min-width:90px">
+                    <option>2026년</option><option>2025년</option>
+                  </select>
+                  <select class="select" style="min-width:80px">
+                    <option>4월</option><option>3월</option><option>2월</option><option>1월</option>
+                  </select>
+                </span>
+                <!-- 월 범위 모드 -->
+                <span id="fp-period-range" style="display:none;gap:6px;align-items:center">
+                  <select class="select" style="min-width:90px">
+                    <option>2026년</option><option>2025년</option>
+                  </select>
+                  <select class="select" style="min-width:80px">
+                    <option>1월</option><option>2월</option><option>3월</option><option>4월</option>
+                  </select>
+                  <span class="date-sep">~</span>
+                  <select class="select" style="min-width:90px">
+                    <option>2026년</option><option>2025년</option>
+                  </select>
+                  <select class="select" style="min-width:80px">
+                    <option>4월</option><option>3월</option><option>2월</option><option>1월</option>
+                  </select>
+                </span>
               </div>
             </div>
-            <div class="search-actions">
-              <button class="btn btn-primary">검색</button>
-              <button class="btn btn-reset">초기화</button>
+          </div>
+
+          <!-- 결제 정보 + 회사검색 (같은 줄) -->
+          <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+            <div class="field-group" style="min-width:320px">
+              <div class="field-label">결제 정보</div>
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap">
+                <select class="select" style="min-width:140px">
+                  <option value="" disabled selected>결제방법</option>
+                  <option value="">전체</option>
+                  <option value="Bank">일괄납입</option>
+                  <option value="Card">신용카드</option>
+                  <option value="Prepaid">선수금 차감</option>
+                </select>
+                <select class="select" style="min-width:140px">
+                  <option value="" disabled selected>결제상태</option>
+                  <option value="">전체</option>
+                  <option value="done">입금완료</option>
+                  <option value="wait">입금대기</option>
+                  <option value="cancel">입금취소</option>
+                </select>
+              </div>
             </div>
+            <div class="field-group" style="min-width:380px">
+              <div class="field-label">회사검색</div>
+              <div style="display:flex;gap:8px;align-items:center;flex-wrap:nowrap">
+                <label class="checkbox-row"><input type="checkbox" id="fp-chk-company"> 선택한 회사만 검색</label>
+                <div class="multi-select-wrap" id="fp-company-wrap">
+                  <div class="multi-tags-box" id="fp-company-box">
+                    <span class="multi-placeholder" id="fp-company-placeholder">회사선택</span>
+                  </div>
+                  <div class="multi-dropdown" id="fp-company-dropdown">
+                    <div class="multi-option" data-value="휴넷">휴넷</div>
+                    <div class="multi-option" data-value="프라임">프라임</div>
+                    <div class="multi-option" data-value="A기업">A기업</div>
+                    <div class="multi-option" data-value="B기업명">B기업명</div>
+                    <div class="multi-option" data-value="C기업명">C기업명</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 검색 / 초기화 -->
+          <div class="search-form-actions">
+            <button class="btn btn-primary">검색</button>
+            <button class="btn btn-reset">초기화</button>
           </div>
         </div>
 
@@ -3698,20 +4442,42 @@
         <div class="card">
           <div class="card-title">결제 상세내역</div>
 
-          <!-- 검색 박스 (과정별 학습현황 상세와 동일 패턴) -->
+          <!-- 검색 박스 (개인별 학습현황 목록과 동일 패턴) -->
           <div style="border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px">
-            <!-- 과정검색 -->
-            <div class="search-form-row" style="margin-bottom:14px">
-              <div class="field-group" style="min-width:380px">
+            <!-- 학습자검색 + 과정검색 (같은 줄) -->
+            <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+              <div class="field-group" style="min-width:520px">
+                <div class="field-label">학습자검색</div>
+                <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap">
+                  <select class="select" style="min-width:80px">
+                    <option value="name">이름</option>
+                    <option value="id">아이디</option>
+                    <option value="empno">사번</option>
+                  </select>
+                  <input type="text" class="input" placeholder="검색어를 입력해주세요." style="width:200px">
+                  <select class="select" style="min-width:120px">
+                    <option value="">학습상태 전체</option>
+                    <option value="pending">예정</option>
+                    <option value="doing">학습중</option>
+                    <option value="done">종료</option>
+                  </select>
+                  <select class="select" style="min-width:120px">
+                    <option value="">수료여부 전체</option>
+                    <option value="pass">수료</option>
+                    <option value="fail">미수료</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-group" style="min-width:440px">
                 <div class="field-label">과정검색</div>
-                <div style="display:flex;gap:6px;align-items:center">
-                  <select class="select" style="min-width:90px">
+                <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap">
+                  <select class="select" style="min-width:80px">
                     <option value="name">과정명</option>
                     <option value="code">과정코드</option>
                   </select>
-                  <input type="text" class="input" placeholder="검색어를 입력해주세요." style="min-width:280px">
-                  <select class="select" style="min-width:100px">
-                    <option value="">과정유형</option>
+                  <input type="text" class="input" placeholder="검색어를 입력해주세요." style="width:200px">
+                  <select class="select" style="min-width:120px">
+                    <option value="">과정유형 전체</option>
                     <option value="온라인">온라인</option>
                     <option value="오프라인">오프라인</option>
                     <option value="하이브리드">하이브리드</option>
@@ -3720,36 +4486,16 @@
                 </div>
               </div>
             </div>
-            <!-- 학습자/부서 검색 -->
-            <div class="search-form-row" style="gap:28px">
-              <div class="field-group">
-                <div class="field-label">학습자검색</div>
-                <div style="display:flex;gap:6px;align-items:center">
-                  <select class="select" style="min-width:70px">
-                    <option value="name">이름</option>
-                    <option value="id">아이디</option>
-                    <option value="empno">사번</option>
-                  </select>
-                  <input type="text" class="input" placeholder="검색어를 입력해주세요." style="min-width:200px">
-                  <select class="select" style="min-width:100px">
-                    <option value="">학습상태</option>
-                    <option value="pending">예정</option>
-                    <option value="doing">학습중</option>
-                    <option value="done">종료</option>
-                  </select>
-                  <select class="select" style="min-width:100px">
-                    <option value="">수료여부</option>
-                    <option value="pass">수료</option>
-                    <option value="fail">미수료</option>
-                  </select>
-                </div>
-              </div>
+
+            <!-- 부서검색 -->
+            <div class="search-form-row" style="gap:28px;margin-bottom:14px">
               <div class="field-group">
                 <div class="field-label">부서검색</div>
-                <input type="text" class="input" placeholder="부서명을 입력해주세요." style="min-width:200px">
+                <input type="text" class="input" placeholder="부서명을 입력해주세요." style="min-width:240px">
               </div>
             </div>
-            <div class="search-form-actions" style="margin-top:14px">
+
+            <div class="search-form-actions">
               <button class="btn btn-primary">검색</button>
               <button class="btn btn-reset">초기화</button>
             </div>
@@ -3889,82 +4635,91 @@
 
       <!-- 검색 폼 -->
       <div class="card">
-        <!-- 집계 단위 -->
-        <div class="search-row">
-          <div class="label">집계 단위</div>
-          <div class="radio-group">
-            <label class="radio-label"><input type="radio" name="fa-unit" value="month" checked onchange="changeFaUnit()"> 월별</label>
-            <label class="radio-label"><input type="radio" name="fa-unit" value="quarter" onchange="changeFaUnit()"> 분기별</label>
-            <label class="radio-label"><input type="radio" name="fa-unit" value="year" onchange="changeFaUnit()"> 연도별</label>
+        <!-- 집계 단위 + 학습시작일 (같은 줄) -->
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group" style="min-width:300px">
+            <div class="field-label">집계 단위</div>
+            <div class="radio-group" style="padding-top:6px">
+              <label class="radio-label"><input type="radio" name="fa-unit" value="month" checked onchange="changeFaUnit()"> 월별</label>
+              <label class="radio-label"><input type="radio" name="fa-unit" value="quarter" onchange="changeFaUnit()"> 분기별</label>
+              <label class="radio-label"><input type="radio" name="fa-unit" value="year" onchange="changeFaUnit()"> 연도별</label>
+            </div>
+          </div>
+          <div class="field-group" style="min-width:560px">
+            <div class="field-label">학습시작일</div>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:nowrap">
+              <!-- 월별·분기별: 년/월 ~ 년/월 -->
+              <span id="fa-period-monthly" style="display:inline-flex;gap:6px;align-items:center">
+                <select class="select" id="fa-m-from-y" style="min-width:90px">
+                  <option selected>2026년</option><option>2025년</option><option>2024년</option>
+                </select>
+                <select class="select" id="fa-m-from-m" style="min-width:80px">
+                  <option selected>1월</option>
+                  <option>2월</option>
+                  <option>3월</option>
+                  <option>4월</option>
+                  <option>5월</option>
+                  <option>6월</option>
+                  <option>7월</option>
+                  <option>8월</option>
+                  <option>9월</option>
+                  <option>10월</option>
+                  <option>11월</option>
+                  <option>12월</option>
+                </select>
+                <span class="date-sep">~</span>
+                <select class="select" id="fa-m-to-y" style="min-width:90px">
+                  <option selected>2026년</option><option>2025년</option><option>2024년</option>
+                </select>
+                <select class="select" id="fa-m-to-m" style="min-width:80px">
+                  <option>1월</option>
+                  <option>2월</option>
+                  <option>3월</option>
+                  <option>4월</option>
+                  <option>5월</option>
+                  <option>6월</option>
+                  <option>7월</option>
+                  <option>8월</option>
+                  <option>9월</option>
+                  <option>10월</option>
+                  <option>11월</option>
+                  <option selected>12월</option>
+                </select>
+              </span>
+              <!-- 연도별: 년 ~ 년 -->
+              <span id="fa-period-yearly" style="display:none;gap:6px;align-items:center">
+                <select class="select" id="fa-y-from" style="min-width:90px">
+                  <option>2022년</option><option>2023년</option><option selected>2024년</option><option>2025년</option><option>2026년</option>
+                </select>
+                <span class="date-sep">~</span>
+                <select class="select" id="fa-y-to" style="min-width:90px">
+                  <option>2022년</option><option>2023년</option><option>2024년</option><option>2025년</option><option selected>2026년</option>
+                </select>
+              </span>
+              <!-- 프리셋 버튼 (단위별) -->
+              <div class="fa-presets" id="fa-presets-month-quarter">
+                <button type="button" class="fa-preset-btn" onclick="setFaPeriod('lastYear')">전년도</button>
+                <button type="button" class="fa-preset-btn" onclick="setFaPeriod('last12m')">최근 12개월</button>
+              </div>
+              <div class="fa-presets" id="fa-presets-year" style="display:none">
+                <button type="button" class="fa-preset-btn" onclick="setFaPeriod('last3y')">최근 3년</button>
+                <button type="button" class="fa-preset-btn" onclick="setFaPeriod('last5y')">최근 5년</button>
+              </div>
+            </div>
           </div>
         </div>
-        <!-- 학습시작일 + 프리셋 -->
-        <div class="search-row">
-          <div class="label">학습시작일</div>
-          <!-- 월별·분기별: 년/월 ~ 년/월 -->
-          <span id="fa-period-monthly" style="display:inline-flex;gap:6px;align-items:center">
-            <select class="select" id="fa-m-from-y" style="min-width:90px">
-              <option selected>2026년</option><option>2025년</option><option>2024년</option>
-            </select>
-            <select class="select" id="fa-m-from-m" style="min-width:80px">
-              <option selected>1월</option>
-              <option>2월</option>
-              <option>3월</option>
-              <option>4월</option>
-              <option>5월</option>
-              <option>6월</option>
-              <option>7월</option>
-              <option>8월</option>
-              <option>9월</option>
-              <option>10월</option>
-              <option>11월</option>
-              <option>12월</option>
-            </select>
-            <span class="date-sep">~</span>
-            <select class="select" id="fa-m-to-y" style="min-width:90px">
-              <option selected>2026년</option><option>2025년</option><option>2024년</option>
-            </select>
-            <select class="select" id="fa-m-to-m" style="min-width:80px">
-              <option>1월</option>
-              <option>2월</option>
-              <option>3월</option>
-              <option>4월</option>
-              <option>5월</option>
-              <option>6월</option>
-              <option>7월</option>
-              <option>8월</option>
-              <option>9월</option>
-              <option>10월</option>
-              <option>11월</option>
-              <option selected>12월</option>
-            </select>
-          </span>
-          <!-- 연도별: 년 ~ 년 -->
-          <span id="fa-period-yearly" style="display:none;gap:6px;align-items:center">
-            <select class="select" id="fa-y-from" style="min-width:90px">
-              <option>2022년</option><option>2023년</option><option selected>2024년</option><option>2025년</option><option>2026년</option>
-            </select>
-            <span class="date-sep">~</span>
-            <select class="select" id="fa-y-to" style="min-width:90px">
-              <option>2022년</option><option>2023년</option><option>2024년</option><option>2025년</option><option selected>2026년</option>
-            </select>
-          </span>
-          <!-- 프리셋 버튼 (단위별) -->
-          <div class="fa-presets" id="fa-presets-month-quarter">
-            <button type="button" class="fa-preset-btn" onclick="setFaPeriod('lastYear')">전년도</button>
-            <button type="button" class="fa-preset-btn" onclick="setFaPeriod('last12m')">최근 12개월</button>
+
+        <!-- 검색 / 초기화 + 안내문 (한 줄) -->
+        <div class="search-form-actions" style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+          <div>
+            <div class="fa-search-note" id="fa-search-note-mq" style="margin:0">ℹ️ 월별·분기별 집계는 최대 12개월 범위까지 조회할 수 있습니다.</div>
+            <div class="fa-search-note" id="fa-search-note-y" style="display:none;margin:0">ℹ️ 연도별 집계는 연도 범위로 조회합니다.</div>
           </div>
-          <div class="fa-presets" id="fa-presets-year" style="display:none">
-            <button type="button" class="fa-preset-btn" onclick="setFaPeriod('last3y')">최근 3년</button>
-            <button type="button" class="fa-preset-btn" onclick="setFaPeriod('last5y')">최근 5년</button>
-          </div>
-          <div class="search-actions">
+          <div style="display:flex;gap:6px;flex-shrink:0">
             <button class="btn btn-primary">검색</button>
             <button class="btn btn-reset">초기화</button>
           </div>
         </div>
-        <div class="fa-search-note" id="fa-search-note-mq">ℹ️ 월별·분기별 집계는 최대 12개월 범위까지 조회할 수 있습니다.</div>
-        <div class="fa-search-note" id="fa-search-note-y" style="display:none">ℹ️ 연도별 집계는 연도 범위로 조회합니다.</div>
       </div>
 
       <!-- KPI 카드 4개 -->
@@ -4451,6 +5206,61 @@
 const MONTHS = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
 const DAYS   = ['일','월','화','수','목','금','토'];
 
+// ── 변경/추가 작업 배지 팝오버 ──────────────────────
+// 사용법: <span class="change-badge" data-num="①" data-memo="설명 텍스트">①</span>
+//        동적 생성된 배지도 자동 작동 (이벤트 위임)
+(function setupChangeBadge() {
+  const popover = document.getElementById('change-popover');
+  if (!popover) return;
+  const numEl  = document.getElementById('cp-num');
+  const bodyEl = document.getElementById('cp-body');
+  const closeEl= document.getElementById('cp-close');
+
+  document.addEventListener('click', (e) => {
+    const badge = e.target.closest('.change-badge');
+    if (badge) {
+      e.stopPropagation();
+      const rect = badge.getBoundingClientRect();
+      numEl.textContent  = badge.dataset.num  || badge.textContent || '·';
+      bodyEl.textContent = badge.dataset.memo || '(메모 없음)';
+
+      // 일단 표시해야 실제 크기를 측정할 수 있음 (display:none 상태에서는 0)
+      popover.classList.add('show');
+      const popW = popover.offsetWidth;
+      const popH = popover.offsetHeight;
+      const margin = 12;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      // 가로: 기본 배지 좌측 정렬, 우측 초과 시 화면 안으로 보정
+      let left = rect.left - 10;
+      if (left + popW + margin > vw) {
+        left = Math.max(margin, vw - popW - margin);
+      }
+
+      // 세로: 기본 배지 아래, 화면 하단 초과 시 배지 위로 펼침
+      let top = rect.bottom + 10;
+      if (top + popH + margin > vh) {
+        const above = rect.top - popH - 10;
+        if (above >= margin) {
+          top = above;   // 위쪽 공간 충분하면 위로
+        } else {
+          top = Math.max(margin, vh - popH - margin);  // 위도 부족하면 화면 안에 맞춤
+        }
+      }
+
+      popover.style.top  = (window.scrollY + top) + 'px';
+      popover.style.left = (window.scrollX + left) + 'px';
+      return;
+    }
+    // 외부 클릭 → 닫기
+    if (!e.target.closest('#change-popover')) {
+      popover.classList.remove('show');
+    }
+  });
+  closeEl.addEventListener('click', () => popover.classList.remove('show'));
+})();
+
 function buildCal(popup, input, y, m) {
   const today = new Date(), sel = input.value;
   const first = new Date(y,m,1).getDay();
@@ -4559,6 +5369,23 @@ const P_COS     = ['회사1','회사2','회사3'];
 const P_ALL_DATA = Array.from({length:50}, (_,i) => {
   const n = P_NAMES[i % P_NAMES.length];
   const status = P_STATUSES[i % 3];
+  const fee = ((i % 8) + 1) * 30000;   // 30,000 ~ 240,000원 사이 8단계 순환
+  const applyDate = `2025-0${(i%9)+1}-${String((i%28)+1).padStart(2,'0')}`;
+  const approveDate = status==='승인' ? `2025-0${(i%9)+1}-${String((i%28)+2).padStart(2,'0')}` : '-';
+
+  // 결제(교육비) 정보 시뮬레이션 - 교육비용 결제 메뉴와 옵션 일치
+  // 결제방법: 일괄납입 / 신용카드 / 선수금 차감
+  // 결제상태: 입금완료 / 입금대기 / 입금취소
+  let paymentStatus, paymentDate, paymentMethod;
+  if (status === '승인')           {
+    paymentStatus = '입금완료';
+    paymentDate = `${applyDate} ${String(10+(i%8)).padStart(2,'0')}:${String((i*7)%60).padStart(2,'0')}`;
+    const methods = ['일괄납입', '신용카드', '선수금 차감'];
+    paymentMethod = methods[i % 3];
+  }
+  else if (status === '승인대기')  { paymentStatus = '입금대기'; paymentDate = '-'; paymentMethod = '-'; }
+  else                              { paymentStatus = '입금취소'; paymentDate = `${applyDate} ${String(10+(i%8)).padStart(2,'0')}:${String((i*7)%60).padStart(2,'0')}`; paymentMethod = '-'; }
+
   return {
     no: 200-i,
     name: n+'이름',
@@ -4566,13 +5393,19 @@ const P_ALL_DATA = Array.from({length:50}, (_,i) => {
     empno: `1000${String(i+1).padStart(2,'0')}`,
     type: P_TYPES[i % 4],
     course: P_COURSES[i % P_COURSES.length],
+    courseCode: String(300000 + (i % P_COURSES.length) * 1370 + (i % 7)),
     period: '2025-01-01~2025-12-31',
-    fee: (i%5===0) ? 0 : (i+1)*5000,
-    applyDate: `2025-0${(i%9)+1}-${String((i%28)+1).padStart(2,'0')}`,
+    fee,
+    applyDate,
     status,
-    approveDate: status==='승인' ? `2025-0${(i%9)+1}-${String((i%28)+2).padStart(2,'0')}` : '-',
+    approveDate,
     company: P_COS[i % 3],
-    dept: P_DEPTS[i % P_DEPTS.length]
+    dept: P_DEPTS[i % P_DEPTS.length],
+    employment: (i % 10 < 7) ? '재직' : '모니터링',  // 70%/30%
+    // 결제 정보
+    paymentStatus,
+    paymentDate,
+    paymentMethod
   };
 });
 
@@ -4618,16 +5451,17 @@ function pRenderTable() {
   const slice = pFilteredData.slice(start, start+pPageSize);
   document.getElementById('p-result-count-text').textContent = pFilteredData.length.toLocaleString();
   if (!slice.length) {
-    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
     document.getElementById('p-pagination').innerHTML = '';
     return;
   }
-  tbody.innerHTML = slice.map(r => `<tr>
+  tbody.innerHTML = slice.map((r, idx) => `<tr>
     <td>${r.no}</td>
-    <td>${maskName(r.name)}</td>
+    <td class="link-cell" data-p-idx="${start + idx}">${maskName(r.name)}</td>
     <td>${maskEmail(r.id)}</td>
     <td>${r.type}</td>
     <td style="text-align:left;padding-left:10px">${r.course}</td>
+    <td>${r.courseCode}</td>
     <td>${fmtPeriod(r.period)}</td>
     <td style="text-align:right;padding-right:10px">${r.fee.toLocaleString()}</td>
     <td>${fmtDatetime(r.applyDate, r.no)}</td>
@@ -4636,6 +5470,15 @@ function pRenderTable() {
     <td>${r.company}</td>
     <td>${r.dept}</td>
   </tr>`).join('');
+
+  // 이름 클릭 → 개인별 신청현황 상세 진입
+  tbody.querySelectorAll('.link-cell[data-p-idx]').forEach(cell => {
+    cell.addEventListener('click', () => {
+      const r = pFilteredData[parseInt(cell.dataset.pIdx)];
+      openPersonalApplyDetail(r);
+    });
+  });
+
   renderPagination('p-pagination', Math.ceil(pFilteredData.length/pPageSize), pCurrentPage, p => { pCurrentPage=p; pRenderTable(); });
 }
 
@@ -4657,6 +5500,7 @@ function pDoSearch() {
   const lt = document.getElementById('p-sel-learner-type').value;
   const lv = document.getElementById('p-input-learner').value.trim().toLowerCase();
   const av = document.getElementById('p-sel-approval').value;
+  const ev = document.getElementById('p-sel-employment').value;
   const ct = document.getElementById('p-sel-course-type').value;
   const cv = document.getElementById('p-input-course').value.trim().toLowerCase();
   const cf = document.getElementById('p-sel-course-form').value;
@@ -4668,9 +5512,10 @@ function pDoSearch() {
       const t = lt==='id' ? r.id : lt==='empno' ? r.empno : r.name;
       if (!t.toLowerCase().includes(lv)) return false;
     }
-    if (av && r.status !== av) return false;
+    if (av && r.status !== av)         return false;
+    if (ev && r.employment !== ev)     return false;
     if (cv) {
-      const t = ct==='code' ? r.id : r.course;
+      const t = ct==='code' ? r.courseCode : r.course;
       if (!t.toLowerCase().includes(cv)) return false;
     }
     if (cf && r.type !== cf) return false;
@@ -4692,15 +5537,13 @@ document.getElementById('p-btn-reset').addEventListener('click', () => {
   document.getElementById('p-input-dept').value    = '';
   document.getElementById('p-sel-learner-type').selectedIndex = 0;
   document.getElementById('p-sel-approval').selectedIndex     = 0;
+  document.getElementById('p-sel-employment').value           = '재직';   // 디폴트
   document.getElementById('p-sel-course-type').selectedIndex  = 0;
   document.getElementById('p-sel-course-form').selectedIndex  = 0;
   document.getElementById('p-sel-course-cat').selectedIndex   = 0;
   document.getElementById('p-chk-company').checked = false;
   resetMultiSelect('p');
-  pFilteredData = [...P_ALL_DATA];
-  pCurrentPage = 1;
-  pUpdateSummary();
-  pRenderTable();
+  pDoSearch();
 });
 ['p-input-learner','p-input-course','p-input-dept'].forEach(id => {
   document.getElementById(id).addEventListener('keydown', e => { if(e.key==='Enter') pDoSearch(); });
@@ -4736,6 +5579,7 @@ const C_ALL_DATA = Array.from({length:200}, (_,i) => {
     no: 200-i,
     type,
     course,
+    courseCode: String(400000 + (i % C_COURSES.length) * 1370 + (i % 13)),
     cat,
     applyPeriod: `2024-12-01 ~2024-12-31`,
     studyPeriod: `2025-01-01 ~2025-12-31`,
@@ -4758,15 +5602,16 @@ function cRenderTable() {
   const slice = cFilteredData.slice(start, start+cPageSize);
   document.getElementById('c-result-count-text').textContent = cFilteredData.length.toLocaleString();
   if (!slice.length) {
-    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
     document.getElementById('c-pagination').innerHTML = '';
     return;
   }
-  tbody.innerHTML = slice.map(r => `<tr>
+  tbody.innerHTML = slice.map((r, idx) => `<tr>
     <td>${r.no}</td>
     <td>${r.type}</td>
-    <td style="text-align:left;padding-left:10px;color:var(--primary);cursor:pointer">${r.course}</td>
+    <td class="link-cell" data-c-idx="${start + idx}" style="text-align:left;padding-left:10px">${r.course}</td>
     <td>${r.cat}</td>
+    <td>${r.courseCode}</td>
     <td>${r.applyPeriod}</td>
     <td>${r.studyPeriod}</td>
     <td style="text-align:right;padding-right:10px">${r.fee.toLocaleString()}</td>
@@ -4776,8 +5621,218 @@ function cRenderTable() {
     <td>${r.cancel}</td>
     <td style="text-align:right;padding-right:10px">${r.totalFee.toLocaleString()}</td>
   </tr>`).join('');
+
+  // 과정명 클릭 → 과정별 신청현황 상세 진입
+  tbody.querySelectorAll('.link-cell[data-c-idx]').forEach(cell => {
+    cell.addEventListener('click', () => {
+      const r = cFilteredData[parseInt(cell.dataset.cIdx)];
+      openCourseApplyDetail(r);
+    });
+  });
+
   renderPagination('c-pagination', Math.ceil(cFilteredData.length/cPageSize), cCurrentPage, p => { cCurrentPage=p; cRenderTable(); });
 }
+
+// ═══════════════════════════════════════════════
+// 신청현황 상세 페이지 (개인별 + 과정별)
+// ═══════════════════════════════════════════════
+
+// 개인별 신청현황 상세 진입
+function openPersonalApplyDetail(r) {
+  // 상단: 신청 정보 한 행
+  document.getElementById('p-detail-summary-body').innerHTML = `<tr>
+    <td>${r.name}</td>
+    <td>${r.id}@hunet.co.kr</td>
+    <td>${r.empno}</td>
+    <td>${r.type}</td>
+    <td style="text-align:left;padding-left:10px">${r.course}</td>
+    <td>${r.courseCode}</td>
+    <td>${fmtPeriod(r.period)}</td>
+    <td style="text-align:right;padding-right:10px">${r.fee.toLocaleString()}</td>
+    <td>${fmtDatetime(r.applyDate, r.no)}</td>
+    <td>${r.status}</td>
+    <td>${fmtDatetime(r.approveDate, r.no)}</td>
+    <td>${r.company}</td>
+    <td>${r.dept}</td>
+  </tr>`;
+
+  // 하단: 교육비 결제 상세
+  document.getElementById('p-detail-pay-amount').textContent = `${r.fee.toLocaleString()}원`;
+  document.getElementById('p-detail-pay-method').textContent = r.paymentMethod || '-';
+  const payCls = {
+    '입금완료': 'success',
+    '입금대기': 'pending',
+    '입금취소': 'fail'
+  }[r.paymentStatus] || 'neutral';
+  document.getElementById('p-detail-pay-status').innerHTML =
+    `<span class="status-badge ${payCls}">${r.paymentStatus || '-'}</span>`;
+  document.getElementById('p-detail-pay-date').textContent = r.paymentDate === '-' ? '-' : r.paymentDate.replace(/-/g, '.');
+
+  showPage('personal-detail');
+}
+
+// ── 과정별 신청현황 상세 ──
+let cDetCurrentCourse = null;
+let cDetAllData      = [];
+let cDetFilteredData = [];
+let cDetCurrentPage  = 1;
+let cDetPageSize     = 50;
+
+// 과정별 신청현황 상세 진입
+function openCourseApplyDetail(r) {
+  cDetCurrentCourse = r;
+
+  // 상단: 과정 신청 정보 한 행
+  document.getElementById('c-detail-course-body').innerHTML = `<tr>
+    <td>${r.type}</td>
+    <td style="text-align:left;padding-left:10px">${r.course}</td>
+    <td>${r.cat}</td>
+    <td>${r.courseCode}</td>
+    <td>${r.applyPeriod}</td>
+    <td>${r.studyPeriod}</td>
+    <td style="text-align:right;padding-right:10px">${r.fee.toLocaleString()}</td>
+    <td>${r.apply}</td>
+    <td>${r.approved}</td>
+    <td>${r.pending}</td>
+    <td>${r.cancel}</td>
+    <td style="text-align:right;padding-right:10px">${r.totalFee.toLocaleString()}</td>
+  </tr>`;
+
+  // 하단: 신청자 목록 시드 — r.apply 명을 P_NAMES 풀에서 생성
+  // 승인/대기/취소 비율은 r.approved / r.pending / r.cancel 그대로 매핑
+  // 재직상태는 재직 70% / 모니터링 30% 시뮬레이션
+  const learners = [];
+  for (let i = 0; i < r.apply; i++) {
+    let status;
+    if (i < r.approved)                       status = '승인';
+    else if (i < r.approved + r.pending)      status = '승인대기';
+    else                                       status = '취소';
+    const employment = (i % 10 < 7) ? '재직' : '모니터링';
+    const name = P_NAMES[i % P_NAMES.length];
+    learners.push({
+      no:         r.apply - i,
+      name:       name + '이름',
+      id:         `apply${String(i+1).padStart(2,'0')}`,
+      empno:      `2000${String(i+1).padStart(3,'0')}`,
+      applyDate:  `2025-0${(i%9)+1}-${String((i%28)+1).padStart(2,'0')}`,
+      fee:        r.fee,
+      status,
+      approveDate: status === '승인' ? `2025-0${(i%9)+1}-${String((i%28)+2).padStart(2,'0')}` : '-',
+      company:    P_COS[i % 3],
+      dept:       P_DEPTS[i % P_DEPTS.length],
+      employment
+    });
+  }
+  cDetAllData      = learners;
+  cDetCurrentPage  = 1;
+
+  // 디폴트 필터 적용: 셀렉트 디폴트값(재직상태=재직)이 자동 반영되도록 cDetApplyFilter 호출
+  // 학습자 식별 검색어·승인상태·회사·부서는 모두 빈 값으로 초기화
+  document.getElementById('c-det-search-key').value = 'name';
+  document.getElementById('c-det-search-val').value = '';
+  document.getElementById('c-det-status-sel').value = '';
+  document.getElementById('c-det-emp-sel').value    = '재직';
+  document.getElementById('cdet-chk-company').checked = false;
+  resetMultiSelect('cdet');
+  document.getElementById('c-det-dept-input').value  = '';
+  cDetApplyFilter();
+
+  showPage('course-detail');
+}
+
+// 신청자 목록 렌더
+function cDetRenderTable() {
+  const tbody = document.getElementById('c-det-learner-body');
+  const start = (cDetCurrentPage - 1) * cDetPageSize;
+  const slice = cDetFilteredData.slice(start, start + cDetPageSize);
+  document.getElementById('c-det-count').textContent = cDetFilteredData.length.toLocaleString();
+  if (!slice.length) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    document.getElementById('c-det-pagination').innerHTML = '';
+    return;
+  }
+  tbody.innerHTML = slice.map(l => `<tr>
+    <td>${l.no}</td>
+    <td>${maskName(l.name)}</td>
+    <td>${maskEmail(l.id)}</td>
+    <td>${l.empno}</td>
+    <td>${fmtDatetime(l.applyDate, l.no)}</td>
+    <td style="text-align:right;padding-right:10px">${l.fee.toLocaleString()}</td>
+    <td>${l.status}</td>
+    <td>${fmtDatetime(l.approveDate, l.no)}</td>
+    <td>${l.company}</td>
+    <td>${l.dept}</td>
+  </tr>`).join('');
+  renderPagination('c-det-pagination', Math.ceil(cDetFilteredData.length/cDetPageSize), cDetCurrentPage, p => { cDetCurrentPage=p; cDetRenderTable(); });
+}
+
+// 신청자 목록 검색
+function cDetApplyFilter() {
+  const key        = document.getElementById('c-det-search-key').value;
+  const val        = document.getElementById('c-det-search-val').value.trim().toLowerCase();
+  const status     = document.getElementById('c-det-status-sel').value;
+  const employment = document.getElementById('c-det-emp-sel').value;
+  const cos        = getMultiSelected('cdet');
+  const dept       = document.getElementById('c-det-dept-input').value.trim().toLowerCase();
+
+  cDetFilteredData = cDetAllData.filter(l => {
+    if (val) {
+      const target = (l[key] || '').toString().toLowerCase();
+      if (!target.includes(val)) return false;
+    }
+    if (status     && l.status     !== status)     return false;
+    if (employment && l.employment !== employment) return false;
+    if (cos.length && !cos.includes(l.company))    return false;
+    if (dept       && !l.dept.toLowerCase().includes(dept)) return false;
+    return true;
+  });
+  cDetCurrentPage = 1;
+  cDetRenderTable();
+}
+
+// 핸들러 일괄 등록
+(function setupApplyDetailHandlers() {
+  // 개인별 상세 - 뒤로가기
+  document.getElementById('p-detail-back-btn').addEventListener('click', () => {
+    document.getElementById('p-btn-reset')?.click();
+    showPage('personal');
+  });
+  document.getElementById('p-detail-prev-btn').addEventListener('click', () => showPage('personal'));
+  document.getElementById('p-detail-breadcrumb-back').addEventListener('click', e => {
+    e.preventDefault(); showPage('personal');
+  });
+
+  // 과정별 상세 - 뒤로가기
+  document.getElementById('c-detail-back-btn').addEventListener('click', () => {
+    document.getElementById('c-btn-reset')?.click();
+    showPage('course');
+  });
+  document.getElementById('c-detail-prev-btn').addEventListener('click', () => showPage('course'));
+  document.getElementById('c-detail-breadcrumb-back').addEventListener('click', e => {
+    e.preventDefault(); showPage('course');
+  });
+
+  // 과정별 상세 - 신청자 목록 검색
+  document.getElementById('c-det-search-btn').addEventListener('click', cDetApplyFilter);
+  document.getElementById('c-det-search-val').addEventListener('keydown', e => {
+    if (e.key === 'Enter') cDetApplyFilter();
+  });
+  document.getElementById('c-det-reset-btn').addEventListener('click', () => {
+    document.getElementById('c-det-search-key').value = 'name';
+    document.getElementById('c-det-search-val').value = '';
+    document.getElementById('c-det-status-sel').value = '';
+    document.getElementById('c-det-emp-sel').value    = '재직';   // 디폴트
+    document.getElementById('cdet-chk-company').checked = false;
+    resetMultiSelect('cdet');
+    document.getElementById('c-det-dept-input').value  = '';
+    cDetApplyFilter();
+  });
+  document.getElementById('c-det-page-size').addEventListener('change', e => {
+    cDetPageSize = parseInt(e.target.value);
+    cDetCurrentPage = 1;
+    cDetRenderTable();
+  });
+})();
 
 function cUpdateSummary() {
   const d = cFilteredData;
@@ -4854,13 +5909,29 @@ const SP_ALL_DATA = Array.from({length:200}, (_,i) => {
   const studyStatus = SP_STATUSES[i % 3];
   const complete = studyStatus === '예정' ? '-' : SP_COMPLETE[i % 3];
   const score = studyStatus === '예정' ? '-' : (Math.floor(Math.random()*40)+60) + '.0';
+  const courseDivList = ['정시','수시'];
+  const courseCatList = ['리더십','직무공통','전문직무','법정의무','어학'];
+  const bookList      = ['있음','없음'];
   return {
     no: 200 - i,
     name: SP_NAMES[i % SP_NAMES.length],
     id: `test${String((i%2)+1).padStart(2,'0')}`,
     type: SP_TYPES[i % SP_TYPES.length],
     course: SP_COURSES[i % SP_COURSES.length],
+    courseCode: String(100000 + (i % SP_COURSES.length) * 1370 + (i % 7)),
+    courseDiv: courseDivList[i % 2],
+    courseCat: courseCatList[i % courseCatList.length],
+    applyPeriod: '2024.12.01 ~ 2024.12.31',
     period: '2025-01-01 ~2025-12-31',
+    reviewEnd: '2026.01.31',
+    fee: ((i % 5 + 1) * 50000).toLocaleString() + '원',
+    book: bookList[i % 2],
+    credit: (i % 4) + '학점',
+    passEval: [
+      { item: '학습', required: '필수', weight: '20%', criteria: '90% 이상' },
+      { item: '시험', required: '필수', weight: '80%', criteria: '65점 이상' }
+    ],
+    passTotal: '70점 이상',
     studyStatus,
     score,
     complete,
@@ -4880,7 +5951,7 @@ function spRenderTable() {
   const slice = spFilteredData.slice(start, start+spPageSize);
   document.getElementById('sp-result-count-text').textContent = spFilteredData.length.toLocaleString();
   if (!slice.length) {
-    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
     document.getElementById('sp-pagination').innerHTML = '';
     return;
   }
@@ -4890,6 +5961,7 @@ function spRenderTable() {
     <td>${maskEmail(r.id)}</td>
     <td>${r.type}</td>
     <td style="text-align:left;padding-left:10px">${r.course}</td>
+    <td>${r.courseCode}</td>
     <td>${fmtPeriod(r.period)}</td>
     <td>${r.studyStatus}</td>
     <td>${r.score}</td>
@@ -4930,6 +6002,13 @@ function spDoSearch() {
   const cos = getMultiSelected('sp');
   const dv = document.getElementById('sp-input-dept').value.trim().toLowerCase();
 
+  // 학습기간 검색 (기준: 과정 vs 학습자 / 유형: 기간/학습시작일/학습종료일 — 1차 정책 그대로)
+  const periodBase = document.querySelector('input[name="sp-period-base"]:checked')?.value || 'learner';
+  const periodFrom = document.getElementById('sp-date-from').value;
+  const periodTo   = document.getElementById('sp-date-to').value;
+  // 1차 정책: 검색 로직 자체는 본 시뮬레이션 범위 외. 라디오 값만 보존하고 향후 데이터 연동 시 분기 적용.
+  // (기준이 'course'면 r.coursePeriod, 'learner'면 r.learnerPeriod 등 학습자 단위 필드로 비교)
+
   spFilteredData = SP_ALL_DATA.filter(r => {
     if (lv) {
       const t = lt==='id' ? r.id : lt==='empno' ? r.empno : r.name;
@@ -4937,7 +6016,7 @@ function spDoSearch() {
     }
     if (cl && r.complete !== cl) return false;
     if (cv) {
-      const t = ct==='code' ? r.id : r.course;
+      const t = ct==='code' ? r.courseCode : r.course;
       if (!t.toLowerCase().includes(cv)) return false;
     }
     if (cf && r.type !== cf) return false;
@@ -4962,11 +6041,12 @@ document.getElementById('sp-btn-reset').addEventListener('click', () => {
   document.getElementById('sp-sel-course-type').selectedIndex  = 0;
   document.getElementById('sp-sel-course-form').selectedIndex  = 0;
   document.getElementById('sp-sel-course-cat').selectedIndex   = 0;
-  document.getElementById('sp-sel-course-div').selectedIndex   = 0;
+  document.getElementById('sp-sel-course-div').value           = 'all';
+  document.querySelector('input[name="sp-period-base"][value="learner"]').checked = true;
   document.getElementById('sp-sel-period-type').selectedIndex  = 1;
   document.getElementById('sp-chk-company').checked = false;
   resetMultiSelect('sp');
-  spSetDateEnabled(false);
+  spApplyPeriodBaseRule();
   spFilteredData = [...SP_ALL_DATA];
   spCurrentPage = 1;
   spUpdateSummary();
@@ -4982,26 +6062,54 @@ document.getElementById('sp-btn-excel').addEventListener('click', () => {
   openExcelModal();
 });
 
-// 과정구분 셀렉박스 → 정시일 때만 날짜+셀렉 활성화
-function spSetDateEnabled(enabled) {
-  const fromInput  = document.getElementById('sp-date-from');
-  const toInput    = document.getElementById('sp-date-to');
-  const periodSel  = document.getElementById('sp-sel-period-type');
-  fromInput.disabled  = !enabled;
-  toInput.disabled    = !enabled;
-  periodSel.disabled  = !enabled;
-  if (!enabled) {
-    fromInput.value = '';
-    toInput.value   = '';
-    periodSel.selectedIndex = 1; // 학습시작일 디폴트
+// 통합 학습기간 - 양방향 잠금 룰 (라디오 기반)
+// - 과정구분 = 정시일 때만 '과정 학습기간' 라디오 활성
+// - 과정구분 = 전체/수시: '과정 학습기간' 라디오 비활성 (학습자별 분산이거나 혼합되어 단일 기준 모호)
+// - 기준 = 과정 학습기간: 과정구분 '전체/수시' 옵션 비활성 (양립 불가, 정시만 가능)
+// - 학습자 학습기간은 과정구분 무관 항상 활성
+function spApplyPeriodBaseRule() {
+  const divSel  = document.getElementById('sp-sel-course-div');
+  const baseRadios = document.getElementsByName('sp-period-base');
+  const courseRadio  = document.querySelector('input[name="sp-period-base"][value="course"]');
+  const learnerRadio = document.querySelector('input[name="sp-period-base"][value="learner"]');
+  const courseLabel  = document.getElementById('sp-period-base-course-label');
+  const allOpt     = divSel.querySelector('option[value="all"]');
+  const rollingOpt = divSel.querySelector('option[value="rolling"]');
+
+  const div = divSel.value;
+
+  // 과정구분이 '정시'가 아닌 경우 (전체/수시) → '과정 학습기간' 라디오 비활성 + 자동 전환
+  if (div !== 'regular') {
+    courseRadio.disabled = true;
+    courseLabel.style.opacity = '0.4';
+    courseLabel.style.cursor = 'not-allowed';
+    if (courseRadio.checked) {
+      learnerRadio.checked = true;
+    }
+  } else {
+    courseRadio.disabled = false;
+    courseLabel.style.opacity = '';
+    courseLabel.style.cursor = 'pointer';
+  }
+
+  // 기준 = 과정 학습기간 → 전체/수시 옵션 비활성 + 자동 정시 전환
+  const currentBase = Array.from(baseRadios).find(r => r.checked)?.value || 'learner';
+  if (currentBase === 'course') {
+    allOpt.disabled = true;
+    rollingOpt.disabled = true;
+    if (divSel.value !== 'regular') divSel.value = 'regular';
+  } else {
+    allOpt.disabled = false;
+    rollingOpt.disabled = false;
   }
 }
 
-document.getElementById('sp-sel-course-div').addEventListener('change', function() {
-  spSetDateEnabled(this.value === 'regular');
+document.getElementById('sp-sel-course-div').addEventListener('change', spApplyPeriodBaseRule);
+document.querySelectorAll('input[name="sp-period-base"]').forEach(radio => {
+  radio.addEventListener('change', spApplyPeriodBaseRule);
 });
 
-// 날짜 피커 - 과정구분이 정시일 때만 팝업 오픈
+// 날짜 피커 조건부 함수 — 다른 화면(과정별 학습현황 등)에서 사용
 function setupDatePickerConditional(inputId, popupId, checkFn) {
   const input = document.getElementById(inputId);
   const popup = document.getElementById(popupId);
@@ -5021,11 +6129,12 @@ function setupDatePickerConditional(inputId, popupId, checkFn) {
   popup.addEventListener('click', e => e.stopPropagation());
 }
 
-setupDatePickerConditional('sp-date-from','sp-cal-from', () => document.getElementById('sp-sel-course-div').value === 'regular');
-setupDatePickerConditional('sp-date-to','sp-cal-to',     () => document.getElementById('sp-sel-course-div').value === 'regular');
+// 개인별 학습현황 - 통합 학습기간은 항상 활성 (setupDatePicker 5168 라인 정의 사용)
+setupDatePicker('sp-date-from','sp-cal-from');
+setupDatePicker('sp-date-to','sp-cal-to');
 
-// 초기 비활성화
-spSetDateEnabled(false);
+// 초기 룰 적용
+spApplyPeriodBaseRule();
 
 
 // ════════════════════════════════════════════════
@@ -5110,35 +6219,299 @@ document.addEventListener('click', () => {
 
 initMultiSelect('p',  ['회사1','회사2','회사3']);
 initMultiSelect('sp', ['회사1','회사2','회사3']);
+initMultiSelect('cdet', ['회사1','회사2','회사3']);
 
 
 // ════════════════════════════════════════════════
 // 개인별 학습상세
 // ════════════════════════════════════════════════
-// 콘텐츠별 샘플 데이터 — 유형별 학습한 정보 기준 상이
-// 진행률 = 학습한정보/전체정보  |  완료여부: 시험·과제만 Y 가능
+// ── 평가항목 루트(IndexCode) 매핑 ────────────────────
+// course_index 의 LEARNING_ROOT / EXAM_ROOT / ASSIGNMENT_ROOT / SURVEY_ROOT
+// 콘텐츠 유형으로 어느 루트에 속하는지 결정. (1차 범위에 과제는 없지만 키 미리 정의)
+const EVAL_ROOT_LABEL = {
+  LEARNING_ROOT:   '학습',
+  EXAM_ROOT:       '시험',
+  ASSIGNMENT_ROOT: '과제',
+  SURVEY_ROOT:     '설문'
+};
+function getEvalRoot(contentType) {
+  if (contentType === '시험' || contentType === '퀴즈') return 'EXAM_ROOT';
+  if (contentType === '과제')                          return 'ASSIGNMENT_ROOT';
+  if (contentType === '설문')                          return 'SURVEY_ROOT';
+  return 'LEARNING_ROOT'; // 동영상/이미지/아티클/첨부파일/토론/PDF/외부링크/오프라인 등
+}
+
+// 평가항목별 콘텐츠 수 집계 (CONTENT_TEMPLATE 기반)
+function countContentsByEvalLabel() {
+  const counts = { '학습': 0, '시험': 0, '과제': 0, '설문': 0 };
+  CONTENT_TEMPLATE.forEach(c => {
+    const label = EVAL_ROOT_LABEL[getEvalRoot(c.type)];
+    if (counts[label] !== undefined) counts[label]++;
+  });
+  return counts;
+}
+
+// 과정 구성 상세 모달 (과정별 학습현황 상세)
+function openCompositionModal(r) {
+  const evals  = Array.isArray(r.passEval) ? r.passEval : [];
+  const counts = countContentsByEvalLabel();
+
+  const rowsHtml = evals.map(e => `<tr>
+    <td class="gr-item">${e.item}</td>
+    <td>${counts[e.item] || 0}개</td>
+    <td>${e.required}</td>
+    <td>${e.weight || '—'}</td>
+    <td>${e.criteria}</td>
+  </tr>`).join('');
+
+  // 총합 — 콘텐츠 수는 모든 평가항목 합산
+  const totalContents = Object.values(counts).reduce((a, b) => a + b, 0);
+
+  document.getElementById('comp-body').innerHTML = rowsHtml
+    || `<tr><td colspan="5" style="text-align:center;color:#aaa;padding:18px;">평가항목이 등록되지 않았습니다.</td></tr>`;
+  document.getElementById('comp-foot').innerHTML = `<tr>
+    <td class="gr-item">총점</td>
+    <td>${totalContents}개</td>
+    <td>—</td>
+    <td>100%</td>
+    <td>${r.passTotal || '-'}</td>
+  </tr>`;
+
+  document.getElementById('composition-overlay').classList.add('open');
+}
+
+// 과정 구성 상세 모달 닫기 핸들러
+(function setupCompositionModal() {
+  const overlay = document.getElementById('composition-overlay');
+  if (!overlay) return;
+  const close = () => overlay.classList.remove('open');
+  document.getElementById('comp-close').addEventListener('click', close);
+  document.getElementById('comp-ok').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+})();
+
+// 과정별 학습현황 상세 - 콘텐츠 셀렉트 채우기 (평가항목 필터 반영)
+function populateContentSelect() {
+  const evalSel    = document.getElementById('sc-det-evalroot-sel');
+  const contentSel = document.getElementById('sc-det-content-sel');
+  if (!evalSel || !contentSel) return;
+  const filterRoot = evalSel.value; // '' = 전체
+  contentSel.innerHTML = '<option value="">포함된 콘텐츠를 선택하세요.</option>';
+  CONTENT_TEMPLATE.forEach((c, i) => {
+    if (filterRoot && getEvalRoot(c.type) !== filterRoot) return;
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${c.name} (${c.type})`;
+    contentSel.appendChild(opt);
+  });
+}
+
+// ── 콘텐츠 유형별 표기 매핑 ─────────────────────────
+// kind: 'duration' = 시간 단위 (totalSec, studiedSec)
+//        'count'   = 수량 단위 (totalCount, studyCount)
+const CONTENT_TYPE_MAP = {
+  '동영상':   { label: '동영상',   kind: 'duration' },
+  '유튜브':   { label: '유튜브',   kind: 'duration' },
+  '이미지':   { label: '이미지',   kind: 'count', unit: '장' },
+  'PDF':      { label: 'PDF',      kind: 'count', unit: '장' },
+  '아티클':   { label: '아티클',   kind: 'count', unit: '개' },
+  '첨부파일': { label: '첨부파일', kind: 'count', unit: '개' },
+  '외부링크': { label: '외부링크', kind: 'count', unit: '개' },
+  '오프라인': { label: '오프라인', kind: 'count', unit: '일' },
+  '시험':     { label: '시험',     kind: 'count', unit: '문항' },
+  '퀴즈':     { label: '퀴즈',     kind: 'count', unit: '문항' },
+  '과제':     { label: '과제',     kind: 'count', unit: '개' },
+  '설문':     { label: '설문',     kind: 'count', unit: '개' },
+  '토론':     { label: '토론',     kind: 'count', unit: '개' },
+};
+
+// 콘텐츠 데이터
+// duration: totalSec(전체 초), studiedSec(학습한 초)
+// count: totalCount(전체 수), studyCount(학습한 수)
+// 토론은 count 유형이지만 부가정보(registerCount/submitCount)도 보유
+// (legacy: total/infoType — buildContentLearnerData 호환용)
 const CONTENT_TEMPLATE = [
-  { type:'동영상',  name:'콘텐츠명 1',  required:'Y', infoType:'time',    infoVal:'15:30:20', total:null, progress:'77.5%', score:'-',    done:'N', lastDate:'2025-01-31' },
-  { type:'이미지',  name:'콘텐츠명 2',  required:'Y', infoType:'fraction', infoVal:1,  total:3,  progress:'50.0%', score:'-',    done:'N', lastDate:'2025-01-31' },
-  { type:'아티클',  name:'콘텐츠명 3',  required:'Y', infoType:'fraction', infoVal:1,  total:1,  progress:'50.0%', score:'-',    done:'N', lastDate:'2025-01-31' },
-  { type:'첨부파일',name:'콘텐츠명 4',  required:'Y', infoType:'fraction', infoVal:1,  total:2,  progress:'50.0%', score:'-',    done:'N', lastDate:'2025-01-31' },
-  { type:'시험',    name:'콘텐츠명 5',  required:'Y', infoType:'qa',       infoVal:10, total:10, progress:'100%',  score:'80점', done:'Y', lastDate:'2025-01-31' },
-  { type:'과제',    name:'콘텐츠명 6',  required:'Y', infoType:'qa',       infoVal:1,  total:1,  progress:'100%',  score:'60점', done:'Y', lastDate:'2025-01-31' },
-  { type:'설문',    name:'콘텐츠명 7',  required:'Y', infoType:'qa',       infoVal:0,  total:5,  progress:'0%',    score:'-',    done:'N', lastDate:'-' },
-  { type:'퀴즈',    name:'콘텐츠명 8',  required:'Y', infoType:'qa',       infoVal:0,  total:5,  progress:'0%',    score:'-',    done:'N', lastDate:'-' },
-  { type:'토론',    name:'콘텐츠명 9',  required:'Y', infoType:'fraction', infoVal:0,  total:1,  progress:'0%',    score:'-',    done:'N', lastDate:'-' },
-  { type:'PDF',     name:'콘텐츠명 10', required:'Y', infoType:'fraction', infoVal:0,  total:5,  progress:'0%',    score:'-',    done:'N', lastDate:'-' },
-  { type:'외부링크',name:'콘텐츠명 11', required:'Y', infoType:'fraction', infoVal:0,  total:3,  progress:'0%',    score:'-',    done:'N', lastDate:'-' },
-  { type:'오프라인',name:'콘텐츠명 12', required:'Y', infoType:'fraction', infoVal:5,  total:10, progress:'50%',   score:'-',    done:'N', lastDate:'2025-01-31' },
+  { type:'동영상',  name:'콘텐츠명 1',  required:'Y', totalSec:930,  studiedSec:721, score:'-',    done:'N', lastDate:'2025-01-31', total:null, infoType:'time' },        // 15:30 → 12:01
+  { type:'유튜브',  name:'콘텐츠명 2',  required:'Y', totalSec:600,  studiedSec:300, score:'-',    done:'N', lastDate:'2025-01-31', total:null, infoType:'time' },        // 10:00 → 5:00
+  { type:'이미지',  name:'콘텐츠명 3',  required:'Y', totalCount:3,  studyCount:1,   score:'-',    done:'N', lastDate:'2025-01-31', total:3,  infoType:'fraction' },
+  { type:'아티클',  name:'콘텐츠명 4',  required:'Y', totalCount:1,  studyCount:1,   score:'-',    done:'N', lastDate:'2025-01-31', total:1,  infoType:'fraction' },
+  { type:'첨부파일',name:'콘텐츠명 5',  required:'Y', totalCount:2,  studyCount:1,   score:'-',    done:'N', lastDate:'2025-01-31', total:2,  infoType:'fraction' },
+  { type:'시험',    name:'콘텐츠명 6',  required:'Y', totalCount:10, studyCount:10,  score:'80점', done:'Y', lastDate:'2025-01-31', total:10, infoType:'qa' },
+  { type:'과제',    name:'콘텐츠명 7',  required:'Y', totalCount:1,  studyCount:1,   score:'60점', done:'Y', lastDate:'2025-01-31', total:1,  infoType:'qa' },
+  { type:'설문',    name:'콘텐츠명 8',  required:'Y', totalCount:1,  studyCount:0,   score:'-',    done:'N', lastDate:'-',          total:5,  infoType:'qa' },
+  { type:'퀴즈',    name:'콘텐츠명 9',  required:'Y', totalCount:5,  studyCount:0,   score:'-',    done:'N', lastDate:'-',          total:5,  infoType:'qa' },
+  { type:'토론',    name:'콘텐츠명 10', required:'Y', totalCount:1,  studyCount:1, registerCount:2, submitCount:1, completionCriteria:'등록완료', score:'-', done:'N', lastDate:'2025-01-31', total:1,  infoType:'fraction' },
+  { type:'PDF',     name:'콘텐츠명 11', required:'Y', totalCount:5,  studyCount:0,   score:'-',    done:'N', lastDate:'-',          total:5,  infoType:'fraction' },
+  { type:'외부링크',name:'콘텐츠명 12', required:'Y', totalCount:1,  studyCount:0,   score:'-',    done:'N', lastDate:'-',          total:1,  infoType:'fraction' },
+  { type:'오프라인',name:'콘텐츠명 13', required:'Y', totalCount:10, studyCount:5,   score:'-',    done:'N', lastDate:'2025-01-31', total:10, infoType:'fraction' },
 ];
 
-// 학습한 정보 표기 생성
-function fmtStudyInfo(c) {
-  if (c.infoType === 'time')     return c.infoVal;             // HH:MM:SS
-  if (c.infoType === 'fraction') return `${c.infoVal}/${c.total}`; // X/Y
-  if (c.infoType === 'qa')       return `${c.infoVal}/${c.total}`; // 응답/전체
-  return '-';
+// 콘텐츠 정보 표기 (예: "동영상 15분 30초", "이미지 3장", "시험 10문항")
+function fmtContentInfo(c) {
+  const m = CONTENT_TYPE_MAP[c.type];
+  if (!m) return '-';
+  if (m.kind === 'duration') {
+    const mm = Math.floor(c.totalSec / 60);
+    const ss = c.totalSec % 60;
+    return `${m.label} ${mm}분 ${ss}초`;
+  }
+  return `${m.label} ${c.totalCount}${m.unit}`;
 }
+
+// 학습한 정보 표기 — 학습한 값 / 전체 값 분수 형태로 통일
+//  duration: HH:MM:SS / HH:MM:SS
+//  count:    학습한 수 / 전체 수
+function fmtStudyInfo(c) {
+  const m = CONTENT_TYPE_MAP[c.type];
+  if (!m) return '-';
+  if (m.kind === 'duration') {
+    return `${secToTime(c.studiedSec || 0)} / ${secToTime(c.totalSec)}`;
+  }
+  // 토론: 완료기준에 따라 등록수 또는 제출수로 분기. 그룹 아니므로 학습한 값도 totalCount로 cap.
+  if (c.type === '토론') {
+    const raw = c.completionCriteria === '제출완료' ? (c.submitCount || 0) : (c.registerCount || 0);
+    const studied = Math.min(raw, c.totalCount);
+    return `${studied} / ${c.totalCount}`;
+  }
+  return `${c.studyCount || 0} / ${c.totalCount}`;
+}
+
+// 진행률(%) — 모든 유형 통일 계산
+function fmtProgress(c) {
+  const m = CONTENT_TYPE_MAP[c.type];
+  if (!m) return '-';
+  let pct;
+  if (m.kind === 'duration') {
+    pct = c.totalSec > 0 ? (c.studiedSec / c.totalSec * 100) : 0;
+  } else if (c.type === '토론') {
+    const studied = c.completionCriteria === '제출완료' ? (c.submitCount || 0) : (c.registerCount || 0);
+    pct = c.totalCount > 0 ? (studied / c.totalCount * 100) : 0;
+    if (pct > 100) pct = 100;  // 토론은 1건만 등록해도 충족이라 상한 100%
+  } else {
+    pct = c.totalCount > 0 ? (c.studyCount / c.totalCount * 100) : 0;
+  }
+  return Number.isInteger(pct) ? `${pct}%` : `${pct.toFixed(1)}%`;
+}
+
+function openCourseInfoModal(r) {
+  // 교재유무 → Y (과정명) / N
+  const bookDisplay = (r.book === '있음') ? `Y (${r.bookName || (r.course ? r.course + ' 교재' : '-')})` : 'N';
+
+  document.getElementById('ci-code').textContent   = r.courseCode || '-';
+  document.getElementById('ci-div').textContent    = r.courseDiv || '-';
+  document.getElementById('ci-type').textContent   = r.type || '-';
+  document.getElementById('ci-name').textContent   = r.course || '-';
+  document.getElementById('ci-cat').textContent    = r.courseCat || '-';
+  document.getElementById('ci-apply').textContent  = r.applyPeriod || '-';
+  document.getElementById('ci-period').textContent = fmtPeriod(r.period) || '-';
+  document.getElementById('ci-review').textContent = r.reviewEnd || '-';
+  document.getElementById('ci-fee').textContent    = r.fee || '-';
+  document.getElementById('ci-book').textContent   = bookDisplay;
+  document.getElementById('ci-credit').textContent = r.credit || '-';
+
+  document.getElementById('course-info-overlay').classList.add('open');
+}
+
+// 과정정보 모달 닫기 핸들러 (1회만 등록)
+(function setupCourseInfoModal() {
+  const overlay = document.getElementById('course-info-overlay');
+  if (!overlay) return;
+  const close = () => overlay.classList.remove('open');
+  document.getElementById('course-info-close').addEventListener('click', close);
+  document.getElementById('course-info-ok').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+})();
+
+// ── 성적 현황 모달 (개인별 학습현황 상세) ────────────
+// 학습자 상태(수료/미수료/수료처리전)에 따라 더미 결과를 다르게 생성
+function openGradeResultModal(r) {
+  const evals    = Array.isArray(r.passEval) ? r.passEval : [];
+  const totalStr = r.passTotal || '-';
+  const totalCriteriaNum = parseInt((totalStr.match(/\d+/) || [0])[0]); // "70점 이상" → 70
+
+  // 학습자 상태별 더미 결과 시드
+  // 수료: 모두 충족 / 미수료: 시험 미달 / 수료처리전: 진행중
+  // 환산점수 합계 — 수료: 19+64=83 / 미수료: 18+44=62 / 수료처리전: '-'
+  const seedByStatus = (status) => {
+    if (status === '수료')   return { 학습: { ach: 95, raw: 95 }, 시험: { ach: 80, raw: 80 } };
+    if (status === '미수료') return { 학습: { ach: 90, raw: 90 }, 시험: { ach: 55, raw: 55 } };
+    return { 학습: { ach: 60, raw: 60 }, 시험: { ach: null, raw: null } }; // 진행중
+  };
+  const seed = seedByStatus(r.complete);
+
+  // 평가항목별 행 생성
+  let totalEarned = 0;
+  let anyPending  = false;
+  const rowsHtml = evals.map(e => {
+    const itemSeed   = seed[e.item] || { ach: null, raw: null };
+    const weightNum  = parseInt((e.weight.match(/\d+/) || [0])[0]); // "20%" → 20
+    const inProgress = itemSeed.ach === null;
+
+    // 진행율: 모든 평가항목을 % 단위로 통일 (학습=진도율, 시험=점수/100)
+    const progDisp = inProgress ? '-' : `${itemSeed.ach}%`;
+    const rawDisp  = inProgress ? '-' : `${itemSeed.raw}점`;
+
+    // 환산점수 = 원점수 × 평가비중 / 100
+    const earned     = inProgress ? null : Math.round(itemSeed.raw * weightNum) / 100;
+    const earnedDisp = inProgress ? '-' : `${earned.toFixed(1)}점`;
+
+    // 충족 판정 (수료기준의 숫자 추출 — 진행율과 직접 비교)
+    const critNum = parseInt((e.criteria.match(/\d+/) || [0])[0]);
+    let rowCls;
+    if (inProgress) { rowCls = 'row-inprogress'; anyPending = true; }
+    else if (itemSeed.ach >= critNum) rowCls = 'row-met';
+    else rowCls = 'row-unmet';
+
+    if (!inProgress) totalEarned += earned;
+
+    return `<tr class="${rowCls}">
+      <td class="gr-item">${e.item}</td>
+      <td>${e.weight}</td>
+      <td>${e.criteria}</td>
+      <td class="gr-result">${progDisp}</td>
+      <td>${rawDisp}</td>
+      <td>${earnedDisp}</td>
+    </tr>`;
+  }).join('');
+
+  // 총점 행 — 획득점수는 학습자 점수(r.score) 우선 표시
+  const learnerScoreNum = (r.score && r.score !== '-') ? Number(r.score) : null;
+  const totalDisp = anyPending
+    ? '-'
+    : (learnerScoreNum !== null
+        ? `${learnerScoreNum}점`
+        : (Number.isInteger(totalEarned) ? `${totalEarned}점` : `${totalEarned.toFixed(1)}점`));
+
+  let totalCls;
+  if (anyPending) {
+    totalCls = 'gr-total-pending';
+  } else {
+    const judgeNum = learnerScoreNum !== null ? learnerScoreNum : totalEarned;
+    totalCls = judgeNum >= totalCriteriaNum ? 'gr-total-met' : 'gr-total-unmet';
+  }
+
+  document.getElementById('grade-body').innerHTML = rowsHtml;
+  document.getElementById('grade-foot').innerHTML = `<tr>
+    <td class="gr-item">총점</td>
+    <td>100%</td>
+    <td>${totalStr}</td>
+    <td>—</td>
+    <td>—</td>
+    <td class="${totalCls}">${totalDisp}</td>
+  </tr>`;
+
+  document.getElementById('grade-overlay').classList.add('open');
+}
+
+// 성적 현황 모달 닫기 핸들러
+(function setupGradeModal() {
+  const overlay = document.getElementById('grade-overlay');
+  if (!overlay) return;
+  const close = () => overlay.classList.remove('open');
+  document.getElementById('grade-close').addEventListener('click', close);
+  document.getElementById('grade-ok').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+})();
 
 function openStudyDetail(r) {
   // ① 개인별 학습현황 상세 (상단 요약 테이블)
@@ -5151,7 +6524,7 @@ function openStudyDetail(r) {
     <td>${r.name}</td>
     <td>${r.id}@hunet.co.kr</td>
     <td>${r.type}</td>
-    <td style="text-align:left;padding-left:10px">${r.course}</td>
+    <td class="link-cell" id="detail-course-link" style="text-align:left;padding-left:10px">${r.course}</td>
     <td>${fmtPeriod(r.period)}</td>
     <td>학습중</td>
     <td>${r.score}</td>
@@ -5159,19 +6532,35 @@ function openStudyDetail(r) {
     <td>${completeDateStr}</td>
     <td>${r.company}</td>
     <td>${r.dept}</td>
+    <td><button class="btn-detail-sm" id="detail-grade-btn">상세보기</button></td>
+    <td>
+      <button class="btn-print-sm ${r.complete === '수료' ? 'active' : ''}"
+              ${r.complete === '수료' ? 'title="수료증 출력"' : 'disabled title="수료자만 발급 가능합니다"'}>
+        출력
+      </button>
+    </td>
   </tr>`;
+
+  // 과정명 클릭 → 과정정보 모달
+  document.getElementById('detail-course-link').addEventListener('click', () => openCourseInfoModal(r));
+
+  // 학습성적 [상세보기] → 성적 현황 모달
+  document.getElementById('detail-grade-btn').addEventListener('click', () => openGradeResultModal(r));
 
   // ② 콘텐츠별 학습 상세
   document.getElementById('detail-content-body').innerHTML = CONTENT_TEMPLATE.map(c => {
     const periodStr  = fmtPeriod(r.period);
     const lastDate   = c.lastDate === '-' ? '-' : fmtDate(c.lastDate);
+    const evalRoot   = getEvalRoot(c.type);
+    const evalLabel  = EVAL_ROOT_LABEL[evalRoot];
     return `<tr>
+      <td title="${evalRoot}">${evalLabel}</td>
       <td>${c.type}</td>
-      <td style="text-align:left;padding-left:10px">${c.name}</td>
+      <td class="cell-wrap" style="text-align:left;padding-left:10px">${c.name}</td>
       <td>${c.required}</td>
       <td>${periodStr}</td>
       <td>${fmtStudyInfo(c)}</td>
-      <td>${c.progress}</td>
+      <td>${fmtProgress(c)}</td>
       <td>${c.score}</td>
       <td>${c.done}</td>
       <td>${lastDate}</td>
@@ -5203,27 +6592,27 @@ document.getElementById('detail-breadcrumb-back').addEventListener('click', e =>
 // PAGE: 과정별 학습현황
 // ════════════════════════════════════════════════
 const SC_COURSES = [
-  { name:'[북러닝] 바이브 코딩 혁명이 온다(도서 미제공)', cat:'전문직무', learners:1 },
-  { name:'[hunet MBAi Essential] 재무회계', cat:'전문직무', learners:1 },
+  { name:'[북러닝] 바이브 코딩 혁명이 온다(도서 미제공)', cat:'전문직무', learners:12 },
+  { name:'[hunet MBAi Essential] 재무회계', cat:'전문직무', learners:9 },
   { name:'[북러닝] AI 2026 트렌드&활용백과(도서 미제공)', cat:'전문직무', learners:17 },
-  { name:'[북러닝] 시민 개발자의 시대, 생성형 AI 업무 자동화(도서 미제공)', cat:'직무공통', learners:1 },
-  { name:'팀장 리더십 스쿨', cat:'리더십', learners:3 },
-  { name:'데이터 분석 기초', cat:'전문직무', learners:2 },
-  { name:'AI 활용 실무', cat:'전문직무', learners:5 },
-  { name:'커뮤니케이션 스킬', cat:'직무공통', learners:4 },
-  { name:'엑셀 마스터 과정', cat:'전문직무', learners:2 },
-  { name:'재무회계 기초', cat:'전문직무', learners:1 },
-  { name:'프레젠테이션 기술', cat:'직무공통', learners:3 },
-  { name:'협상 스킬 심화', cat:'리더십', learners:2 },
-  { name:'직장예절 교육', cat:'법정', learners:1 },
-  { name:'개인정보보호 필수교육', cat:'법정', learners:6 },
-  { name:'산업안전보건 교육', cat:'법정', learners:4 },
-  { name:'성희롱 예방교육', cat:'법정', learners:5 },
-  { name:'신입사원 온보딩', cat:'직무공통', learners:2 },
-  { name:'OKR 목표관리', cat:'리더십', learners:1 },
-  { name:'비즈니스 영어 커뮤니케이션', cat:'전문직무', learners:2 },
-  { name:'파이썬 데이터 분석', cat:'전문직무', learners:3 },
-  { name:'문서작성 실무', cat:'직무공통', learners:1 },
+  { name:'[북러닝] 시민 개발자의 시대, 생성형 AI 업무 자동화(도서 미제공)', cat:'직무공통', learners:10 },
+  { name:'팀장 리더십 스쿨', cat:'리더십', learners:14 },
+  { name:'데이터 분석 기초', cat:'전문직무', learners:11 },
+  { name:'AI 활용 실무', cat:'전문직무', learners:13 },
+  { name:'커뮤니케이션 스킬', cat:'직무공통', learners:9 },
+  { name:'엑셀 마스터 과정', cat:'전문직무', learners:15 },
+  { name:'재무회계 기초', cat:'전문직무', learners:8 },
+  { name:'프레젠테이션 기술', cat:'직무공통', learners:12 },
+  { name:'협상 스킬 심화', cat:'리더십', learners:10 },
+  { name:'직장예절 교육', cat:'법정', learners:11 },
+  { name:'개인정보보호 필수교육', cat:'법정', learners:14 },
+  { name:'산업안전보건 교육', cat:'법정', learners:13 },
+  { name:'성희롱 예방교육', cat:'법정', learners:15 },
+  { name:'신입사원 온보딩', cat:'직무공통', learners:9 },
+  { name:'OKR 목표관리', cat:'리더십', learners:10 },
+  { name:'비즈니스 영어 커뮤니케이션', cat:'전문직무', learners:12 },
+  { name:'파이썬 데이터 분석', cat:'전문직무', learners:11 },
+  { name:'문서작성 실무', cat:'직무공통', learners:8 },
 ];
 
 const SC_ALL_DATA = SC_COURSES.map((c, i) => {
@@ -5235,8 +6624,22 @@ const SC_ALL_DATA = SC_COURSES.map((c, i) => {
     no: SC_COURSES.length - i,
     type: '온라인',
     name: c.name,
+    courseCode: String(200000 + i * 137 + (i % 11)),
     cat: c.cat,
     period: '2026-04-01~2026-04-30',
+    // ── 과정정보 모달용 필드 ──
+    courseDiv:    i % 2 === 0 ? '정시' : '수시',
+    applyPeriod:  '2026.03.01 ~ 2026.03.31',
+    reviewEnd:    '2026.05.31',
+    fee:          ((i % 5 + 1) * 50000).toLocaleString() + '원',
+    book:         i % 2 === 0 ? '있음' : '없음',
+    credit:       (i % 4) + '학점',
+    passEval: [
+      { item: '학습', required: '필수', weight: '20%', criteria: '90% 이상' },
+      { item: '시험', required: '필수', weight: '80%', criteria: '65점 이상' }
+    ],
+    passTotal: '70점 이상',
+    // ─────────────────────
     learners: c.learners,
     ready: 0,
     studying,
@@ -5258,7 +6661,7 @@ function scRenderTable() {
   const slice = scFilteredData.slice(start, start+scPageSize);
   document.getElementById('sc-result-count-text').textContent = scFilteredData.length.toLocaleString();
   if (!slice.length) {
-    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="15" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
     document.getElementById('sc-pagination').innerHTML = '';
     return;
   }
@@ -5267,6 +6670,7 @@ function scRenderTable() {
     <td>${r.type}</td>
     <td class="link-cell" style="text-align:left;padding-left:10px" data-sc-idx="${start+idx}">${r.name}</td>
     <td>${r.cat}</td>
+    <td>${r.courseCode}</td>
     <td>${fmtPeriod(r.period)}</td>
     <td>${r.learners}</td>
     <td>${r.ready}</td>
@@ -5355,22 +6759,19 @@ function getCompleteCriteria(type) {
   if (type === '토론')               return '등록완료';        // 등록완료(디폴트) 또는 제출완료 (설정 가능)
   if (type === 'PDF')               return '전체 조회';
   if (type === '외부링크')           return '전체 클릭완료';   // 전체 링크 클릭 완료 (첨부파일과 동일 구조)
-  if (type === '오프라인')           return '8회 출석';         // N회 출석 (설정 가능한 변수값)
+  if (type === '오프라인')           return '8일 출석';         // N일 출석 (설정 가능한 변수값)
   return '열람완료';
 }
 
 // 콘텐츠 총 정보 — 유형별 단위 표기
 function getContentInfo(c) {
-  if (c.type === '동영상')   return '35:00:00';
-  if (c.type === '이미지')   return `${c.total}장`;
-  if (c.type === '아티클')   return `${c.total}페이지`;
-  if (c.type === '첨부파일') return `${c.total}개`;
-  if (c.type === '시험' || c.type === '과제' || c.type === '설문' || c.type === '퀴즈') return `${c.total}문항`;
-  if (c.type === '토론')     return `${c.total}개`;
-  if (c.type === 'PDF')      return `${c.total}페이지`;
-  if (c.type === '외부링크') return `${c.total}회`;
-  if (c.type === '오프라인') return `${c.total}차시`;
-  return `${c.total}개`;
+  // 과정별 학습현황 상세 - 콘텐츠 메타 표기 (콘텐츠 유형 텍스트 제외, 수치+단위만)
+  const m = CONTENT_TYPE_MAP[c.type];
+  if (!m) return '-';
+  if (m.kind === 'duration') {
+    return secToTime(c.totalSec || 0);
+  }
+  return `${c.totalCount}${m.unit}`;
 }
 
 // 콘텐츠 모드: 유형별 학습자 데이터 생성
@@ -5382,11 +6783,11 @@ function buildContentLearnerData(learners, c, periodStr) {
   return learners.map((l, i) => {
     let studyInfo = '-', progress = '-', contentScore = '-', contentDone = 'N', lastStudy = '-';
 
-    if (type === '동영상') {
-      // 학습한 정보 = 최대 시청 위치(초), 진행율 = 시청/총시간
-      const totalSec   = timeToSec('35:00:00');
+    if (type === '동영상' || type === '유튜브') {
+      // 학습한 정보 = 학습한 시간 / 전체 시간 (HH:MM:SS / HH:MM:SS)
+      const totalSec   = c.totalSec || 0;
       const watchedSec = [0, Math.floor(totalSec*0.5), totalSec, totalSec, totalSec][i] ?? 0;
-      studyInfo   = secToTime(watchedSec);
+      studyInfo   = `${secToTime(watchedSec)} / ${secToTime(totalSec)}`;
       const pct   = totalSec > 0 ? Math.round(watchedSec/totalSec*1000)/10 : 0;
       progress    = pct + '%';
       contentDone = pct >= 80 ? 'Y' : 'N';
@@ -5507,7 +6908,17 @@ function scDetRenderHead(contentMode) {
   if (contentMode) {
     thead.innerHTML = `<tr>
       <th>No.</th><th>이름</th><th>아이디</th>
-      <th>학습자 콘텐츠 학습기간</th><th>학습한 정보</th>
+      <th>학습자 콘텐츠 학습기간</th>
+      <th>학습한 정보<span class="change-badge in-th" data-num="21" data-memo="학습한 값 / 전체 값 의미
+- 동영상·유튜브: 학습한 최대 시간 / 전체 길이
+- 이미지·PDF: 확인한 페이지 수 / 전체 페이지 수
+- 첨부파일: 다운로드한 수 / 전체 수
+- 오프라인: 출석 일차 / 전체 일차
+- 시험·퀴즈: 응시 문항 / 전체 문항
+- 아티클·외부링크·과제·설문: 확인/제출 수 / 1 (그룹 X, 전체 1 고정)
+- 토론: 완료기준에 따라 분기
+   · 등록완료 기준: 등록수 / 1
+   · 제출완료 기준: 제출수 / 1">21</span></th>
       <th>진행률(%)</th><th>콘텐츠 점수</th>
       <th>완료여부</th><th>최근 학습일</th><th>회사명</th><th>부서명</th>
     </tr>`;
@@ -5515,7 +6926,12 @@ function scDetRenderHead(contentMode) {
     thead.innerHTML = `<tr>
       <th>No.</th><th>이름</th><th>아이디</th>
       <th>학습자 학습기간</th><th>학습상태</th>
-      <th>필수평가항목 이수</th><th>총점</th>
+      <th>필수평가항목 이수<span class="change-badge in-th" data-num="18" data-memo="- 클릭 시 성적 현황 모달 호출
+- 학습자별 이수 충족수 / 전체 필수 평가항목 수
+- 학습자 상태별 표기:
+  · 수료: 2/2 (학습·시험 모두 충족)
+  · 미수료: 1/2 (학습 충족, 시험 미달)
+  · 수료처리전: 1/2 (학습 충족, 시험 미응시)">18</span></th><th>총점</th>
       <th>수료여부</th><th>수료처리일</th><th>회사명</th><th>부서명</th>
     </tr>`;
   }
@@ -5547,19 +6963,27 @@ function scDetRenderTable() {
       <td>${r.dept}</td>
     </tr>`).join('');
   } else {
-    tbody.innerHTML = slice.map(r => `<tr>
+    tbody.innerHTML = slice.map((r, idx) => `<tr>
       <td>${r.no}</td>
       <td>${maskName(r.name)}</td>
       <td>${maskEmail(r.id)}</td>
       <td>${r.period}</td>
       <td>${r.status}</td>
-      <td>${r.passItem}</td>
+      <td class="link-cell" data-grade-idx="${start + idx}">${r.passItem}</td>
       <td>${r.score}</td>
       <td>${r.complete}</td>
       <td>${r.completeDate}</td>
       <td>${r.company}</td>
       <td>${r.dept}</td>
     </tr>`).join('');
+
+    // 필수평가항목 이수 클릭 → 성적 현황 모달
+    tbody.querySelectorAll('.link-cell[data-grade-idx]').forEach(cell => {
+      cell.addEventListener('click', () => {
+        const learner = scDetFilteredData[parseInt(cell.dataset.gradeIdx)];
+        openGradeResultModal(learner);
+      });
+    });
   }
   renderPagination('sc-det-pagination', Math.ceil(scDetFilteredData.length/scDetPageSize), scDetCurrentPage, p => { scDetCurrentPage=p; scDetRenderTable(); });
 }
@@ -5571,7 +6995,7 @@ function openCourseDetail(r) {
   // ① 과정 요약 테이블
   document.getElementById('sc-detail-course-body').innerHTML = `<tr>
     <td>${r.type}</td>
-    <td style="text-align:left;padding-left:10px">${r.name}</td>
+    <td class="link-cell" id="sc-detail-course-link" style="text-align:left;padding-left:10px">${r.name}</td>
     <td>${r.cat}</td>
     <td>${periodStr}</td>
     <td>${r.learners}</td>
@@ -5582,18 +7006,35 @@ function openCourseDetail(r) {
     <td>${r.pass}</td>
     <td>${r.fail}</td>
     <td>${r.rate}</td>
+    <td><button class="btn-detail-sm" id="sc-detail-comp-btn">상세보기</button></td>
     <td><button class="btn-print-sm ${r.pass > 0 ? 'active' : ''}" ${r.pass === 0 ? 'disabled' : ''}>출력</button></td>
   </tr>`;
 
-  // ② 목차 셀렉박스 동적 구성 (CONTENT_TEMPLATE 기반)
-  const sel = document.getElementById('sc-det-content-sel');
-  sel.innerHTML = '<option value="">포함된 콘텐츠를 선택하세요.</option>';
-  CONTENT_TEMPLATE.forEach((c, i) => {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.textContent = `${c.name} (${c.type})`;
-    sel.appendChild(opt);
+  // 과정명 클릭 → 과정정보 모달 (SC 데이터 → 모달 어댑터)
+  document.getElementById('sc-detail-course-link').addEventListener('click', () => {
+    openCourseInfoModal({
+      courseCode:  r.courseCode,
+      courseDiv:   r.courseDiv,
+      type:        r.type,
+      course:      r.name,
+      courseCat:   r.cat,
+      applyPeriod: r.applyPeriod,
+      period:      r.period,
+      reviewEnd:   r.reviewEnd,
+      fee:         r.fee,
+      book:        r.book,
+      credit:      r.credit,
+      passEval:    r.passEval,
+      passTotal:   r.passTotal
+    });
   });
+
+  // 과정 구성 버튼 → 과정 구성 상세 모달
+  document.getElementById('sc-detail-comp-btn').addEventListener('click', () => openCompositionModal(r));
+
+  // ② 목차 셀렉박스 동적 구성 (CONTENT_TEMPLATE 기반)
+  // 평가항목 필터가 적용된 옵션만 채운다
+  populateContentSelect();
 
   // ③ 학습자 원본 데이터 생성 (다양한 수료 상태 샘플)
   const completeStatusMap = ['수료처리전', '수료처리전', '수료', '미수료', '수료'];
@@ -5601,18 +7042,26 @@ function openCourseDetail(r) {
     const complete     = completeStatusMap[i % completeStatusMap.length];
     const completeDate = (complete === '수료' || complete === '미수료')
       ? fmtDatetime('2026-03-31', i) : '-';
+    // passItem(필수평가항목 이수) — 학습자별 충족 수
+    let passItem;
+    if (complete === '수료')         passItem = '2 / 2';
+    else if (complete === '미수료')  passItem = '1 / 2';   // 학습은 충족, 시험 미달
+    else                             passItem = '1 / 2';   // 진행 중 (학습 충족, 시험 미응시)
     return {
       no: r.learners - i,
       name: l.name,
       id: l.id,
       period: periodStr,
       status: complete === '수료처리전' ? '학습중' : '종료',
-      passItem: complete === '수료' ? '2 / 2' : '0 / 2',
-      score: complete === '수료' ? '90' : complete === '미수료' ? '65' : '-',
+      passItem,
+      score: complete === '수료' ? '83' : complete === '미수료' ? '62' : '-',
       complete,
       completeDate,
       company: '(주)휴넷',
       dept: l.dept,
+      // 성적 현황 모달용 — 과정의 평가 정의 복사
+      passEval:  r.passEval,
+      passTotal: r.passTotal,
       studyInfo: '00:00:00', progress: '-', contentScore: '-', contentDone: 'N', lastStudy: '-'
     };
   });
@@ -5650,6 +7099,20 @@ document.getElementById('sc-content-to-course-btn').addEventListener('click', ()
   scDetRenderTable();
 });
 
+// 평가항목 변경 → 콘텐츠 셀렉트 옵션 자동 갱신
+document.getElementById('sc-det-evalroot-sel').addEventListener('change', () => {
+  populateContentSelect();
+  // 콘텐츠 셀렉트가 리셋되면 콘텐츠 모드도 해제
+  document.getElementById('sc-content-detail-box').style.display = 'none';
+  if (scDetContentMode) {
+    scDetContentMode = false;
+    scDetFilteredData = [...scDetAllData];
+    scDetCurrentPage = 1;
+    scDetRenderHead(false);
+    scDetRenderTable();
+  }
+});
+
 document.getElementById('sc-det-btn-search').addEventListener('click', () => {
   const contentIdx = document.getElementById('sc-det-content-sel').value;
   const lt   = document.getElementById('sc-det-learner-type').value;
@@ -5664,11 +7127,14 @@ document.getElementById('sc-det-btn-search').addEventListener('click', () => {
     box.style.display = 'block';
 
     // 콘텐츠별 학습 상세 테이블
+    const evalRootMeta = getEvalRoot(c.type);
+    const evalLabelMeta = EVAL_ROOT_LABEL[evalRootMeta];
     document.getElementById('sc-content-detail-body').innerHTML = `<tr>
       <td>1</td>
       <td>${c.required}</td>
+      <td title="${evalRootMeta}">${evalLabelMeta}</td>
       <td>${c.type}</td>
-      <td style="text-align:left;padding-left:10px">${c.name}</td>
+      <td class="cell-wrap" style="text-align:left;padding-left:10px">${c.name}</td>
       <td>${scCurrentCourse ? fmtPeriod(scCurrentCourse.period) : '-'}</td>
       <td>${getContentInfo(c)}</td>
       <td>${getCompleteCriteria(c.type)}</td>
@@ -5706,6 +7172,8 @@ document.getElementById('sc-det-btn-reset').addEventListener('click', () => {
   document.getElementById('sc-det-dept-input').value = '';
   document.getElementById('sc-det-learner-type').selectedIndex = 0;
   document.getElementById('sc-det-company-sel').selectedIndex = 0;
+  document.getElementById('sc-det-evalroot-sel').selectedIndex = 0;
+  populateContentSelect();
   document.getElementById('sc-det-content-sel').selectedIndex = 0;
   document.getElementById('sc-content-detail-box').style.display = 'none';
   scDetContentMode = false;
@@ -6689,8 +8157,8 @@ const initialPage = location.hash.slice(1) || 'personal';
 if (!navigateToPage(initialPage)) {
   navigateToPage('personal');
 }
-pUpdateSummary();
-pRenderTable();
+// 페이지 초기 로드 - 재직상태 디폴트가 ‘재직’이므로 자동 필터 적용
+pDoSearch();
 cUpdateSummary();
 cRenderTable();
 spUpdateSummary();
@@ -8850,7 +10318,7 @@ document.addEventListener('keydown', e => {
       엑셀 다운로드 페이지로 이동하시겠습니까?
     </div>
     <div class="modal-footer-end" style="display:flex;gap:8px;padding:0 20px 20px">
-      <button class="btn btn-reset" style="flex:1" onclick="closeModal('modal-excel-confirm')">아니오</button>
+      <button class="btn btn-reset" onclick="closeModal('modal-excel-confirm')">아니오</button>
       <button class="btn btn-primary" style="flex:3" onclick="closeModal('modal-excel-confirm')">예</button>
     </div>
   </div>
