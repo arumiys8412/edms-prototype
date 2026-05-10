@@ -1539,6 +1539,10 @@
   .change-badge:hover { background: #e55a2b; transform: scale(1.1) translateY(-1px); }
   .change-badge.in-th { margin-left: 4px; top: -6px; }
 
+  /* 신청관리 그룹 - 파란색 */
+  .change-badge.signup { background: #1d4ed8; }
+  .change-badge.signup:hover { background: #1e40af; }
+
   /* 셀렉트 위에 배지 띄우기 */
   .badge-wrap { position: relative; display: inline-block; }
   .badge-wrap > .change-badge {
@@ -1799,17 +1803,6 @@
     font-size: 12px; cursor: pointer; font-family: inherit;
   }
   .btn-detail-sm:hover { border-color: #1a1a2e; color: #1a1a2e; background: #f7f8fa; }
-
-  /* number input의 위/아래 spinner 화살표 제거 */
-  input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -2063,7 +2056,7 @@
         <span class="nav-arrow">▶</span>
       </div>
       <div class="nav-sub">
-        <a class="nav-item" data-page="period" href="#">수강신청 기간</a>
+        <a class="nav-item" data-page="" href="#">수강신청 기간</a>
         <a class="nav-item" data-page="restrict" href="#">수강신청 제한</a>
       </div>
     </div>
@@ -2114,8 +2107,7 @@
         <!-- 학습자검색 + 과정검색 (같은 줄) -->
         <div class="search-form-row" style="gap:28px;margin-bottom:14px">
           <div class="field-group" style="min-width:520px">
-            <div class="field-label">학습자검색<span class="change-badge" data-num="1" data-memo="- 옵션: 재직상태 전체 / 재직 / 모니터링
-- 디폴트: 재직">1</span></div>
+            <div class="field-label">학습자검색</div>
             <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap">
               <select class="select" id="p-sel-learner-type" style="min-width:80px">
                 <option value="name">이름</option>
@@ -2123,17 +2115,20 @@
                 <option value="empno">사번</option>
               </select>
               <input type="text" class="input" id="p-input-learner" placeholder="검색어를 입력해주세요." style="width:200px">
-              <select class="select" id="p-sel-approval" style="min-width:120px">
+              <span class="badge-wrap"><select class="select" id="p-sel-approval" style="min-width:120px">
                 <option value="">승인상태 전체</option>
                 <option value="승인">승인</option>
                 <option value="승인대기">승인대기</option>
                 <option value="취소">취소</option>
-              </select>
-              <select class="select" id="p-sel-employment" style="min-width:120px">
+              </select><span class="change-badge signup" data-num="2" data-memo="placeholder: ‘승인상태 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 승인상태 전체 / 승인 / 승인대기 / 취소">2</span></span>
+              <span class="badge-wrap"><select class="select" id="p-sel-employment" style="min-width:120px">
                 <option value="">재직상태 전체</option>
                 <option value="재직" selected>재직</option>
                 <option value="모니터링">모니터링</option>
-              </select>
+              </select><span class="change-badge signup" data-num="1" data-memo="placeholder: ‘재직상태 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 재직상태 전체 / 재직 / 모니터링
+디폴트: 재직">1</span></span>
             </div>
           </div>
           <div class="field-group" style="min-width:560px">
@@ -2144,19 +2139,21 @@
                 <option value="code">과정코드</option>
               </select>
               <input type="text" class="input" id="p-input-course" placeholder="검색어를 입력해주세요." style="width:200px">
-              <select class="select" id="p-sel-course-form" style="min-width:120px">
+              <span class="badge-wrap"><select class="select" id="p-sel-course-form" style="min-width:120px">
                 <option value="">과정유형 전체</option>
                 <option value="온라인">온라인</option>
                 <option value="오프라인">오프라인</option>
                 <option value="하이브리드">하이브리드</option>
                 <option value="마이크로러닝">마이크로러닝</option>
-              </select>
-              <select class="select" id="p-sel-course-cat" style="min-width:120px">
+              </select><span class="change-badge signup" data-num="3" data-memo="placeholder: ‘과정유형 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 과정유형 전체 / 온라인 / 오프라인 / 하이브리드 / 마이크로러닝">3</span></span>
+              <span class="badge-wrap"><select class="select" id="p-sel-course-cat" style="min-width:120px">
                 <option value="">과정분류 전체</option>
                 <option value="경영">경영</option>
                 <option value="IT">IT</option>
                 <option value="어학">어학</option>
-              </select>
+              </select><span class="change-badge signup" data-num="4" data-memo="placeholder: ‘과정분류 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 과정분류 전체 / 경영 / IT / 어학">4</span></span>
             </div>
           </div>
         </div>
@@ -2225,8 +2222,9 @@
         <table class="main-table">
           <thead>
             <tr>
-              <th>No.</th><th>이름</th><th>아이디</th><th>과정유형</th><th>과정명</th>
-              <th>과정코드<span class="change-badge in-th" data-num="2" data-memo="- 데이터: ProductID">2</span></th>
+              <th>No.</th><th>이름<span class="change-badge signup in-th" data-num="6" data-memo="link화 (신규)
+(클릭) 개인별 신청현황 상세 페이지 진입">6</span></th><th>아이디</th><th>과정유형</th><th>과정명</th>
+              <th>과정코드<span class="change-badge signup in-th" data-num="5" data-memo="- 데이터: ProductID">5</span></th>
               <th>학습자 학습기간</th><th>교육비(청구)</th><th>신청일</th>
               <th>승인상태</th><th>승인일</th><th>회사명</th><th>부서명</th>
             </tr>
@@ -2262,7 +2260,8 @@
       <!-- Card 1: 신청자 정보 한 행 -->
       <div class="card">
         <div class="detail-section-header">
-          <div class="detail-section-title">신청 정보</div>
+          <div class="detail-section-title">신청 정보<span class="change-badge signup" data-num="12" data-memo="신규 페이지 - 신청 정보 표
+컬럼: 과정유형 / 과정명 / 과정코드 / 학습자 학습기간 / 교육비(청구) / 신청일 / 승인상태 / 승인일">12</span></div>
           <div style="display:flex;gap:6px">
             <button class="mbtn mbtn-gray" id="p-detail-back-btn">목록</button>
             <button class="mbtn mbtn-gray" id="p-detail-prev-btn">이전</button>
@@ -2271,8 +2270,10 @@
         <table class="main-table">
           <thead>
             <tr>
-              <th>이름</th><th>아이디</th><th>사번</th><th>과정유형</th>
-              <th>과정명</th><th>과정코드</th><th>학습자 학습기간</th>
+              <th>이름<span class="change-badge signup in-th" data-num="11" data-memo="신규 페이지 - 학습자 정보
+컬럼: 이름 / 아이디 / 사번 / 회사명 / 부서명">11</span></th><th>아이디</th><th>사번</th><th>과정유형</th>
+              <th>과정명<span class="change-badge signup in-th" data-num="13" data-memo="link화 (신규)
+(클릭) 과정 정보 모달 호출">13</span></th><th>과정코드</th><th>학습자 학습기간</th>
               <th>교육비(청구)</th><th>신청일</th><th>승인상태</th>
               <th>승인일</th><th>회사명</th><th>부서명</th>
             </tr>
@@ -2290,17 +2291,23 @@
             <col>
           </colgroup>
           <tbody>
-            <tr><th>결제금액</th> <td id="p-detail-pay-amount">-</td></tr>
-            <tr><th>결제방법<span class="change-badge" data-num="3" data-memo="결제방법 옵션 (교육비용 결제 메뉴 기준)
+            <tr><th>결제금액<span class="change-badge signup" data-num="14" data-memo="신규 항목
+학습자 1인 결제금액 (수강료 기준)">14</span></th> <td id="p-detail-pay-amount">-</td></tr>
+            <tr><th>결제방법<span class="change-badge signup" data-num="15" data-memo="결제방법 옵션 (교육비용 결제 메뉴 기준)
 - 일괄납입: 회사 단위 일괄 결제
 - 신용카드: 카드 결제
 - 선수금 차감: 사전 적립금에서 차감
-- 결제상태가 ‘입금완료’가 아닌 경우 ‘-’ 표시">3</span></th> <td id="p-detail-pay-method">-</td></tr>
-            <tr><th>결제상태<span class="change-badge" data-num="4" data-memo="결제상태 옵션 (교육비용 결제 메뉴 기준)
+- 입금대기 시 ‘-’ 표시 (결제 진행 전)
+- 입금취소도 결제 발생 후 취소면 결제수단 보존">15</span></th> <td id="p-detail-pay-method">-</td></tr>
+            <tr><th>결제상태<span class="change-badge signup" data-num="16" data-memo="결제상태 옵션 (교육비용 결제 메뉴 기준)
 - 입금완료: 결제 처리 완료
 - 입금대기: 결제 진행 중
-- 입금취소: 결제 취소·환불">4</span></th> <td id="p-detail-pay-status">-</td></tr>
-            <tr><th>결제일시</th> <td id="p-detail-pay-date">-</td></tr>
+- 입금취소: 결제 취소·환불">16</span></th> <td id="p-detail-pay-status">-</td></tr>
+            <tr><th>결제일시<span class="change-badge signup" data-num="17" data-memo="신규 항목
+- 입금완료: 결제 발생 일시
+- 입금취소: 결제 발생 일시 (취소: 취소 발생 일시)
+- 입금대기: ‘-’
+- 결제 발생 후 취소 시 원래 결제일시 보존, 취소일시는 괄호에 표기">17</span></th> <td id="p-detail-pay-date">-</td></tr>
           </tbody>
         </table>
       </div>
@@ -2347,19 +2354,21 @@
                 <option value="code">과정코드</option>
               </select>
               <input type="text" class="input" id="c-input-course" placeholder="검색어를 입력해주세요." style="width:200px">
-              <select class="select" id="c-sel-course-form" style="min-width:120px">
+              <span class="badge-wrap"><select class="select" id="c-sel-course-form" style="min-width:120px">
                 <option value="">과정유형 전체</option>
                 <option value="온라인">온라인</option>
                 <option value="오프라인">오프라인</option>
                 <option value="하이브리드">하이브리드</option>
                 <option value="마이크로러닝">마이크로러닝</option>
-              </select>
-              <select class="select" id="c-sel-course-cat" style="min-width:120px">
+              </select><span class="change-badge signup" data-num="7" data-memo="placeholder: ‘과정유형 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 과정유형 전체 / 온라인 / 오프라인 / 하이브리드 / 마이크로러닝">7</span></span>
+              <span class="badge-wrap"><select class="select" id="c-sel-course-cat" style="min-width:120px">
                 <option value="">과정분류 전체</option>
                 <option value="경영">경영</option>
                 <option value="IT">IT</option>
                 <option value="어학">어학</option>
-              </select>
+              </select><span class="change-badge signup" data-num="8" data-memo="placeholder: ‘과정분류 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 과정분류 전체 / 경영 / IT / 어학">8</span></span>
             </div>
           </div>
         </div>
@@ -2404,9 +2413,10 @@
         <table class="main-table">
           <thead>
             <tr>
-              <th>No.</th><th>과정유형</th><th>과정명</th>
+              <th>No.</th><th>과정유형</th><th>과정명<span class="change-badge signup in-th" data-num="10" data-memo="link화 (신규)
+(클릭) 과정별 신청현황 상세 페이지 진입">10</span></th>
               <th>과정분류</th>
-              <th>과정코드<span class="change-badge in-th" data-num="5" data-memo="- 데이터: ProductID">5</span></th>
+              <th>과정코드<span class="change-badge signup in-th" data-num="9" data-memo="- 데이터: ProductID">9</span></th>
               <th>과정 신청기간</th><th>과정 학습기간</th>
               <th>1인 교육비(청구)</th><th>신청 수</th><th>승인 수</th>
               <th>승인대기 수</th><th>취소 수</th><th>총 교육비</th>
@@ -2443,7 +2453,8 @@
       <!-- Card 1: 과정 신청 정보 한 행 -->
       <div class="card">
         <div class="detail-section-header">
-          <div class="detail-section-title">과정 신청현황</div>
+          <div class="detail-section-title">과정 신청현황<span class="change-badge signup" data-num="19" data-memo="신규 페이지 - 신청 집계
+컬럼: 신청 수 / 승인 수 / 승인대기 수 / 취소 수 / 총 교육비">19</span></div>
           <div style="display:flex;gap:6px">
             <button class="mbtn mbtn-gray" id="c-detail-back-btn">목록</button>
             <button class="mbtn mbtn-gray" id="c-detail-prev-btn">이전</button>
@@ -2452,7 +2463,9 @@
         <table class="main-table">
           <thead>
             <tr>
-              <th>과정유형</th><th>과정명</th><th>과정분류</th><th>과정코드</th>
+              <th>과정유형<span class="change-badge signup in-th" data-num="18" data-memo="신규 페이지 - 과정 정보 표
+컬럼: 과정유형 / 과정명 / 과정분류 / 과정코드 / 과정 신청기간 / 과정 학습기간 / 1인 교육비(청구)">18</span></th><th>과정명<span class="change-badge signup in-th" data-num="20" data-memo="link화 (신규)
+(클릭) 과정 정보 모달 호출">20</span></th><th>과정분류</th><th>과정코드</th>
               <th>과정 신청기간</th><th>과정 학습기간</th>
               <th>1인 교육비(청구)</th><th>신청 수</th><th>승인 수</th>
               <th>승인대기 수</th><th>취소 수</th><th>총 교육비</th>
@@ -2471,7 +2484,10 @@
           <!-- 첫 줄: 학습자 검색 -->
           <div class="search-form-row" style="gap:28px">
             <div class="field-group">
-              <div class="field-label">학습자검색</div>
+              <div class="field-label">학습자검색<span class="change-badge signup" data-num="21" data-memo="신규 항목 (1차에는 과정별 신청현황에 학습자 검색 없었음)
+- 검색조건: 이름 / 아이디 / 사번
+- 승인상태 셀렉트 (placeholder: ‘승인상태 전체’)
+- 재직상태 셀렉트 (placeholder: ‘재직상태 전체’, 디폴트: 재직)">21</span></div>
               <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
                 <select class="select" id="c-det-search-key" style="min-width:70px">
                   <option value="name">이름</option>
@@ -2528,7 +2544,8 @@
         <table class="main-table">
           <thead>
             <tr>
-              <th>No.</th><th>이름</th><th>아이디</th><th>사번</th>
+              <th>No.</th><th>이름<span class="change-badge signup in-th" data-num="22" data-memo="신규 페이지 - 신청자 목록 컬럼
+컬럼: No. / 이름 / 아이디 / 사번 / 신청일 / 교육비 / 승인상태 / 승인일 / 회사명 / 부서명">22</span></th><th>아이디</th><th>사번</th>
               <th>신청일</th><th>교육비</th><th>승인상태</th><th>승인일</th>
               <th>회사명</th><th>부서명</th>
             </tr>
@@ -3649,141 +3666,6 @@
       </div>
 
     </div><!-- /page-study-detail -->
-
-
-    <!-- ══════════════════════════════════════════ -->
-    <!-- PAGE: 수강신청 기간설정                      -->
-    <!-- ══════════════════════════════════════════ -->
-    <div class="page-section" id="page-period">
-      <div class="page-header-row">
-        <div class="page-header-title">수강신청 기간설정</div>
-        <div class="breadcrumb">홈 &gt; <a href="#">수강신청설정</a> &gt; 수강신청 기간설정</div>
-      </div>
-
-      <!-- 안내 영역 -->
-      <div class="card" style="background:#f8f9fb;border:1px solid #e0e3e8;padding:14px 18px">
-        <div style="font-size:12px;color:#555;line-height:1.7">
-          본 화면에서 설정한 값은 <strong style="color:#1a73e8">신규 개설되는 정시 과정</strong>의 기본값으로 자동 적용됩니다. 이미 개설된 과정에는 영향을 주지 않습니다.<br>
-          수시 과정의 신청·취소 정책은 본 메뉴 적용 대상이 아닙니다.
-        </div>
-      </div>
-
-      <!-- 입력 영역 (단일 카드, 구분 없음) -->
-      <div class="card" style="padding:0">
-        <table class="rd-table">
-          <tbody class="rd-editable">
-            <!-- 1-1. 과정 수강신청 기간 (시작·종료 기준점 분리) -->
-            <tr>
-              <th style="vertical-align:top;padding-top:14px">신청기간</th>
-              <td>
-                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-                  <select class="select" id="period-apply-start-base" style="width:140px">
-                    <option value="thismonth">학습시작일 당월</option>
-                    <option value="prevmonth" selected>학습시작일 전월</option>
-                    <option value="prev2month">학습시작일 전전월</option>
-                  </select>
-                  <select class="select" id="period-apply-start-day" style="width:80px">
-                    <option value="1" selected>1일</option><option value="2">2일</option><option value="3">3일</option><option value="4">4일</option><option value="5">5일</option><option value="6">6일</option><option value="7">7일</option><option value="8">8일</option><option value="9">9일</option><option value="10">10일</option><option value="11">11일</option><option value="12">12일</option><option value="13">13일</option><option value="14">14일</option><option value="15">15일</option><option value="16">16일</option><option value="17">17일</option><option value="18">18일</option><option value="19">19일</option><option value="20">20일</option><option value="21">21일</option><option value="22">22일</option><option value="23">23일</option><option value="24">24일</option><option value="25">25일</option><option value="26">26일</option><option value="27">27일</option><option value="28">28일</option><option value="29">29일</option><option value="30">30일</option><option value="lastday">말일</option>
-                  </select>
-                  <input type="number" id="period-apply-start-hh" value="00" min="0" max="23" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
-                  <span style="font-size:12px;color:#666">시</span>
-                  <input type="number" id="period-apply-start-mm" value="00" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
-                  <span style="font-size:12px;color:#666">분</span>
-                  <input type="number" id="period-apply-start-ss" value="00" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
-                  <span style="font-size:12px;color:#666">초 부터 ~</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px">
-                  <select class="select" id="period-apply-end-base" style="width:140px">
-                    <option value="thismonth" selected>학습시작일 당월</option>
-                    <option value="prevmonth">학습시작일 전월</option>
-                    <option value="prev2month">학습시작일 전전월</option>
-                  </select>
-                  <select class="select" id="period-apply-end-day" style="width:80px">
-                    <option value="1">1일</option><option value="2">2일</option><option value="3">3일</option><option value="4">4일</option><option value="5">5일</option><option value="6">6일</option><option value="7">7일</option><option value="8">8일</option><option value="9">9일</option><option value="10">10일</option><option value="11">11일</option><option value="12">12일</option><option value="13">13일</option><option value="14">14일</option><option value="15">15일</option><option value="16">16일</option><option value="17">17일</option><option value="18">18일</option><option value="19">19일</option><option value="20" selected>20일</option><option value="21">21일</option><option value="22">22일</option><option value="23">23일</option><option value="24">24일</option><option value="25">25일</option><option value="26">26일</option><option value="27">27일</option><option value="28">28일</option><option value="29">29일</option><option value="30">30일</option><option value="lastday">말일</option>
-                  </select>
-                  <input type="number" id="period-apply-end-hh" value="23" min="0" max="23" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
-                  <span style="font-size:12px;color:#666">시</span>
-                  <input type="number" id="period-apply-end-mm" value="59" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
-                  <span style="font-size:12px;color:#666">분</span>
-                  <input type="number" id="period-apply-end-ss" value="59" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
-                  <span style="font-size:12px;color:#666">초 까지</span>
-                </div>
-              </td>
-            </tr>
-
-            <!-- 1-2. 과정 취소기간 -->
-            <tr>
-              <th style="vertical-align:top;padding-top:14px">취소기간</th>
-              <td>
-                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-                  <span style="font-size:12px;color:#333;font-weight:500;margin-right:4px">신청종료일 후</span>
-                  <input type="number" id="period-cancel-day" value="1" min="0" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px">
-                  <span style="font-size:12px;color:#666">일</span>
-                  <input type="number" id="period-cancel-hh" value="23" min="0" max="23" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
-                  <span style="font-size:12px;color:#666">시</span>
-                  <input type="number" id="period-cancel-mm" value="59" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
-                  <span style="font-size:12px;color:#666">분</span>
-                  <input type="number" id="period-cancel-ss" value="59" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
-                  <span style="font-size:12px;color:#666">초 까지</span>
-                </div>
-                <div style="font-size:11px;color:#888;line-height:1.6;margin-top:6px">※ 입력값이 학습시작일을 초과하는 경우, 학습시작일 직전까지로 자동 한정됩니다.</div>
-              </td>
-            </tr>
-
-            <!-- 1-3. 결재 중 취소처리 -->
-            <tr>
-              <th>결재 중 취소처리</th>
-              <td>
-                <div class="rd-radio-group">
-                  <label class="rd-radio-label"><input type="radio" name="period-approve-during" value="Y" checked> 취소가능</label>
-                  <label class="rd-radio-label"><input type="radio" name="period-approve-during" value="N"> 취소불가</label>
-                </div>
-              </td>
-            </tr>
-
-            <!-- 1-4. 결재 완료 후 취소처리 -->
-            <tr>
-              <th>결재 완료 후 취소처리</th>
-              <td>
-                <div class="rd-radio-group">
-                  <label class="rd-radio-label"><input type="radio" name="period-approve-after" value="Y" checked> 취소가능</label>
-                  <label class="rd-radio-label"><input type="radio" name="period-approve-after" value="N"> 취소불가</label>
-                </div>
-              </td>
-            </tr>
-
-            <!-- 1-5. 신청기간 외 과정정보 노출 -->
-            <tr>
-              <th>신청기간 외<br>과정정보 노출</th>
-              <td>
-                <div class="rd-radio-group">
-                  <label class="rd-radio-label"><input type="radio" name="period-show-outside" value="Y" checked> 보이기</label>
-                  <label class="rd-radio-label"><input type="radio" name="period-show-outside" value="N"> 보이지않기</label>
-                </div>
-                <div style="font-size:11px;color:#888;line-height:1.6;margin-top:6px">※ '보이기'를 선택할 경우 수강신청 기간에 상관없이 과정정보가 보이지만 수강신청은 되지 않습니다.</div>
-              </td>
-            </tr>
-
-            <!-- 사용여부 Y/N (맨 아래) -->
-            <tr>
-              <th>사용여부</th>
-              <td>
-                <div class="rd-radio-group">
-                  <label class="rd-radio-label"><input type="radio" name="period-use" value="Y" checked> Y</label>
-                  <label class="rd-radio-label"><input type="radio" name="period-use" value="N"> N</label>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 하단 버튼 -->
-      <div class="detail-footer">
-        <button class="btn-edit-red" onclick="periodSave()">저장</button>
-        <button class="btn-list-gray" onclick="periodReset()">취소</button>
-      </div>
-    </div><!-- /page-period -->
 
 
     <!-- ══════════════════════════════════════════ -->
@@ -5533,15 +5415,29 @@ const P_ALL_DATA = Array.from({length:50}, (_,i) => {
   // 결제(교육비) 정보 시뮬레이션 - 교육비용 결제 메뉴와 옵션 일치
   // 결제방법: 일괄납입 / 신용카드 / 선수금 차감
   // 결제상태: 입금완료 / 입금대기 / 입금취소
-  let paymentStatus, paymentDate, paymentMethod;
+  let paymentStatus, paymentDate, paymentMethod, cancelDate;
+  const methods = ['일괄납입', '신용카드', '선수금 차감'];
   if (status === '승인')           {
     paymentStatus = '입금완료';
     paymentDate = `${applyDate} ${String(10+(i%8)).padStart(2,'0')}:${String((i*7)%60).padStart(2,'0')}`;
-    const methods = ['일괄납입', '신용카드', '선수금 차감'];
     paymentMethod = methods[i % 3];
+    cancelDate = null;
   }
-  else if (status === '승인대기')  { paymentStatus = '입금대기'; paymentDate = '-'; paymentMethod = '-'; }
-  else                              { paymentStatus = '입금취소'; paymentDate = `${applyDate} ${String(10+(i%8)).padStart(2,'0')}:${String((i*7)%60).padStart(2,'0')}`; paymentMethod = '-'; }
+  else if (status === '승인대기')  {
+    paymentStatus = '입금대기';
+    paymentDate = '-';
+    paymentMethod = '-';
+    cancelDate = null;
+  }
+  else {
+    paymentStatus = '입금취소';
+    // 취소 건은 결제 발생 후 취소로 시뮬레이션 - 결제수단·결제일시 보존
+    paymentDate = `${applyDate} ${String(10+(i%8)).padStart(2,'0')}:${String((i*7)%60).padStart(2,'0')}`;
+    paymentMethod = methods[i % 3];
+    // 취소일시 = 결제일시 + 며칠
+    const cancelDay = ((i%28) + 5) % 28 + 1;
+    cancelDate = `${applyDate.substring(0,8)}${String(cancelDay).padStart(2,'0')} ${String(14+(i%6)).padStart(2,'0')}:${String((i*11)%60).padStart(2,'0')}`;
+  }
 
   return {
     no: 200-i,
@@ -5562,7 +5458,8 @@ const P_ALL_DATA = Array.from({length:50}, (_,i) => {
     // 결제 정보
     paymentStatus,
     paymentDate,
-    paymentMethod
+    paymentMethod,
+    cancelDate
   };
 });
 
@@ -5745,7 +5642,12 @@ const C_ALL_DATA = Array.from({length:200}, (_,i) => {
     approved,
     pending,
     cancel,
-    totalFee: fee * apply
+    totalFee: fee * apply,
+    // 과정정보 모달용 필드
+    courseDiv: i % 2 === 0 ? '정시' : '수시',
+    reviewEnd: '2026-01-31',
+    book:      i % 2 === 0 ? '있음' : '없음',
+    credit:    (i % 4) + '학점'
   };
 });
 
@@ -5802,7 +5704,7 @@ function openPersonalApplyDetail(r) {
     <td>${r.id}@hunet.co.kr</td>
     <td>${r.empno}</td>
     <td>${r.type}</td>
-    <td style="text-align:left;padding-left:10px">${r.course}</td>
+    <td class="link-cell" id="p-detail-course-link" style="text-align:left;padding-left:10px">${r.course}</td>
     <td>${r.courseCode}</td>
     <td>${fmtPeriod(r.period)}</td>
     <td style="text-align:right;padding-right:10px">${r.fee.toLocaleString()}</td>
@@ -5812,6 +5714,11 @@ function openPersonalApplyDetail(r) {
     <td>${r.company}</td>
     <td>${r.dept}</td>
   </tr>`;
+
+  // 과정명 클릭 → 과정 정보 모달
+  document.getElementById('p-detail-course-link').addEventListener('click', () => {
+    openCourseInfoModal(r);
+  });
 
   // 하단: 교육비 결제 상세
   document.getElementById('p-detail-pay-amount').textContent = `${r.fee.toLocaleString()}원`;
@@ -5823,7 +5730,15 @@ function openPersonalApplyDetail(r) {
   }[r.paymentStatus] || 'neutral';
   document.getElementById('p-detail-pay-status').innerHTML =
     `<span class="status-badge ${payCls}">${r.paymentStatus || '-'}</span>`;
-  document.getElementById('p-detail-pay-date').textContent = r.paymentDate === '-' ? '-' : r.paymentDate.replace(/-/g, '.');
+  document.getElementById('p-detail-pay-date').innerHTML = (() => {
+    if (r.paymentDate === '-') return '-';
+    const payDate = r.paymentDate.replace(/-/g, '.');
+    if (r.cancelDate) {
+      const cancelDate = r.cancelDate.replace(/-/g, '.');
+      return `${payDate} <span style="color:#888">(취소: ${cancelDate})</span>`;
+    }
+    return payDate;
+  })();
 
   showPage('personal-detail');
 }
@@ -5842,7 +5757,7 @@ function openCourseApplyDetail(r) {
   // 상단: 과정 신청 정보 한 행
   document.getElementById('c-detail-course-body').innerHTML = `<tr>
     <td>${r.type}</td>
-    <td style="text-align:left;padding-left:10px">${r.course}</td>
+    <td class="link-cell" id="c-detail-course-link" style="text-align:left;padding-left:10px">${r.course}</td>
     <td>${r.cat}</td>
     <td>${r.courseCode}</td>
     <td>${r.applyPeriod}</td>
@@ -5854,6 +5769,23 @@ function openCourseApplyDetail(r) {
     <td>${r.cancel}</td>
     <td style="text-align:right;padding-right:10px">${r.totalFee.toLocaleString()}</td>
   </tr>`;
+
+  // 과정명 클릭 → 과정 정보 모달 (과정별 데이터 → 모달 어댑터)
+  document.getElementById('c-detail-course-link').addEventListener('click', () => {
+    openCourseInfoModal({
+      course:       r.course,
+      courseCode:   r.courseCode,
+      courseDiv:    r.courseDiv,
+      type:         r.type,
+      courseCat:    r.cat,
+      applyPeriod:  r.applyPeriod,
+      period:       r.studyPeriod,
+      reviewEnd:    r.reviewEnd,
+      fee:          r.fee ? r.fee.toLocaleString() + '원' : '-',
+      book:         r.book,
+      credit:       r.credit
+    });
+  });
 
   // 하단: 신청자 목록 시드 — r.apply 명을 P_NAMES 풀에서 생성
   // 승인/대기/취소 비율은 r.approved / r.pending / r.cancel 그대로 매핑
@@ -10140,97 +10072,6 @@ document.addEventListener('keydown', e => {
     document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
   }
 });
-
-
-// ════════════════════════════════════════════════
-// PAGE: 수강신청 기간설정
-// ════════════════════════════════════════════════
-// 시·분·초 모두 input type=number 사용. 디폴트값은 HTML value 속성으로 관리.
-
-// 시작·종료 시점을 비교 가능한 숫자 점수로 환산
-// 기준점(전전월=0/전월=1/당월=2) → 일자(말일=31) → 시·분·초 통합
-function periodComputeScore(base, day, hh, mm, ss) {
-  const baseRank = base === 'thismonth' ? 2 : (base === 'prevmonth' ? 1 : 0);
-  const dayNum = day === 'lastday' ? 31 : parseInt(day);
-  return baseRank * 10000000 + dayNum * 100000 + parseInt(hh) * 3600 + parseInt(mm) * 60 + parseInt(ss);
-}
-
-// 시·분·초 input 일반 검증 + 자동 2자리 패딩
-function periodValidateTime(id, label, unit, max) {
-  // unit: '시' | '분' | '초', max: 23 | 59
-  const el = document.getElementById(id);
-  const val = el.value.trim();
-  const num = parseInt(val);
-  if (val === '' || isNaN(num) || num < 0 || num > max || !Number.isInteger(Number(val))) {
-    alert(label + '의 ' + unit + '은 0 이상 ' + max + ' 이하의 정수만 입력 가능합니다.');
-    el.focus();
-    return false;
-  }
-  // 자동 2자리 패딩 (예: 5 → 05)
-  el.value = num.toString().padStart(2, '0');
-  return true;
-}
-
-// 저장 — 입력 검증 후 알림 (프로토타입)
-function periodSave() {
-  const useY = document.querySelector('input[name="period-use"]:checked').value === 'Y';
-  if (!useY) {
-    alert('사용여부 N으로 저장되었습니다.\n본 화면 설정값은 신규 과정에 적용되지 않습니다.');
-    return;
-  }
-  // 시·분·초 input 검증 (총 9개: 신청기간 시작/종료, 취소기간 각각 HH/MM/SS)
-  const timeFields = [
-    // 신청기간 시작
-    {id: 'period-apply-start-hh', label: '신청기간 시작', unit: '시', max: 23},
-    {id: 'period-apply-start-mm', label: '신청기간 시작', unit: '분', max: 59},
-    {id: 'period-apply-start-ss', label: '신청기간 시작', unit: '초', max: 59},
-    // 신청기간 종료
-    {id: 'period-apply-end-hh', label: '신청기간 종료', unit: '시', max: 23},
-    {id: 'period-apply-end-mm', label: '신청기간 종료', unit: '분', max: 59},
-    {id: 'period-apply-end-ss', label: '신청기간 종료', unit: '초', max: 59},
-    // 취소기간
-    {id: 'period-cancel-hh', label: '취소기간', unit: '시', max: 23},
-    {id: 'period-cancel-mm', label: '취소기간', unit: '분', max: 59},
-    {id: 'period-cancel-ss', label: '취소기간', unit: '초', max: 59}
-  ];
-  for (const f of timeFields) {
-    if (!periodValidateTime(f.id, f.label, f.unit, f.max)) return;
-  }
-  // 신청기간 시작·종료 시점 비교 검증 (초까지 비교)
-  const startScore = periodComputeScore(
-    document.getElementById('period-apply-start-base').value,
-    document.getElementById('period-apply-start-day').value,
-    document.getElementById('period-apply-start-hh').value,
-    document.getElementById('period-apply-start-mm').value,
-    document.getElementById('period-apply-start-ss').value
-  );
-  const endScore = periodComputeScore(
-    document.getElementById('period-apply-end-base').value,
-    document.getElementById('period-apply-end-day').value,
-    document.getElementById('period-apply-end-hh').value,
-    document.getElementById('period-apply-end-mm').value,
-    document.getElementById('period-apply-end-ss').value
-  );
-  if (startScore >= endScore) {
-    alert('신청기간 종료 시점이 시작 시점보다 앞설 수 없습니다.\n기준점·일자·시각을 다시 확인해주세요.');
-    return;
-  }
-  // 취소기간 N일 검증: 0 이상의 자연수
-  const cDay = parseInt(document.getElementById('period-cancel-day').value);
-  if (isNaN(cDay) || cDay < 0) {
-    alert('취소기간 N일은 0 이상의 자연수만 입력 가능합니다.');
-    return;
-  }
-  alert('수강신청 기간설정 기본값이 저장되었습니다.\n신규 개설되는 정시 과정에 자동 적용됩니다.');
-}
-
-// 취소
-function periodReset() {
-  if (confirm('변경사항을 취소하시겠습니까?')) {
-    location.reload();
-  }
-}
-
 
 </script>
 <!-- ══════════════════════════════════════════ -->
