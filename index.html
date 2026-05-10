@@ -1799,6 +1799,17 @@
     font-size: 12px; cursor: pointer; font-family: inherit;
   }
   .btn-detail-sm:hover { border-color: #1a1a2e; color: #1a1a2e; background: #f7f8fa; }
+
+  /* number input의 위/아래 spinner 화살표 제거 */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -2052,7 +2063,7 @@
         <span class="nav-arrow">▶</span>
       </div>
       <div class="nav-sub">
-        <a class="nav-item" data-page="" href="#">수강신청 기간</a>
+        <a class="nav-item" data-page="period" href="#">수강신청 기간</a>
         <a class="nav-item" data-page="restrict" href="#">수강신청 제한</a>
       </div>
     </div>
@@ -3638,6 +3649,141 @@
       </div>
 
     </div><!-- /page-study-detail -->
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 수강신청 기간설정                      -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-period">
+      <div class="page-header-row">
+        <div class="page-header-title">수강신청 기간설정</div>
+        <div class="breadcrumb">홈 &gt; <a href="#">수강신청설정</a> &gt; 수강신청 기간설정</div>
+      </div>
+
+      <!-- 안내 영역 -->
+      <div class="card" style="background:#f8f9fb;border:1px solid #e0e3e8;padding:14px 18px">
+        <div style="font-size:12px;color:#555;line-height:1.7">
+          본 화면에서 설정한 값은 <strong style="color:#1a73e8">신규 개설되는 정시 과정</strong>의 기본값으로 자동 적용됩니다. 이미 개설된 과정에는 영향을 주지 않습니다.<br>
+          수시 과정의 신청·취소 정책은 본 메뉴 적용 대상이 아닙니다.
+        </div>
+      </div>
+
+      <!-- 입력 영역 (단일 카드, 구분 없음) -->
+      <div class="card" style="padding:0">
+        <table class="rd-table">
+          <tbody class="rd-editable">
+            <!-- 1-1. 과정 수강신청 기간 (시작·종료 기준점 분리) -->
+            <tr>
+              <th style="vertical-align:top;padding-top:14px">신청기간</th>
+              <td>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                  <select class="select" id="period-apply-start-base" style="width:140px">
+                    <option value="thismonth">학습시작일 당월</option>
+                    <option value="prevmonth" selected>학습시작일 전월</option>
+                    <option value="prev2month">학습시작일 전전월</option>
+                  </select>
+                  <select class="select" id="period-apply-start-day" style="width:80px">
+                    <option value="1" selected>1일</option><option value="2">2일</option><option value="3">3일</option><option value="4">4일</option><option value="5">5일</option><option value="6">6일</option><option value="7">7일</option><option value="8">8일</option><option value="9">9일</option><option value="10">10일</option><option value="11">11일</option><option value="12">12일</option><option value="13">13일</option><option value="14">14일</option><option value="15">15일</option><option value="16">16일</option><option value="17">17일</option><option value="18">18일</option><option value="19">19일</option><option value="20">20일</option><option value="21">21일</option><option value="22">22일</option><option value="23">23일</option><option value="24">24일</option><option value="25">25일</option><option value="26">26일</option><option value="27">27일</option><option value="28">28일</option><option value="29">29일</option><option value="30">30일</option><option value="lastday">말일</option>
+                  </select>
+                  <input type="number" id="period-apply-start-hh" value="00" min="0" max="23" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
+                  <span style="font-size:12px;color:#666">시</span>
+                  <input type="number" id="period-apply-start-mm" value="00" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
+                  <span style="font-size:12px;color:#666">분</span>
+                  <input type="number" id="period-apply-start-ss" value="00" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
+                  <span style="font-size:12px;color:#666">초 부터 ~</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px">
+                  <select class="select" id="period-apply-end-base" style="width:140px">
+                    <option value="thismonth" selected>학습시작일 당월</option>
+                    <option value="prevmonth">학습시작일 전월</option>
+                    <option value="prev2month">학습시작일 전전월</option>
+                  </select>
+                  <select class="select" id="period-apply-end-day" style="width:80px">
+                    <option value="1">1일</option><option value="2">2일</option><option value="3">3일</option><option value="4">4일</option><option value="5">5일</option><option value="6">6일</option><option value="7">7일</option><option value="8">8일</option><option value="9">9일</option><option value="10">10일</option><option value="11">11일</option><option value="12">12일</option><option value="13">13일</option><option value="14">14일</option><option value="15">15일</option><option value="16">16일</option><option value="17">17일</option><option value="18">18일</option><option value="19">19일</option><option value="20" selected>20일</option><option value="21">21일</option><option value="22">22일</option><option value="23">23일</option><option value="24">24일</option><option value="25">25일</option><option value="26">26일</option><option value="27">27일</option><option value="28">28일</option><option value="29">29일</option><option value="30">30일</option><option value="lastday">말일</option>
+                  </select>
+                  <input type="number" id="period-apply-end-hh" value="23" min="0" max="23" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
+                  <span style="font-size:12px;color:#666">시</span>
+                  <input type="number" id="period-apply-end-mm" value="59" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
+                  <span style="font-size:12px;color:#666">분</span>
+                  <input type="number" id="period-apply-end-ss" value="59" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
+                  <span style="font-size:12px;color:#666">초 까지</span>
+                </div>
+              </td>
+            </tr>
+
+            <!-- 1-2. 과정 취소기간 -->
+            <tr>
+              <th style="vertical-align:top;padding-top:14px">취소기간</th>
+              <td>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+                  <span style="font-size:12px;color:#333;font-weight:500;margin-right:4px">신청종료일 후</span>
+                  <input type="number" id="period-cancel-day" value="1" min="0" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px">
+                  <span style="font-size:12px;color:#666">일</span>
+                  <input type="number" id="period-cancel-hh" value="23" min="0" max="23" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
+                  <span style="font-size:12px;color:#666">시</span>
+                  <input type="number" id="period-cancel-mm" value="59" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
+                  <span style="font-size:12px;color:#666">분</span>
+                  <input type="number" id="period-cancel-ss" value="59" min="0" max="59" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center">
+                  <span style="font-size:12px;color:#666">초 까지</span>
+                </div>
+                <div style="font-size:11px;color:#888;line-height:1.6;margin-top:6px">※ 입력값이 학습시작일을 초과하는 경우, 학습시작일 직전까지로 자동 한정됩니다.</div>
+              </td>
+            </tr>
+
+            <!-- 1-3. 결재 중 취소처리 -->
+            <tr>
+              <th>결재 중 취소처리</th>
+              <td>
+                <div class="rd-radio-group">
+                  <label class="rd-radio-label"><input type="radio" name="period-approve-during" value="Y" checked> 취소가능</label>
+                  <label class="rd-radio-label"><input type="radio" name="period-approve-during" value="N"> 취소불가</label>
+                </div>
+              </td>
+            </tr>
+
+            <!-- 1-4. 결재 완료 후 취소처리 -->
+            <tr>
+              <th>결재 완료 후 취소처리</th>
+              <td>
+                <div class="rd-radio-group">
+                  <label class="rd-radio-label"><input type="radio" name="period-approve-after" value="Y" checked> 취소가능</label>
+                  <label class="rd-radio-label"><input type="radio" name="period-approve-after" value="N"> 취소불가</label>
+                </div>
+              </td>
+            </tr>
+
+            <!-- 1-5. 신청기간 외 과정정보 노출 -->
+            <tr>
+              <th>신청기간 외<br>과정정보 노출</th>
+              <td>
+                <div class="rd-radio-group">
+                  <label class="rd-radio-label"><input type="radio" name="period-show-outside" value="Y" checked> 보이기</label>
+                  <label class="rd-radio-label"><input type="radio" name="period-show-outside" value="N"> 보이지않기</label>
+                </div>
+                <div style="font-size:11px;color:#888;line-height:1.6;margin-top:6px">※ '보이기'를 선택할 경우 수강신청 기간에 상관없이 과정정보가 보이지만 수강신청은 되지 않습니다.</div>
+              </td>
+            </tr>
+
+            <!-- 사용여부 Y/N (맨 아래) -->
+            <tr>
+              <th>사용여부</th>
+              <td>
+                <div class="rd-radio-group">
+                  <label class="rd-radio-label"><input type="radio" name="period-use" value="Y" checked> Y</label>
+                  <label class="rd-radio-label"><input type="radio" name="period-use" value="N"> N</label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 하단 버튼 -->
+      <div class="detail-footer">
+        <button class="btn-edit-red" onclick="periodSave()">저장</button>
+        <button class="btn-list-gray" onclick="periodReset()">취소</button>
+      </div>
+    </div><!-- /page-period -->
 
 
     <!-- ══════════════════════════════════════════ -->
@@ -9994,6 +10140,97 @@ document.addEventListener('keydown', e => {
     document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
   }
 });
+
+
+// ════════════════════════════════════════════════
+// PAGE: 수강신청 기간설정
+// ════════════════════════════════════════════════
+// 시·분·초 모두 input type=number 사용. 디폴트값은 HTML value 속성으로 관리.
+
+// 시작·종료 시점을 비교 가능한 숫자 점수로 환산
+// 기준점(전전월=0/전월=1/당월=2) → 일자(말일=31) → 시·분·초 통합
+function periodComputeScore(base, day, hh, mm, ss) {
+  const baseRank = base === 'thismonth' ? 2 : (base === 'prevmonth' ? 1 : 0);
+  const dayNum = day === 'lastday' ? 31 : parseInt(day);
+  return baseRank * 10000000 + dayNum * 100000 + parseInt(hh) * 3600 + parseInt(mm) * 60 + parseInt(ss);
+}
+
+// 시·분·초 input 일반 검증 + 자동 2자리 패딩
+function periodValidateTime(id, label, unit, max) {
+  // unit: '시' | '분' | '초', max: 23 | 59
+  const el = document.getElementById(id);
+  const val = el.value.trim();
+  const num = parseInt(val);
+  if (val === '' || isNaN(num) || num < 0 || num > max || !Number.isInteger(Number(val))) {
+    alert(label + '의 ' + unit + '은 0 이상 ' + max + ' 이하의 정수만 입력 가능합니다.');
+    el.focus();
+    return false;
+  }
+  // 자동 2자리 패딩 (예: 5 → 05)
+  el.value = num.toString().padStart(2, '0');
+  return true;
+}
+
+// 저장 — 입력 검증 후 알림 (프로토타입)
+function periodSave() {
+  const useY = document.querySelector('input[name="period-use"]:checked').value === 'Y';
+  if (!useY) {
+    alert('사용여부 N으로 저장되었습니다.\n본 화면 설정값은 신규 과정에 적용되지 않습니다.');
+    return;
+  }
+  // 시·분·초 input 검증 (총 9개: 신청기간 시작/종료, 취소기간 각각 HH/MM/SS)
+  const timeFields = [
+    // 신청기간 시작
+    {id: 'period-apply-start-hh', label: '신청기간 시작', unit: '시', max: 23},
+    {id: 'period-apply-start-mm', label: '신청기간 시작', unit: '분', max: 59},
+    {id: 'period-apply-start-ss', label: '신청기간 시작', unit: '초', max: 59},
+    // 신청기간 종료
+    {id: 'period-apply-end-hh', label: '신청기간 종료', unit: '시', max: 23},
+    {id: 'period-apply-end-mm', label: '신청기간 종료', unit: '분', max: 59},
+    {id: 'period-apply-end-ss', label: '신청기간 종료', unit: '초', max: 59},
+    // 취소기간
+    {id: 'period-cancel-hh', label: '취소기간', unit: '시', max: 23},
+    {id: 'period-cancel-mm', label: '취소기간', unit: '분', max: 59},
+    {id: 'period-cancel-ss', label: '취소기간', unit: '초', max: 59}
+  ];
+  for (const f of timeFields) {
+    if (!periodValidateTime(f.id, f.label, f.unit, f.max)) return;
+  }
+  // 신청기간 시작·종료 시점 비교 검증 (초까지 비교)
+  const startScore = periodComputeScore(
+    document.getElementById('period-apply-start-base').value,
+    document.getElementById('period-apply-start-day').value,
+    document.getElementById('period-apply-start-hh').value,
+    document.getElementById('period-apply-start-mm').value,
+    document.getElementById('period-apply-start-ss').value
+  );
+  const endScore = periodComputeScore(
+    document.getElementById('period-apply-end-base').value,
+    document.getElementById('period-apply-end-day').value,
+    document.getElementById('period-apply-end-hh').value,
+    document.getElementById('period-apply-end-mm').value,
+    document.getElementById('period-apply-end-ss').value
+  );
+  if (startScore >= endScore) {
+    alert('신청기간 종료 시점이 시작 시점보다 앞설 수 없습니다.\n기준점·일자·시각을 다시 확인해주세요.');
+    return;
+  }
+  // 취소기간 N일 검증: 0 이상의 자연수
+  const cDay = parseInt(document.getElementById('period-cancel-day').value);
+  if (isNaN(cDay) || cDay < 0) {
+    alert('취소기간 N일은 0 이상의 자연수만 입력 가능합니다.');
+    return;
+  }
+  alert('수강신청 기간설정 기본값이 저장되었습니다.\n신규 개설되는 정시 과정에 자동 적용됩니다.');
+}
+
+// 취소
+function periodReset() {
+  if (confirm('변경사항을 취소하시겠습니까?')) {
+    location.reload();
+  }
+}
+
 
 </script>
 <!-- ══════════════════════════════════════════ -->
