@@ -2543,9 +2543,12 @@
           <thead>
             <tr>
               <th>No.</th><th>이름<span class="change-badge signup in-th" data-num="20" data-memo="신규 페이지 - 신청자 목록 컬럼
-컬럼: No. / 이름 / 아이디 / 사번 / 신청일 / 교육비 / 승인상태 / 승인일 / 회사명 / 부서명">20</span></th><th>아이디</th><th>사번</th>
+컬럼: No. / 이름 / 아이디 / 사번 / 신청일 / 교육비 / 승인상태 / 승인일 / 회사명 / 부서명 / 재직상태">20</span></th><th>아이디</th><th>사번</th>
               <th>신청일</th><th>교육비</th><th>승인상태</th><th>승인일</th>
               <th>회사명</th><th>부서명</th>
+              <th>재직상태<span class="change-badge signup in-th" data-num="21" data-memo="신규 컬럼
+- 옵션: 재직 / 모니터링
+- 디폴트: 재직">21</span></th>
             </tr>
           </thead>
           <tbody id="c-det-learner-body"></tbody>
@@ -5834,7 +5837,7 @@ function cDetRenderTable() {
   const slice = cDetFilteredData.slice(start, start + cDetPageSize);
   document.getElementById('c-det-count').textContent = cDetFilteredData.length.toLocaleString();
   if (!slice.length) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
     document.getElementById('c-det-pagination').innerHTML = '';
     return;
   }
@@ -5849,6 +5852,7 @@ function cDetRenderTable() {
     <td>${fmtDatetime(l.approveDate, l.no)}</td>
     <td>${l.company}</td>
     <td>${l.dept}</td>
+    <td>${l.employment}</td>
   </tr>`).join('');
   renderPagination('c-det-pagination', Math.ceil(cDetFilteredData.length/cDetPageSize), cDetCurrentPage, p => { cDetCurrentPage=p; cDetRenderTable(); });
 }
@@ -6399,6 +6403,7 @@ function populateContentSelect() {
 const CONTENT_TYPE_MAP = {
   '동영상':   { label: '동영상',   kind: 'duration' },
   '유튜브':   { label: '유튜브',   kind: 'duration' },
+  '쇼츠':     { label: '쇼츠',     kind: 'duration' },
   '이미지':   { label: '이미지',   kind: 'count', unit: '장' },
   'PDF':      { label: 'PDF',      kind: 'count', unit: '장' },
   '아티클':   { label: '아티클',   kind: 'count', unit: '개' },
@@ -6431,6 +6436,7 @@ const CONTENT_TEMPLATE = [
   { type:'PDF',     name:'콘텐츠명 11', required:'Y', totalCount:5,  studyCount:0,   score:'-',    done:'N', lastDate:'-',          total:5,  infoType:'fraction' },
   { type:'외부링크',name:'콘텐츠명 12', required:'Y', totalCount:1,  studyCount:0,   score:'-',    done:'N', lastDate:'-',          total:1,  infoType:'fraction' },
   { type:'오프라인',name:'콘텐츠명 13', required:'Y', totalCount:10, studyCount:5,   score:'-',    done:'N', lastDate:'2025-01-31', total:10, infoType:'fraction' },
+  { type:'쇼츠',    name:'콘텐츠명 14', required:'Y', totalSec:90,   studiedSec:60,  score:'-',    done:'N', lastDate:'2025-01-31', total:null, infoType:'time' },        // 1:30 → 1:00
 ];
 
 // 콘텐츠 정보 표기 (예: "동영상 15분 30초", "이미지 3장", "시험 10문항")
@@ -6833,7 +6839,7 @@ function secToTime(s) {
 // 완료기준 텍스트 생성
 // 완료기준 — 콘텐츠 유형별 설정 가능한 변수값
 function getCompleteCriteria(type) {
-  if (type === '동영상')             return '80%이상';
+  if (type === '동영상' || type === '쇼츠')   return '80%이상';
   if (type === '이미지')             return '전체 조회';
   if (type === '아티클')             return '조회';
   if (type === '첨부파일')           return '전체 다운로드';
@@ -6866,7 +6872,7 @@ function buildContentLearnerData(learners, c, periodStr) {
   return learners.map((l, i) => {
     let studyInfo = '-', progress = '-', contentScore = '-', contentDone = 'N', lastStudy = '-';
 
-    if (type === '동영상' || type === '유튜브') {
+    if (type === '동영상' || type === '유튜브' || type === '쇼츠') {
       // 학습한 정보 = 학습한 시간 / 전체 시간 (HH:MM:SS / HH:MM:SS)
       const totalSec   = c.totalSec || 0;
       const watchedSec = [0, Math.floor(totalSec*0.5), totalSec, totalSec, totalSec][i] ?? 0;
