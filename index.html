@@ -1848,6 +1848,199 @@
     font-size: 12px; cursor: pointer; font-family: inherit;
   }
   .btn-detail-sm:hover { border-color: #1a1a2e; color: #1a1a2e; background: #f7f8fa; }
+
+/* ===== 통합 대시보드 스타일 (이식) ===== */
+#page-dashboard *{ margin:0; padding:0; box-sizing:border-box; }
+#page-dashboard{
+    --blue:#1a73e8; --blue-dim:#e8f0fe; --ink:#1a1a2e; --gray:#5a6675;
+    --line:#e6e9ee; --bg:#f4f6f9; --muted:#9aa3ad; --up:#d93025; --down:#1a73e8; --micro:#7e57c2;
+  }
+#page-dashboard{ font-family:'Pretendard','Apple SD Gothic Neo',-apple-system,sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; }
+#page-dashboard .db-main{ padding:0; max-width:none; margin:0; }
+#page-dashboard .page-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+#page-dashboard .page-head h1{ font-size:19px; font-weight:700; display:flex; align-items:center; gap:8px; }
+#page-dashboard .page-head p{ font-size:12.5px; color:var(--muted); margin-top:3px; }
+#page-dashboard .head-actions{ display:flex; gap:9px; align-items:center; }
+/* 초기화·컴포넌트 추가는 편집 모드에서만 노출 */
+#page-dashboard #resetBtn{ display:none; }
+#page-dashboard.editing #resetBtn{ display:inline-flex; }
+#page-dashboard .btn{ font-family:inherit; font-size:13px; height:34px; padding:0 16px; border-radius:8px; cursor:pointer; border:1px solid #d8dde3; background:#fff; color:var(--gray); font-weight:400; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
+#page-dashboard .btn-primary{ background:var(--blue); border-color:var(--blue); color:#fff; }
+#page-dashboard .edit-banner{ display:none; background:var(--blue-dim); border:1px solid #c5dafb; border-radius:8px; padding:10px 14px; font-size:12.5px; color:#174ea6; margin-bottom:16px; align-items:center; gap:8px; }
+#page-dashboard.editing .edit-banner{ display:flex; }
+#page-dashboard .grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+#page-dashboard .comp{ background:#fff; border:1px solid var(--line); border-radius:12px; padding:20px 22px; position:relative; min-height:160px; min-width:0; }
+/* M 컴포넌트(전체너비 아님): 높이 고정 + 내부 정렬 */
+#page-dashboard .comp:not(.size-l){ height:340px; display:flex; flex-direction:column; }
+#page-dashboard .comp:not(.size-l) .c-head{ flex:none; }
+#page-dashboard .comp:not(.size-l) .c-row{ flex:1; min-height:0; align-items:stretch; }
+#page-dashboard .comp:not(.size-l) .c-row .c-left{ justify-content:flex-start; border-right:none; }
+#page-dashboard .comp:not(.size-l) .c-row .c-right{ justify-content:space-between; align-items:stretch; border-left:1px solid var(--line); padding-left:24px; }
+#page-dashboard .comp:not(.size-l) .c-row .c-right .c-graph-head{ flex:none; padding-bottom:0; margin-bottom:0; border-bottom:none; }
+#page-dashboard .comp:not(.size-l) .c-row .c-right .pie-box{ flex:1; justify-content:center; align-items:center; display:flex; }
+#page-dashboard .comp:not(.size-l) .c-row .c-right .pie-chart-svg{ width:104px; height:104px; }
+#page-dashboard .comp:not(.size-l) .c-row .c-right .pie-legend{ flex:none; width:100%; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px 12px; }
+#page-dashboard .comp:not(.size-l) .c-row .c-right .pie-leg-item{ min-width:0; }
+#page-dashboard .comp:not(.size-l) .c-row .c-right .pie-leg-l{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; }
+#page-dashboard .comp:not(.size-l) .c-col{ flex:1; min-height:0; }
+#page-dashboard .comp.size-l{ grid-column:span 2; display:flex; flex-direction:column; }
+#page-dashboard .comp.size-l .c-col{ flex:1 1 auto; min-height:0; }
+/* 좁은 화면: 1열로 전환 (L사이즈 span 무력화) */
+@media (max-width:1100px){
+  #page-dashboard .grid{ grid-template-columns:minmax(0,1fr); }
+  #page-dashboard .comp.size-l{ grid-column:auto; }
+}
+#page-dashboard.editing .comp{ border-style:dashed; border-color:#c5cdd6; cursor:grab; }
+#page-dashboard.editing .comp:hover{ box-shadow:0 4px 16px rgba(26,115,232,.12); }
+#page-dashboard .comp.dragging{ opacity:.5; }
+#page-dashboard .comp.drop-target{ border-color:var(--blue); box-shadow:0 0 0 2px var(--blue-dim); }
+#page-dashboard .c-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+#page-dashboard .c-title{ font-size:18px; font-weight:700; color:var(--ink); display:inline-flex; align-items:center; gap:5px; letter-spacing:-0.3px; }
+#page-dashboard .c-tools{ display:flex; align-items:center; gap:8px; }
+#page-dashboard /* M 사이즈(좁은 컴포넌트)에서 토글 줄바꿈 허용·압축 */
+  .comp:not(.size-l) .c-head{ flex-wrap:wrap; gap:8px; }
+#page-dashboard /* 수정·삭제 컨트롤 (상시 노출) */
+  .c-ctrls{ display:flex; gap:5px; }
+#page-dashboard .c-ctrl{ width:26px; height:26px; border-radius:6px; border:1px solid var(--line); background:#fff; cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; color:var(--gray); }
+#page-dashboard .c-ctrl:hover{ border-color:var(--blue); color:var(--blue); }
+#page-dashboard .c-ctrl.editonly{ display:none; }
+#page-dashboard.editing .c-ctrl.editonly{ display:flex; }
+#page-dashboard .c-ctrl.del:hover{ background:#fdecea; color:var(--up); border-color:#f5c6c2; }
+#page-dashboard .c-titlewrap{ display:inline-flex; align-items:center; gap:9px; }
+#page-dashboard .c-basis{ font-size:11.5px; color:var(--muted); font-weight:500; white-space:nowrap; }
+#page-dashboard.editing .c-basis{ display:none; }
+#page-dashboard .c-detail{ font-size:inherit; line-height:1; color:var(--ink); font-weight:700; cursor:pointer; margin-left:5px; }
+#page-dashboard .c-detail:hover{ color:var(--blue); }
+
+#page-dashboard .k-vline{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
+#page-dashboard .k-vline .k-c{ margin-top:0; }
+#page-dashboard /* KPI 띠 (메인 + 함께 볼 숫자) */
+  .kpibar{ display:flex; gap:0; margin-bottom:16px; align-items:flex-start; }
+#page-dashboard .kpi{ padding:2px 16px; border-right:1px solid var(--line); text-align:left; }
+#page-dashboard .kpi:first-child{ padding-left:0; }
+#page-dashboard .kpi:last-child{ border-right:none; }
+#page-dashboard .kpi-main .k-l{ color:var(--ink); font-weight:700; }
+#page-dashboard .c-title .c-title-ico{ display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; margin-right:8px; border-radius:8px; background:#f1f5fb; }
+#page-dashboard .c-title .c-title-ico svg{ display:block; }
+#page-dashboard .k-l{ font-size:12px; color:var(--ink); margin-bottom:5px; }
+#page-dashboard .k-v{ font-size:18px; font-weight:600; color:var(--gray); line-height:1.1; white-space:nowrap; }
+#page-dashboard .kpi-main .k-v{ font-size:27px; font-weight:700; color:var(--ink); letter-spacing:-0.5px; }
+#page-dashboard .k-v .u{ font-size:11px; color:#aaa; font-weight:400; margin-left:1px; }
+#page-dashboard .kpi-main .k-v .u{ font-size:13px; color:#888; font-weight:500; }
+#page-dashboard .k-c{ font-size:11.5px; font-weight:600; margin-top:4px; color:var(--up); }
+#page-dashboard .k-c.down{ color:var(--down); }
+#page-dashboard /* 그래프 영역 */
+  .c-graph-head{ font-size:12px; font-weight:700; color:var(--ink); margin-bottom:16px; }
+#page-dashboard /* L 좌우 배치 (KPI : 그래프 = 50:50) */
+  .c-row{ display:flex; gap:24px; align-items:stretch; }
+#page-dashboard .c-row .c-left{ flex:1 1 50%; min-width:0; border-right:1px solid var(--line); padding-right:24px; display:flex; flex-direction:column; justify-content:flex-start; gap:16px; }
+#page-dashboard .c-row .c-right{ flex:1 1 50%; min-width:0; display:flex; flex-direction:column; justify-content:flex-start; }
+#page-dashboard .size-l .c-row .c-right{ padding-top:10px; justify-content:space-between; min-width:0; overflow:hidden; }
+#page-dashboard .size-l .c-row .c-right .c-graph-head{ flex:none; }
+#page-dashboard .size-l .c-row .c-right .bars{ flex:1; min-height:0; }
+/* L 원그래프: 중앙 정렬 */
+#page-dashboard .size-l .c-row .c-right .pie-box{ flex:1; justify-content:center; align-items:center; }
+#page-dashboard .size-l .c-row .c-right .pie-legend{ flex:none; }
+#page-dashboard /* L 상하 구조: KPI 가로 띠(위) + 그래프(아래, #page-dashboard 크게) */
+  .c-col{ display:flex; flex-direction:column; height:100%; min-height:0; }
+#page-dashboard .kpibar-l{ display:flex; padding-bottom:14px; margin-bottom:14px; border-bottom:1px solid var(--line); flex:none; }
+#page-dashboard .kpibar-l .kpil-main{ flex:0 0 50%; max-width:50%; }
+#page-dashboard .kpibar-l .kpil-subs{ flex:0 0 50%; max-width:50%; min-width:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 16px; align-content:start; border-left:1px solid var(--line); padding-left:24px; }
+#page-dashboard .kpibar-l .kpil-main .kpi{ padding-left:0; border-right:none; }
+#page-dashboard .kpibar-l .kpil-subs .kpi{ padding-left:0; min-width:0; }
+#page-dashboard .c-graph-l{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; }
+#page-dashboard .c-graph-l .bars{ height:auto; flex:1 1 auto; min-height:0; }
+#page-dashboard .c-graph-l .line-wrap{ width:100%; }
+/* 원그래프 (도넛 · SVG) */
+#page-dashboard .pie-box{ display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+#page-dashboard .pie-chart-svg{ position:relative; width:120px; height:120px; flex:none; }
+#page-dashboard .pie-chart-svg svg{ width:100%; height:100%; display:block; }
+#page-dashboard .pie-seg{ cursor:pointer; transition:opacity .12s; }
+#page-dashboard .pie-chart-svg:hover .pie-seg{ opacity:.45; }
+#page-dashboard .pie-chart-svg .pie-seg:hover{ opacity:1; }
+#page-dashboard .pie-tip{ position:absolute; display:none; transform:translate(-50%,-130%); padding:4px 9px; border-radius:6px; background:rgba(20,30,50,.92); color:#fff; font-size:11px; font-weight:600; white-space:nowrap; pointer-events:none; z-index:5; }
+#page-dashboard .pie-tip.on{ display:block; }
+#page-dashboard .pie-legend{ display:flex; flex-direction:column; gap:7px; min-width:0; flex:1; }
+#page-dashboard .pie-leg-item{ display:flex; align-items:center; gap:7px; font-size:12px; }
+#page-dashboard .pie-dot{ width:9px; height:9px; border-radius:2px; flex:none; }
+#page-dashboard .pie-leg-l{ color:var(--ink); font-weight:600; }
+#page-dashboard .pie-leg-v{ color:var(--gray); margin-left:auto; white-space:nowrap; }
+#page-dashboard .pie-leg-pct{ flex:none; margin-left:10px; min-width:48px; text-align:right; color:var(--blue); font-weight:700; white-space:nowrap; }
+/* 선 그래프: SVG는 선/점만, 텍스트는 HTML 오버레이(고정 폰트) */
+#page-dashboard .line-box{ position:relative; width:100%; height:150px; }
+#page-dashboard .line-svg{ position:absolute; inset:0 0 22px 0; width:100%; height:calc(100% - 22px); display:block; }
+#page-dashboard .line-overlay{ position:absolute; inset:0 0 22px 0; }
+#page-dashboard .line-overlay .lp{ position:absolute; transform:translate(-50%,-50%); }
+#page-dashboard .line-overlay .lp-dot{ position:absolute; left:50%; top:50%; width:6px; height:6px; border-radius:50%; background:var(--blue); transform:translate(-50%,-50%); transition:width .12s,height .12s; }
+#page-dashboard .line-overlay .lp-dot-last{ width:8px; height:8px; }
+#page-dashboard .line-overlay .lp:hover .lp-dot{ width:9px; height:9px; }
+#page-dashboard .line-overlay .lp-val{ position:absolute; left:50%; bottom:6px; transform:translateX(-50%); font-size:10px; font-weight:600; color:var(--blue); white-space:nowrap; opacity:0; transition:opacity .12s; pointer-events:none; }
+#page-dashboard .line-overlay .lp:hover .lp-val{ opacity:1; }
+#page-dashboard .line-overlay .lp-val.lp-last{ opacity:1; }
+#page-dashboard .line-overlay .lp::after{ content:''; position:absolute; left:50%; top:50%; width:18px; height:18px; transform:translate(-50%,-50%); cursor:pointer; }
+#page-dashboard .line-caps{ position:absolute; left:0; right:0; bottom:0; height:18px; }
+#page-dashboard .line-caps .lp-cap{ position:absolute; transform:translateX(-50%); font-size:9px; color:var(--muted); white-space:nowrap; }
+#page-dashboard /* L KPI: 메인 상단 + 보조 2열 그리드 */
+  .kpi-l-main{ padding-bottom:14px; margin-bottom:14px; border-bottom:1px solid var(--line); }
+#page-dashboard .kpi-l-main .kpi{ padding:0; border:none; }
+#page-dashboard .kpi-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px 16px; }
+#page-dashboard .c-row .c-left .kpi-main-wrap{ padding-bottom:22px; border-bottom:1px solid var(--line); }
+#page-dashboard .kpi-grid .kpi{ padding:0; border:none; }
+#page-dashboard .kpi-grid .k-l{ margin-bottom:3px; }
+#page-dashboard .kpi-grid .k-v{ font-size:17px; }
+#page-dashboard /* 막대 */
+  .bars{ display:flex; align-items:flex-end; gap:6px; height:96px; box-sizing:border-box; overflow:hidden; }
+#page-dashboard .bar-col{ flex:1 1 0; min-width:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; min-height:0; }
+#page-dashboard .bar-wrap{ width:100%; flex:1 1 0; min-height:0; display:flex; align-items:flex-end; justify-content:center; padding-top:16px; box-sizing:border-box; overflow:hidden; }
+#page-dashboard .bar-stack{ width:64%; max-width:38px; min-height:2px; display:flex; flex-direction:column; justify-content:flex-end; position:relative; }
+#page-dashboard .bar-stack .bv{ position:absolute; bottom:100%; left:50%; transform:translateX(-50%); margin-bottom:2px; font-size:10px; font-weight:600; color:var(--gray); white-space:nowrap; pointer-events:none; }
+#page-dashboard .bar-stack .bv.hi{ color:var(--blue); }
+#page-dashboard .bar{ width:100%; flex:1 1 auto; min-height:2px; background:var(--blue-dim); border-radius:3px 3px 0 0; }
+#page-dashboard .bar.hi{ background:var(--blue); }
+#page-dashboard .bar-cap{ flex:none; font-size:10px; color:var(--muted); margin-top:6px; width:100%; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+#page-dashboard /* 추이(선) */
+  .line-wrap{ width:100%; }
+#page-dashboard /* 슬라이드 */
+  .overlay{ display:none; position:fixed; inset:0; background:rgba(20,30,50,.35); z-index:9500; }
+#page-dashboard .overlay.on{ display:block; }
+#page-dashboard .slide{ position:fixed; top:0; right:-480px; width:460px; height:100%; background:#fff; box-shadow:-4px 0 24px rgba(0,0,0,.12); z-index:9501; transition:right .25s; display:flex; flex-direction:column; }
+#page-dashboard .slide.on{ right:0; }
+#page-dashboard .slide-head{ padding:20px 24px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; }
+#page-dashboard .slide-head h2{ font-size:16px; font-weight:700; }
+#page-dashboard .slide-head .x{ font-size:20px; color:var(--muted); cursor:pointer; background:none; border:none; }
+#page-dashboard .slide-body{ flex:1; overflow-y:auto; padding:22px 24px; }
+#page-dashboard .slide-foot{ padding:16px 24px; border-top:1px solid var(--line); display:flex; gap:10px; justify-content:flex-end; }
+#page-dashboard .field{ margin-bottom:20px; }
+#page-dashboard .field-label{ font-size:12.5px; color:var(--gray); font-weight:600; margin-bottom:8px; }
+#page-dashboard .field-hint{ font-size:10.5px; color:var(--muted); font-weight:400; }
+#page-dashboard .sel{ width:100%; font-family:inherit; font-size:13px; padding:10px 12px; border:1px solid #d8dde3; border-radius:7px; color:var(--ink); background:#fff; }
+#page-dashboard .chips{ display:flex; flex-wrap:wrap; gap:7px; }
+#page-dashboard .chip{ font-size:11.5px; padding:5px 11px; border:1px solid #d8dde3; border-radius:14px; background:#fff; color:var(--gray); cursor:pointer; }
+#page-dashboard .chip.on{ background:var(--blue); border-color:var(--blue); color:#fff; }
+#page-dashboard .chip.soft.on{ background:var(--blue-dim); border-color:var(--blue); color:var(--blue); font-weight:600; }
+#page-dashboard .chips[data-filter] .chip.on{ background:var(--blue-dim); border-color:var(--blue); color:var(--blue); font-weight:600; }
+#page-dashboard .chip.locked{ opacity:.4; cursor:not-allowed; }
+#page-dashboard .auto-graph{ display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--blue-dim); border-radius:8px; }
+#page-dashboard .ag-icon{ font-size:22px; }
+#page-dashboard .ag-name{ font-size:13px; font-weight:700; color:var(--blue); }
+#page-dashboard .ag-desc{ font-size:11px; color:var(--gray); }
+#page-dashboard .filter-block{ margin-bottom:14px; }
+#page-dashboard #sizeChips{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+#page-dashboard #sizeChips .chip{ display:flex; align-items:center; justify-content:center; width:auto; padding:11px 0; font-size:14px; font-weight:700; border-radius:10px; }
+#page-dashboard .add-tile{ border:2px dashed #cdd5de; border-radius:12px; min-height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; cursor:pointer; color:var(--muted); transition:all .15s; }
+#page-dashboard .add-tile:hover{ border-color:var(--blue); color:var(--blue); background:var(--blue-dim); }
+#page-dashboard .add-tile .plus{ font-size:26px; }
+#page-dashboard .add-tile .t{ font-size:12.5px; font-weight:600; }
+#page-dashboard /* 대시보드 전체 비어있음 */
+  .empty-board{ grid-column:1 / -1; min-height:340px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; border:1px solid var(--line); border-radius:14px; background:#fff; padding:48px 24px; }
+#page-dashboard .empty-board .eb-icon{ font-size:40px; opacity:.7; }
+#page-dashboard .empty-board .eb-title{ font-size:16px; font-weight:700; color:var(--ink); }
+#page-dashboard .empty-board .eb-desc{ font-size:13px; color:var(--muted); margin-bottom:8px; }
+#page-dashboard /* 개별 컴포넌트 데이터 없음 */
+  .comp-empty{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; min-height:120px; color:var(--muted); text-align:center; }
+#page-dashboard .comp-empty .ce-icon{ font-size:24px; opacity:.6; }
+#page-dashboard .comp-empty .ce-title{ font-size:13.5px; font-weight:600; color:var(--gray); }
+#page-dashboard .comp-empty .ce-desc{ font-size:12px; color:var(--muted); }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
@@ -2116,6 +2309,84 @@
   </nav>
 
   <main class="main">
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 통합 대시보드 (메인 화면)              -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-dashboard">
+<div class="db-main">
+  <div class="page-head">
+    <div>
+      <h1>대시보드</h1>
+    </div>
+    <div class="head-actions">
+      <button class="btn" id="resetBtn">기본값 복구</button>
+      <button class="btn" id="addBtn">＋ 대시보드 추가</button>
+      <button class="btn btn-primary" id="editBtn">편집</button>
+    </div>
+  </div>
+  <div class="edit-banner"><span>✏️ 대시보드를 드래그해 위치를 바꾸고 대시보드를 추가·삭제할 수 있습니다.</span></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="slide" id="slide">
+  <div class="slide-head">
+    <h2 id="slideTitle">대시보드 추가</h2>
+    <button class="x" id="slideClose">✕</button>
+  </div>
+  <div class="slide-body">
+    <div class="field">
+      <div class="field-label">크기</div>
+      <div class="chips" id="sizeChips">
+        <span class="chip size-opt on" data-size="m">M</span><span class="chip size-opt" data-size="l">L</span>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">주요 지표 선택 <span class="field-hint">· 그래프로 볼 지표 1개</span></div>
+      <div class="chips" id="domainChips">
+        <span class="chip" data-d="apply">신청 수</span>
+        <span class="chip" data-d="study">학습자 수</span>
+        <span class="chip" data-d="result">수료율</span>
+        <span class="chip" data-d="cost">교육비</span>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">보기 방식 <span class="field-hint">· 그래프 1개의 기준 전환 (단일 선택)</span></div>
+      <select class="sel" id="mView">
+        <option value="period">월별 추이</option>
+        <option value="type">과정유형별</option>
+        <option value="dept">부서별</option>
+        <option value="position">직급별</option>
+        <option value="company">회사별</option>
+        <option value="none">단일 수치 (그래프 없음)</option>
+      </select>
+      <div class="auto-graph" style="margin-top:10px">
+        <div class="ag-icon" id="agIcon">📈</div>
+        <div><div class="ag-name" id="agName">선 차트</div><div class="ag-desc" id="agDesc">기간별 추이에 적합합니다.</div></div>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">노출 KPI 지표 <span class="field-hint" id="extraHint">· 최대 4개</span></div>
+      <div class="chips" id="extraChips"></div>
+    </div>
+    <div class="field">
+      <div class="field-label">기간</div>
+      <div class="filter-block">
+        <div class="chips" data-filter="period" data-single="1">
+          <span class="chip">전월</span><span class="chip">당월</span><span class="chip">당해년도</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-foot">
+    <button class="btn" id="slideCancel">취소</button>
+    <button class="btn btn-primary" id="slideSave">추가</button>
+  </div>
+</div>
+
+
+    </div>
 
     <!-- ══════════════════════════════════════════ -->
     <!-- PAGE: 개인별 신청현황                        -->
@@ -8744,8 +9015,11 @@ window.addEventListener('hashchange', () => {
 });
 
 // 초기 페이지: URL 해시 우선, 없으면 개인별 신청현황
-const initialPage = location.hash.slice(1) || 'personal';
-if (!navigateToPage(initialPage)) {
+const initialPage = location.hash.slice(1) || 'dashboard';
+if (initialPage === 'dashboard') {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('page-dashboard').classList.add('active');
+} else if (!navigateToPage(initialPage)) {
   navigateToPage('personal');
 }
 // 페이지 초기 로드 - 재직상태 디폴트가 ‘재직’이므로 자동 필터 적용
@@ -11006,5 +11280,401 @@ function periodReset() {
 </div>
 
 
+<script>
+/* ===== 통합 대시보드 스크립트 (이식) ===== */
+(function(){
+
+// 데이터 라벨·값 (샘플)
+// 영역(domain)별 정의: 메인 옵션 / 함께볼 옵션 / 공통 데이터
+var DOMAIN={
+  study:{
+    label:'학습현황',
+    mains:['total','courses','rate'],
+    extras:['courses','rate','completed','misuryo','before','yejung','doing','done'],
+    defaults:['courses','yejung','doing','done']
+  },
+  apply:{
+    label:'신청현황',
+    mains:['apply','fee','courses'],
+    extras:['courses','approved','waiting','canceled','fee'],
+    defaults:['courses','approved','waiting','canceled']
+  },
+  result:{
+    label:'수료결과',
+    mains:['rate'],
+    extras:['courses','total','completed','misuryo'],
+    defaults:['courses','total','completed','misuryo']
+  },
+  cost:{
+    label:'교육비용',
+    mains:['fee','courses','perhead'],
+    extras:['courses','total','paidApply','freeApply','perhead'],
+    defaults:['courses','total']
+  }
+};
+// 전체 지표 라벨·단위·값 (영역 공통 풀)
+var LABEL={total:'학습자 수',courses:'과정 수',rate:'수료율',apply:'신청 수',fee:'교육비',completed:'수료자 수',perhead:'1인당 교육비'};
+// 상위 타이틀 아이콘 (채워진 컬러 아이콘 · 종이+연필/책 톤)
+var TITLE_ICON={
+  apply:'<svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 3h8l4 4v6.5l-2 2V8h-4V4H5v16h6l-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="#5b9bf3"/><path d="M13 3l4 4h-4V3z" fill="#9cc3f8"/><path d="M20.7 11.3l1 1a1 1 0 0 1 0 1.4l-6.1 6.1-2.6.6.6-2.6 6.1-6.1a1 1 0 0 1 1.4 0z" fill="#f4b740"/><path d="M19.3 12.7l1.4 1.4-5.2 5.2-1.4-1.4z" fill="#ffd479"/></svg>',
+  study:'<svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 6C9.5 4.5 6 4.3 3.5 5.2v13C6 17.3 9.5 17.5 12 19V6z" fill="#5b9bf3"/><path d="M12 6c2.5-1.5 6-1.7 8.5-.8v13C18 17.3 14.5 17.5 12 19V6z" fill="#9cc3f8"/><path d="M12 6v13" stroke="#1a73e8" stroke-width="1.2"/></svg>',
+  result:'<svg viewBox="0 0 24 24" width="20" height="20"><path d="M12 3L1.5 8 12 13l10.5-5L12 3z" fill="#5b9bf3"/><path d="M5 11v4.2c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V11l-7 3.3L5 11z" fill="#9cc3f8"/><path d="M21.5 8.2v5.3" stroke="#f4b740" stroke-width="1.6" stroke-linecap="round"/><circle cx="21.5" cy="14.4" r="1.2" fill="#f4b740"/></svg>',
+  cost:'<svg viewBox="0 0 24 24" width="20" height="20"><circle cx="9" cy="9" r="6" fill="#ffd479"/><circle cx="9" cy="9" r="6" fill="none" stroke="#f4b740" stroke-width="1.2"/><path d="M9 5.5v7M6.5 7.5h5M6.5 10h5" stroke="#b8860b" stroke-width="1.1" stroke-linecap="round"/><circle cx="15" cy="15" r="6" fill="#5b9bf3"/><path d="M15 11.5v7M12.5 13.5h5M12.5 16h5" stroke="#fff" stroke-width="1.1" stroke-linecap="round"/></svg>'
+};
+var SHORT={total:'총 학습자',courses:'총 과정',rate:'수료율',apply:'총 신청',fee:'총 교육비',perhead:'1인당 교육비',
+  yejung:'예정',doing:'학습중',done:'종료',completed:'수료',misuryo:'미수료',before:'수료처리전',
+  approved:'승인',waiting:'승인대기',canceled:'취소',paid:'입금완료',paywait:'입금대기',paycancel:'입금취소',
+  paidApply:'유료 학습자',freeApply:'무료 학습자'};
+var UNIT={total:'명',courses:'개',rate:'%',apply:'건',fee:'원',perhead:'원',
+  yejung:'명',doing:'명',done:'명',completed:'명',misuryo:'명',before:'명',
+  approved:'건',waiting:'건',canceled:'건',paid:'건',paywait:'건',paycancel:'건',
+  paidApply:'명',freeApply:'명'};
+var VAL={total:'2,040',courses:'55',rate:'86.7',apply:'1,284',fee:'32,450,000',perhead:'15,907',
+  yejung:'180',doing:'1,240',done:'620',completed:'520',misuryo:'80',before:'20',
+  approved:'1,042',waiting:'86',canceled:'156',paid:'980',paywait:'120',paycancel:'42',
+  paidApply:'1,560',freeApply:'480'};
+var CMP={total:'▲ +5.8%',courses:'▲ +3개',rate:'▲ +1.8%p',apply:'▲ +9.2%',fee:'▲ +7.5%',perhead:'▼ -1,200원',
+  yejung:'▲ +12명',doing:'▲ +6.2%',done:'▲ +28명',completed:'▲ +34명',misuryo:'▼ -6명',before:'▼ -4명',
+  approved:'▲ +8.1%',waiting:'▲ +12건',canceled:'▲ +18건',paid:'▲ +6.4%',paywait:'▼ -8건',paycancel:'▲ +5건',
+  paidApply:'▲ +7.2%',freeApply:'▲ +12.4%'};
+var CMPUP={total:true,courses:true,rate:true,apply:true,fee:true,perhead:true,
+  yejung:true,doing:true,done:true,completed:true,misuryo:false,before:false,
+  approved:true,waiting:true,canceled:false,paid:true,paywait:true,paycancel:false,
+  paidApply:true,freeApply:true};
+
+// 그룹화 → 자동 그래프
+function decideGraph(group, main){
+  if(group==='none') return 'kpi';
+  if(group==='period') return 'line';
+  // 과정유형별은 원그래프(단, 비율형 지표 수료율은 비중 의미가 없어 막대 유지)
+  if(group==='type' && main!=='rate') return 'pie';
+  return 'bar'; // dept/company/position 및 비율형 type
+}
+var GRAPH_INFO={
+  kpi:{icon:'123',name:'단일 수치',desc:'그룹화 없이 숫자만 표시합니다.'},
+  line:{icon:'📈',name:'선 차트',desc:'기간별 추이에 적합합니다.'},
+  bar:{icon:'📊',name:'막대 차트',desc:'범주별 비교에 적합합니다.'},
+  pie:{icon:'🥧',name:'원 차트',desc:'구성비를 보기에 적합합니다.'}
+};
+// 그룹별 샘플 (라벨/값)
+var GROUP_DATA={
+  period:{labels:['6월','7월','8월','9월','10월','11월','12월','1월','2월','3월','4월','5월'], vals:[980,1040,1120,1180,1240,1080,920,1160,1100,1320,1240,1284]},
+  dept:{labels:['개발본부','영업본부','경영지원','마케팅','인사','재무','전략기획'], vals:[420,360,210,140,110,80,60]},
+  company:{labels:['본사','계열사A','계열사B'], vals:[760,360,164]},
+  position:{labels:['사원','대리','과장','차장','부장','임원'], vals:[540,380,220,140,90,40]},
+  type:{labels:['온라인','오프라인','하이브리드러닝','마이크로러닝'], vals:[712,358,158,56]}
+};
+
+var DEFAULT=[
+  {domain:'apply',main:'apply',extras:['courses','approved','waiting','canceled'],view:'type',size:'m',period:'당월'},
+  {domain:'study',main:'total',extras:['courses','yejung','doing','done'],view:'position',size:'m',period:'당월'},
+  {domain:'result',main:'rate',extras:['courses','total','completed','misuryo'],view:'dept',size:'l',period:'전월'},
+  {domain:'cost',main:'fee',extras:['courses','total','perhead'],view:'period',size:'l',period:'당해년도'},
+  {domain:'cost',main:'fee',extras:['courses','total','paidApply','freeApply'],view:'type',size:'l',period:'당해년도'}
+];
+var comps=JSON.parse(JSON.stringify(DEFAULT));
+var editing=false, editIndex=-1;
+
+function compInner(c){
+  // 집계 데이터 없음(메인 지표 값이 0 또는 없음) → empty 표시
+  var _mv=parseFloat(String(VAL[c.main]||'0').replace(/,/g,''));
+  if(!_mv){
+    return '<div class="comp-empty"><div class="ce-icon">📭</div><div class="ce-title">집계된 데이터가 없습니다</div><div class="ce-desc">선택한 기간에 해당하는 데이터가 없습니다.</div></div>';
+  }
+  var isL=(c.size==='l');
+  var graph=decideGraph(c.view,c.main);
+  var hasGraph=(graph!=='kpi');
+  // KPI존 (M: 가로 띠 / L: 메인 상단 + 보조 2x2)
+  var CMP_BASIS={'당월':'전월 대비','전월':'직전월 대비','당해년도':'전년도 대비','전년도':'전전년도 대비'};
+  var cmpBasis=CMP_BASIS[c.period]||'직전월 대비';
+  var mainKpi='<div class="kpi kpi-main"><div class="k-l">'+SHORT[c.main]+'</div><div class="k-vline"><span class="k-v">'+VAL[c.main]+'<span class="u">'+UNIT[c.main]+'</span></span><span class="k-c'+(CMPUP[c.main]?'':' down')+'">'+CMP[c.main]+' '+cmpBasis+'</span></div></div>';
+  var subKpis='';
+  (c.extras||[]).forEach(function(k){
+    subKpis+='<div class="kpi"><div class="k-l">'+SHORT[k]+'</div><div class="k-v">'+VAL[k]+'<span class="u">'+UNIT[k]+'</span></div></div>';
+  });
+  // M용 가로 띠
+  var kpi='<div class="kpibar">'+mainKpi+subKpis+'</div>';
+  // L용: 메인 + 보조 2열 그리드
+  var kpiL='<div class="kpi-l-main">'+mainKpi+'</div>'+(subKpis?'<div class="kpi-grid">'+subKpis+'</div>':'');
+  // 그래프존
+  var gz='';
+  if(graph==='pie'){
+    var raw=GROUP_DATA[c.view]||GROUP_DATA.type;
+    var unit=UNIT[c.main];
+    var mainVal=parseFloat((VAL[c.main]||'0').replace(/,/g,''));
+    var rawSum=raw.vals.reduce(function(a,b){return a+b;},0);
+    var pairs=raw.labels.map(function(l,i){ return [l, raw.vals[i]]; }).sort(function(a,b){ return b[1]-a[1]; });
+    var COLORS=['#1a73e8','#5b9bf3','#9cc3f8','#cfe0fc','#e8f0fe','#b8d4fb'];
+    var ghLabel={dept:'부서별',company:'회사별',position:'직급별',type:'과정유형별'}[c.view];
+    // 도넛 차트: SVG stroke-dasharray 세그먼트 (세그먼트별 호버 툴팁)
+    var R=42, CIRC=2*Math.PI*R, off=0, segs='', legend='';
+    pairs.forEach(function(p,i){
+      var pct=p[1]/rawSum*100;
+      var col=COLORS[i%COLORS.length];
+      var val=Math.round(mainVal*(p[1]/rawSum)).toLocaleString("en-US")+unit;
+      var seg=CIRC*pct/100;
+      segs+='<circle class="pie-seg" cx="60" cy="60" r="'+R+'" fill="none" stroke="'+col+'" stroke-width="16"'+
+        ' stroke-dasharray="'+seg.toFixed(2)+' '+(CIRC-seg).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'"'+
+        ' data-tip="'+p[0]+' · '+val+' ('+pct.toFixed(1)+'%)"></circle>';
+      var legVal=isL ? '<span class="pie-leg-v">'+val+'</span><span class="pie-leg-pct">'+pct.toFixed(1)+'%</span>' : '';
+      legend+='<div class="pie-leg-item"><span class="pie-dot" style="background:'+col+'"></span><span class="pie-leg-l">'+p[0]+'</span>'+legVal+'</div>';
+      off+=seg;
+    });
+    gz+='<div class="c-graph-head">'+ghLabel+' '+SHORT[c.main]+'</div>'+
+      '<div class="pie-box"><div class="pie-chart-svg"><svg viewBox="0 0 120 120">'+
+        '<g transform="rotate(-90 60 60)">'+segs+'</g></svg>'+
+        '<div class="pie-tip"></div></div></div>'+
+      '<div class="pie-legend">'+legend+'</div>';
+  } else if(graph==='bar'){
+    var raw=GROUP_DATA[c.view]||GROUP_DATA.dept;
+    var unit=UNIT[c.main];
+    // 메인 지표 실제값(VAL)을 기준으로 그룹 비중에 맞게 환산 → 단위/스케일 일치
+    var mainVal=parseFloat((VAL[c.main]||'0').replace(/,/g,''));
+    var rawSum=raw.vals.reduce(function(a,b){return a+b;},0);
+    var pairs=raw.labels.map(function(l,i){ return [l, raw.vals[i]]; }).sort(function(a,b){ return b[1]-a[1]; });
+    var top=pairs;
+    var labels=top.map(function(p){return p[0];});
+    // 수료율 등 비율 지표는 비중 환산이 무의미 → 원 비율 유지, 그 외는 메인값×비중
+    var isRate=(unit==='%');
+    var vals=top.map(function(p){ return isRate ? Math.round(mainVal*(p[1]/Math.max.apply(null,raw.vals))*10)/10 : Math.round(mainVal*(p[1]/rawSum)); });
+    var mx=Math.max.apply(null,vals);
+    var ghLabel={dept:'부서별',company:'회사별',position:'직급별',type:'과정유형별'}[c.view];
+    gz+='<div class="c-graph-head">'+ghLabel+' '+SHORT[c.main]+'</div><div class="bars">';
+    labels.forEach(function(l,i){ var hh=Math.round(vals[i]/mx*88); var hi=(i===0); gz+='<div class="bar-col"><div class="bar-wrap"><div class="bar-stack" style="height:'+hh+'%"><div class="bv'+(hi?' hi':'')+'">'+vals[i].toLocaleString("en-US")+unit+'</div><div class="bar'+(hi?' hi':'')+'"></div></div></div><div class="bar-cap">'+l+'</div></div>'; });
+    gz+='</div>';
+  } else if(graph==='line'){
+    var gd=GROUP_DATA.period;
+    var unit=UNIT[c.main];
+    var mainVal=parseFloat((VAL[c.main]||'0').replace(/,/g,''));
+    var lastRaw=gd.vals[gd.vals.length-1];
+    var scaled=gd.vals.map(function(v){ return Math.round(mainVal*(v/lastRaw)*(unit==='%'?10:1))/(unit==='%'?10:1); });
+    var mx=Math.max.apply(null,scaled), mn=Math.min.apply(null,scaled);
+    // SVG는 비율 좌표(0~100)로 그리고 가로 꽉 채움. 텍스트는 HTML 오버레이(고정 폰트).
+    var n=gd.labels.length;
+    var pts=scaled.map(function(v,i){
+      var xp=4+i*(92/(n-1));            // % 가로 위치 (4~96%)
+      var yp=14+(1-((v-mn)/(mx-mn||1)))*64; // % 세로 위치 (14~78%)
+      return [Math.round(xp*100)/100, Math.round(yp*100)/100];
+    });
+    var poly=pts.map(function(p){return p[0]+','+p[1];}).join(' ');
+    var area='M'+pts[0][0]+',92 L'+poly.replace(/ /g,' L')+' L'+pts[pts.length-1][0]+',92 Z';
+    // HTML 오버레이: 원형 점 + 호버/끝점 수치 + 월 라벨 (SVG 늘림과 무관하게 정원 유지)
+    var htmlPts=pts.map(function(p,i){
+      var isLast=(i===pts.length-1);
+      var val=scaled[i].toLocaleString("en-US")+unit;
+      return '<div class="lp" style="left:'+p[0]+'%;top:'+p[1]+'%">'+
+        '<span class="lp-dot'+(isLast?' lp-dot-last':'')+'"></span>'+
+        '<span class="lp-val'+(isLast?' lp-last':'')+'">'+val+'</span></div>';
+    }).join('');
+    var htmlCaps=gd.labels.map(function(l,i){ return '<span class="lp-cap" style="left:'+pts[i][0]+'%">'+l+'</span>'; }).join('');
+    gz+='<div class="c-graph-head">최근 12개월 '+SHORT[c.main]+' 추이</div>'+
+      '<div class="line-wrap"><div class="line-box">'+
+        '<svg viewBox="0 0 100 100" preserveAspectRatio="none" class="line-svg"><defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a73e8" stop-opacity=".22"/><stop offset="100%" stop-color="#1a73e8" stop-opacity="0"/></linearGradient></defs>'+
+        '<path d="'+area+'" fill="url(#lg)"/>'+
+        '<polyline points="'+poly+'" fill="none" stroke="#1a73e8" stroke-width="1.5" vector-effect="non-scaling-stroke"/>'+
+        '</svg>'+
+        '<div class="line-overlay">'+htmlPts+'</div>'+
+        '<div class="line-caps">'+htmlCaps+'</div>'+
+      '</div></div>';
+  }
+  // 배치 규칙
+  //  - 선(월별 추이): 항상 상하 (KPI 위 / 그래프 아래 전체 폭)
+  //  - 원: 항상 우측 (작아도 가독성 확보)
+  //  - 막대: L이면 우측, M이면 상하(좁은 폭에 막대 몰림 방지)
+  if(hasGraph){
+    var sideways = (graph==='pie') || (graph==='bar' && isL); // 우측 배치 여부
+    if(graph==='line' || !sideways){
+      // 상하: KPI 가로 띠 위 + 그래프 아래 전체 폭
+      return '<div class="c-col"><div class="kpibar-l"><div class="kpil-main">'+mainKpi+'</div><div class="kpil-subs">'+subKpis+'</div></div><div class="c-graph-l">'+gz+'</div></div>';
+    }
+    // 우측: KPI 좌(메인 + 보조 2열) / 그래프 우
+    return '<div class="c-row"><div class="c-left"><div class="kpi-main-wrap">'+mainKpi+'</div>'+(subKpis?'<div class="kpi-grid">'+subKpis+'</div>':'')+'</div><div class="c-right">'+gz+'</div></div>';
+  }
+  // 그래프 없음(단일 수치) → KPI만
+  return kpi+gz;
+}
+
+function renderGrid(){
+  var grid=document.getElementById('grid');
+  grid.innerHTML='';
+  if(comps.length===0 && !editing){
+    grid.innerHTML='<div class="empty-board"><div class="eb-icon">📊</div><div class="eb-title">표시할 대시보드가 없습니다</div><div class="eb-desc">대시보드 추가 버튼을 눌러 보고 싶은 지표를 구성해 보세요.</div><button class="btn btn-primary" id="ebAdd">대시보드 추가</button></div>';
+    var eba=document.getElementById('ebAdd'); if(eba) eba.addEventListener('click',function(){ openSlide(-1); });
+    return;
+  }
+  comps.forEach(function(c,i){
+    var el=document.createElement('div');
+    el.className='comp'+(c.size==='l'?' size-l':'');
+    el.dataset.idx=i;
+    var ctrls='<div class="c-ctrls"><button class="c-ctrl edit" title="수정">✎</button><button class="c-ctrl del editonly" title="삭제">✕</button></div>';
+    var _now=new Date();
+    var _y=_now.getFullYear(), _m=_now.getMonth()+1;
+    var _pm=(_m===1)?12:_m-1, _py=(_m===1)?_y-1:_y;
+    var PERIOD_LABEL={
+      '당월':_m+'월 기준',
+      '전월':_pm+'월 기준',
+      '당해년도':_y+'년 누적',
+      '전년도':(_y-1)+'년 누적'
+    };
+    var baseDate=(c.domain==='apply')?'신청일':'학습시작일';
+    var basisLabel='<span class="c-basis">'+(PERIOD_LABEL[c.period]||(_m+'월 기준'))+' · '+baseDate+' 기준</span>';
+    var detail='<span class="c-detail">›</span>';
+    var titleIcon=TITLE_ICON[c.domain]?'<span class="c-title-ico">'+TITLE_ICON[c.domain]+'</span>':'';
+    el.innerHTML='<div class="c-head"><span class="c-titlewrap"><span class="c-title">'+titleIcon+LABEL[c.main]+detail+'</span>'+basisLabel+'</span><div class="c-tools">'+ctrls+'</div></div>'+compInner(c);
+    grid.appendChild(el);
+  });
+  if(editing){
+    var add=document.createElement('div');
+    add.className='add-tile'; add.id='addTile';
+    add.innerHTML='<div class="plus">＋</div><div class="t">대시보드 추가</div>';
+    grid.appendChild(add);
+  }
+  bindEvents();
+}
+
+function bindEvents(){
+  document.querySelectorAll('.c-ctrl.del').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation(); var idx=+b.closest('.comp').dataset.idx; var nm=LABEL[comps[idx].main]||'대시보드'; if(confirm("'"+nm+"' 대시보드를 삭제할까요?")){ comps.splice(idx,1); renderGrid(); } }); });
+  document.querySelectorAll('.c-ctrl.edit').forEach(function(b){ b.addEventListener('click',function(e){ e.stopPropagation(); openSlide(+b.closest('.comp').dataset.idx); }); });
+  var add=document.getElementById('addTile'); if(add) add.addEventListener('click',function(){ openSlide(-1); });
+  // 도넛 세그먼트 호버 툴팁
+  document.querySelectorAll('.pie-chart-svg').forEach(function(box){
+    var tip=box.querySelector('.pie-tip');
+    box.querySelectorAll('.pie-seg').forEach(function(seg){
+      seg.addEventListener('mousemove',function(e){
+        var r=box.getBoundingClientRect();
+        tip.textContent=seg.getAttribute('data-tip');
+        tip.style.left=(e.clientX-r.left)+'px';
+        tip.style.top=(e.clientY-r.top)+'px';
+        tip.classList.add('on');
+      });
+      seg.addEventListener('mouseleave',function(){ tip.classList.remove('on'); });
+    });
+  });
+  if(editing) bindDrag();
+}
+function bindDrag(){
+  var dragEl=null;
+  document.querySelectorAll('.comp').forEach(function(el){
+    el.setAttribute('draggable','true');
+    el.addEventListener('dragstart',function(){ dragEl=el; el.classList.add('dragging'); });
+    el.addEventListener('dragend',function(){ el.classList.remove('dragging'); document.querySelectorAll('.drop-target').forEach(function(t){t.classList.remove('drop-target');}); });
+    el.addEventListener('dragover',function(e){ e.preventDefault(); if(el!==dragEl) el.classList.add('drop-target'); });
+    el.addEventListener('dragleave',function(){ el.classList.remove('drop-target'); });
+    el.addEventListener('drop',function(e){ e.preventDefault(); if(el===dragEl)return; var from=+dragEl.dataset.idx,to=+el.dataset.idx; var m=comps.splice(from,1)[0]; comps.splice(to,0,m); renderGrid(); });
+  });
+}
+
+// 슬라이드
+var curDomain='study';
+var curMain='total';
+function fillDomain(domain, keepExtras){
+  curDomain=domain;
+  var d=DOMAIN[domain];
+  curMain=d.mains[0]; // 영역별 그래프 데이터 1개 고정
+  document.querySelectorAll('#domainChips .chip').forEach(function(ch){ ch.classList.toggle('on',ch.dataset.d===domain); });
+  var eWrap=document.getElementById('extraChips');
+  var defs=d.defaults||[];
+  // 디폴트 지표를 앞으로 정렬 (선택은 하지 않음)
+  var ordered=d.extras.slice().sort(function(a,b){
+    var ia=defs.indexOf(a), ib=defs.indexOf(b);
+    if(ia<0) ia=999; if(ib<0) ib=999;
+    return ia-ib;
+  });
+  eWrap.innerHTML=ordered.map(function(k){ return '<span class="chip soft" data-k="'+k+'">'+SHORT[k]+'</span>'; }).join('');
+  eWrap.querySelectorAll('.chip').forEach(function(ch){ ch.addEventListener('click',function(){ if(!ch.classList.contains('on') && eWrap.querySelectorAll('.chip.on').length>=extraMax()) return; ch.classList.toggle('on'); refreshExtraLimit(); }); });
+  if(keepExtras){ eWrap.querySelectorAll('.chip').forEach(function(ch){ ch.classList.toggle('on',keepExtras.indexOf(ch.dataset.k)>=0); }); }
+  refreshExtraLimit();
+}
+function openSlide(idx){
+  editIndex=idx;
+  var isEdit=(idx>=0);
+  document.getElementById('slideTitle').textContent=isEdit?'대시보드 편집':'대시보드 추가';
+  document.getElementById('slideSave').textContent=isEdit?'저장':'추가';
+  var c=isEdit?comps[idx]:{domain:'study',main:'total',extras:[],view:'period',size:'m',period:''};
+  fillDomain(c.domain||'study', isEdit ? (c.extras||[]) : null);
+  document.getElementById('mView').value=c.view;
+  document.querySelectorAll('.size-opt').forEach(function(o){ o.classList.toggle('on',o.dataset.size===c.size); });
+  document.querySelectorAll('.chips[data-filter] .chip').forEach(function(ch){ ch.classList.remove('on'); });
+  document.querySelectorAll('.chips[data-single] .chip').forEach(function(ch){ ch.classList.toggle('on', !!c.period && ch.textContent===c.period); });
+  refreshAuto(); refreshFilterUI();
+  document.getElementById('overlay').classList.add('on');
+  document.getElementById('slide').classList.add('on');
+}
+function closeSlide(){ document.getElementById('overlay').classList.remove('on'); document.getElementById('slide').classList.remove('on'); }
+function refreshAuto(){
+  var g=decideGraph(document.getElementById('mView').value,curMain);
+  var info=GRAPH_INFO[g];
+  document.getElementById('agIcon').textContent=info.icon;
+  document.getElementById('agName').textContent=info.name;
+  document.getElementById('agDesc').textContent=info.desc;
+}
+function saveSlide(){
+  var main=curMain;
+  var view=document.getElementById('mView').value;
+  var size=document.querySelector('.size-opt.on').dataset.size;
+  var periodEl=document.querySelector('.chips[data-single] .chip.on');
+  if(!periodEl){ alert('기간을 선택해 주세요.'); return; }
+  var period=periodEl.textContent;
+  var extras=Array.prototype.map.call(document.querySelectorAll('#extraChips .chip.on'),function(c){return c.dataset.k;});
+  var c={domain:curDomain,main:main,extras:extras,view:view,size:size,period:period};
+  if(editIndex>=0) comps[editIndex]=c; else comps.push(c);
+  closeSlide(); renderGrid();
+}
+
+// 필터 3개 제한
+var FMAX=3;
+function countF(){ return document.querySelectorAll('.chips:not([data-single]) .chip.on').length; }
+function refreshFilterUI(){
+  var fc=document.getElementById('filterCount');
+  if(!fc) return;
+  var n=countF();
+  fc.textContent='· 선택한 값 '+n+'/'+FMAX;
+  var full=(n>=FMAX);
+  document.querySelectorAll('.chips:not([data-single]) .chip').forEach(function(c){ c.classList.toggle('locked',full&&!c.classList.contains('on')); });
+}
+
+// 이벤트
+document.getElementById('editBtn').addEventListener('click',function(){
+  editing=!editing; document.getElementById('page-dashboard').classList.toggle('editing',editing);
+  this.textContent=editing?'완료':'편집';
+  renderGrid();
+});
+document.getElementById('resetBtn').addEventListener('click',function(){
+  comps=JSON.parse(JSON.stringify(DEFAULT));
+  if(editing){ editing=false; document.getElementById('page-dashboard').classList.remove('editing'); document.getElementById('editBtn').textContent='편집'; }
+  renderGrid();
+});
+document.getElementById('addBtn').addEventListener('click',function(){ openSlide(-1); });
+document.getElementById('slideClose').addEventListener('click',closeSlide);
+document.getElementById('slideCancel').addEventListener('click',closeSlide);
+document.getElementById('overlay').addEventListener('click',closeSlide);
+document.getElementById('slideSave').addEventListener('click',saveSlide);
+document.getElementById('mView').addEventListener('change',refreshAuto);
+function extraMax(){ return (document.querySelector('.size-opt.on')?.dataset.size==='l')?6:4; }
+function refreshExtraLimit(){
+  var max=extraMax();
+  var on=document.querySelectorAll('#extraChips .chip.on').length;
+  var hint=document.getElementById('extraHint');
+  if(hint) hint.textContent='· 최대 '+max+'개 ('+on+'/'+max+')';
+  // 초과분 자동 해제
+  if(on>max){ var chips=document.querySelectorAll('#extraChips .chip.on'); for(var i=max;i<chips.length;i++) chips[i].classList.remove('on'); }
+}
+document.querySelectorAll('#domainChips .chip').forEach(function(ch){ ch.addEventListener('click',function(){ fillDomain(ch.dataset.d); }); });
+document.querySelectorAll('.size-opt').forEach(function(o){ o.addEventListener('click',function(){ document.querySelectorAll('.size-opt').forEach(function(x){x.classList.remove('on');}); o.classList.add('on'); refreshExtraLimit(); }); });
+document.querySelectorAll('.chips[data-filter]').forEach(function(row){
+  var single=row.hasAttribute('data-single');
+  row.querySelectorAll('.chip').forEach(function(chip){
+    chip.addEventListener('click',function(){
+      if(single){ row.querySelectorAll('.chip').forEach(function(c){c.classList.remove('on');}); chip.classList.add('on'); return; }
+      if(!chip.classList.contains('on') && countF()>=FMAX) return;
+      chip.classList.toggle('on'); refreshFilterUI();
+    });
+  });
+});
+
+renderGrid();
+
+})();
+</script>
 </body>
 </html>
