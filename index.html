@@ -1938,9 +1938,10 @@
 #page-dashboard .size-l .c-row .c-right{ padding-top:10px; justify-content:space-between; min-width:0; overflow:hidden; }
 #page-dashboard .size-l .c-row .c-right .c-graph-head{ flex:none; }
 #page-dashboard .size-l .c-row .c-right .bars{ flex:1; min-height:0; }
-/* L 원그래프: 중앙 정렬 */
-#page-dashboard .size-l .c-row .c-right .pie-box{ flex:1; justify-content:center; align-items:center; }
-#page-dashboard .size-l .c-row .c-right .pie-legend{ flex:none; }
+/* L 원그래프: 도넛 좌 / 범례 우 (가로 배치) */
+#page-dashboard .size-l .c-row .c-right .pie-box{ flex:1; display:flex; flex-direction:row; flex-wrap:nowrap; justify-content:flex-start; align-items:center; gap:32px; }
+#page-dashboard .size-l .c-row .c-right .pie-chart-svg{ width:150px; height:150px; flex:0 0 150px; }
+#page-dashboard .size-l .c-row .c-right .pie-legend{ flex:1 1 auto; min-width:0; width:auto; display:flex; flex-direction:column; gap:9px; }
 #page-dashboard /* L 상하 구조: KPI 가로 띠(위) + 그래프(아래, #page-dashboard 크게) */
   .c-col{ display:flex; flex-direction:column; height:100%; min-height:0; }
 #page-dashboard .kpibar-l{ display:flex; padding-bottom:14px; margin-bottom:14px; border-bottom:1px solid var(--line); flex:none; }
@@ -11291,25 +11292,29 @@ var DOMAIN={
     label:'학습현황',
     mains:['total','courses','rate'],
     extras:['courses','rate','completed','misuryo','before','yejung','doing','done'],
-    defaults:['courses','yejung','doing','done']
+    defaults:['courses','yejung','doing','done'],
+    defPeriod:'당월'
   },
   apply:{
     label:'신청현황',
     mains:['apply','fee','courses'],
     extras:['courses','approved','waiting','canceled','fee'],
-    defaults:['courses','approved','waiting','canceled']
+    defaults:['courses','approved','waiting','canceled'],
+    defPeriod:'당월'
   },
   result:{
     label:'수료결과',
     mains:['rate'],
     extras:['courses','total','completed','misuryo'],
-    defaults:['courses','total','completed','misuryo']
+    defaults:['courses','total','completed','misuryo'],
+    defPeriod:'당월'
   },
   cost:{
     label:'교육비용',
     mains:['fee','courses','perhead'],
     extras:['courses','total','paidApply','freeApply','perhead'],
-    defaults:['courses','total']
+    defaults:['courses','total'],
+    defPeriod:'당월'
   }
 };
 // 전체 지표 라벨·단위·값 (영역 공통 풀)
@@ -11423,8 +11428,8 @@ function compInner(c){
     gz+='<div class="c-graph-head">'+ghLabel+' '+SHORT[c.main]+'</div>'+
       '<div class="pie-box"><div class="pie-chart-svg"><svg viewBox="0 0 120 120">'+
         '<g transform="rotate(-90 60 60)">'+segs+'</g></svg>'+
-        '<div class="pie-tip"></div></div></div>'+
-      '<div class="pie-legend">'+legend+'</div>';
+        '<div class="pie-tip"></div></div>'+
+        '<div class="pie-legend">'+legend+'</div></div>';
   } else if(graph==='bar'){
     var raw=GROUP_DATA[c.view]||GROUP_DATA.dept;
     var unit=UNIT[c.main];
@@ -11584,6 +11589,10 @@ function fillDomain(domain, keepExtras){
   eWrap.querySelectorAll('.chip').forEach(function(ch){ ch.addEventListener('click',function(){ if(!ch.classList.contains('on') && eWrap.querySelectorAll('.chip.on').length>=extraMax()) return; ch.classList.toggle('on'); refreshExtraLimit(); }); });
   if(keepExtras){ eWrap.querySelectorAll('.chip').forEach(function(ch){ ch.classList.toggle('on',keepExtras.indexOf(ch.dataset.k)>=0); }); }
   refreshExtraLimit();
+  // 신규 추가 시: 영역별 기본 기간 자동 선택 (편집 모드는 기존 값 유지하므로 keepExtras로 구분)
+  if(!keepExtras && d.defPeriod){
+    document.querySelectorAll('.chips[data-single] .chip').forEach(function(ch){ ch.classList.toggle('on', ch.textContent===d.defPeriod); });
+  }
 }
 function openSlide(idx){
   editIndex=idx;
@@ -11595,7 +11604,7 @@ function openSlide(idx){
   document.getElementById('mView').value=c.view;
   document.querySelectorAll('.size-opt').forEach(function(o){ o.classList.toggle('on',o.dataset.size===c.size); });
   document.querySelectorAll('.chips[data-filter] .chip').forEach(function(ch){ ch.classList.remove('on'); });
-  document.querySelectorAll('.chips[data-single] .chip').forEach(function(ch){ ch.classList.toggle('on', !!c.period && ch.textContent===c.period); });
+  if(isEdit){ document.querySelectorAll('.chips[data-single] .chip').forEach(function(ch){ ch.classList.toggle('on', !!c.period && ch.textContent===c.period); }); }
   refreshAuto(); refreshFilterUI();
   document.getElementById('overlay').classList.add('on');
   document.getElementById('slide').classList.add('on');
