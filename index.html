@@ -4069,12 +4069,12 @@
                 </div>
                 <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px">
                   <select class="select" id="period-apply-end-base" style="width:140px">
-                    <option value="thismonth" selected>학습시작일 당월</option>
-                    <option value="prevmonth">학습시작일 전월</option>
+                    <option value="thismonth">학습시작일 당월</option>
+                    <option value="prevmonth" selected>학습시작일 전월</option>
                     <option value="prev2month">학습시작일 전전월</option>
                   </select>
                   <select class="select" id="period-apply-end-day" style="width:80px">
-                    <option value="1">1일</option><option value="2">2일</option><option value="3">3일</option><option value="4">4일</option><option value="5">5일</option><option value="6">6일</option><option value="7">7일</option><option value="8">8일</option><option value="9">9일</option><option value="10">10일</option><option value="11">11일</option><option value="12">12일</option><option value="13">13일</option><option value="14">14일</option><option value="15">15일</option><option value="16">16일</option><option value="17">17일</option><option value="18">18일</option><option value="19">19일</option><option value="20" selected>20일</option><option value="21">21일</option><option value="22">22일</option><option value="23">23일</option><option value="24">24일</option><option value="25">25일</option><option value="26">26일</option><option value="27">27일</option><option value="28">28일</option><option value="29">29일</option><option value="30">30일</option><option value="lastday">말일</option>
+                    <option value="1">1일</option><option value="2">2일</option><option value="3">3일</option><option value="4">4일</option><option value="5">5일</option><option value="6">6일</option><option value="7">7일</option><option value="8">8일</option><option value="9">9일</option><option value="10">10일</option><option value="11">11일</option><option value="12">12일</option><option value="13">13일</option><option value="14">14일</option><option value="15">15일</option><option value="16">16일</option><option value="17">17일</option><option value="18">18일</option><option value="19">19일</option><option value="20">20일</option><option value="21">21일</option><option value="22">22일</option><option value="23">23일</option><option value="24">24일</option><option value="25">25일</option><option value="26">26일</option><option value="27">27일</option><option value="28">28일</option><option value="29">29일</option><option value="30">30일</option><option value="lastday" selected>말일</option>
                   </select>
                   <input type="number" id="period-apply-end-hh" value="23" min="0" max="23" style="width:60px;height:26px;border:1px solid #ccc;border-radius:3px;padding:0 8px;font-size:12px;text-align:center" oninput="this.value=this.value.replace(/[^0-9]/g,'').slice(0,2);if(this.value!==''&&Number(this.value)>23)this.value='23';">
                   <span style="font-size:12px;color:#666">시</span>
@@ -4144,8 +4144,8 @@
               <th>사용여부</th>
               <td>
                 <div class="rd-radio-group">
-                  <label class="rd-radio-label"><input type="radio" name="period-use" value="Y" checked> Y</label>
-                  <label class="rd-radio-label"><input type="radio" name="period-use" value="N"> N</label>
+                  <label class="rd-radio-label"><input type="radio" name="period-use" value="Y"> Y</label>
+                  <label class="rd-radio-label"><input type="radio" name="period-use" value="N" checked> N</label>
                 </div>
               </td>
             </tr>
@@ -4302,6 +4302,20 @@
             <tr>
               <th>신청제한명</th>
               <td><input type="text" id="rd-name" style="width:100%"></td>
+            </tr>
+            <!-- 이력 조회기간 (미수료 탭) -->
+            <tr id="rd-fail-history-row" style="display:none">
+              <th>이력 조회기간</th>
+              <td>
+                <div class="rd-date-wrap">
+                  <input type="text" id="rd-fail-history-from" value="2025-01-01" style="width:110px">
+                  <span class="rd-cal-icon">📅</span>
+                  <span class="rd-date-sep">~</span>
+                  <input type="text" id="rd-fail-history-to" value="2025-12-31" style="width:110px">
+                  <span class="rd-cal-icon">📅</span>
+                </div>
+                <div style="font-size:11px;color:#888;margin-top:4px">해당 기간 내 수강 이력을 기준으로 미수료 여부를 체크합니다.</div>
+              </td>
             </tr>
             <tr id="rd-apply-period-row">
               <th>적용기간</th>
@@ -4503,31 +4517,22 @@
               <th>신청제한명</th>
               <td><input type="text" id="rr-name" placeholder="제한명을 입력하세요" style="width:100%"></td>
             </tr>
-            <!-- 적용기간 (항상 표시) -->
-            <tr id="rr-apply-period-row">
-              <th>적용기간</th>
+            <!-- 이력 조회기간 (미수료 탭) -->
+            <tr id="rr-fail-history-row" style="display:none">
+              <th>이력 조회기간</th>
               <td>
                 <div class="rd-date-wrap">
-                  <input type="text" id="rr-date-from" placeholder="YYYY-MM-DD" style="width:120px">
+                  <input type="text" id="rr-fail-history-from" placeholder="YYYY-MM-DD" style="width:120px">
                   <span class="rd-cal-icon">📅</span>
                   <span class="rd-date-sep">~</span>
-                  <input type="text" id="rr-date-to" placeholder="YYYY-MM-DD" style="width:120px">
+                  <input type="text" id="rr-fail-history-to" placeholder="YYYY-MM-DD" style="width:120px">
                   <span class="rd-cal-icon">📅</span>
                 </div>
-                <span id="rr-period-note-fail" style="font-size:11px;color:#888;margin-left:8px;display:none">기간에 속하는 학습시작일 과정</span>
-                <div style="font-size:11px;color:#888;margin-top:4px">※ 종료일이 지나면 자동으로 비활성화됩니다.</div>
+                <div style="font-size:11px;color:#888;margin-top:4px">해당 기간 내 수강 이력을 기준으로 미수료 여부를 체크합니다.</div>
               </td>
             </tr>
-            <!-- 미수료 개수 (미수료 탭) -->
-            <tr id="rr-fail-count-row" style="display:none">
-              <th>미수료 개수</th>
-              <td>
-                <input type="number" id="rr-fail-count" value="1" min="1" style="width:80px">
-                <span class="rd-unit">개 미수료시, 신청제한 시작</span>
-              </td>
-            </tr>
-            <!-- 신청제한 개월수 (미수료 탭) -->
-            <!-- 동일과정 전용 필드 -->
+            <!-- 적용기간 (항상 표시) -->
+            <!-- 동일과정 전용 필드: 이력 조회기간 -->
             <tr id="rr-dup-checkrange-row" style="display:none">
               <th>이력 조회기간</th>
               <td>
@@ -4559,7 +4564,28 @@
                 <span class="rd-unit">% 이상</span>
               </td>
             </tr>
-            <tr id="rr-count-row">
+            <tr id="rr-apply-period-row">
+              <th>적용기간</th>
+              <td>
+                <div class="rd-date-wrap">
+                  <input type="text" id="rr-date-from" placeholder="YYYY-MM-DD" style="width:120px">
+                  <span class="rd-cal-icon">📅</span>
+                  <span class="rd-date-sep">~</span>
+                  <input type="text" id="rr-date-to" placeholder="YYYY-MM-DD" style="width:120px">
+                  <span class="rd-cal-icon">📅</span>
+                </div>
+                <span id="rr-period-note-fail" style="font-size:11px;color:#888;margin-left:8px;display:none">기간에 속하는 학습시작일 과정</span>
+                <div style="font-size:11px;color:#888;margin-top:4px">※ 종료일이 지나면 자동으로 비활성화됩니다.</div>
+              </td>
+            </tr>
+            <!-- 미수료 개수 (미수료 탭) -->
+            <tr id="rr-fail-count-row" style="display:none">
+              <th>미수료 개수</th>
+              <td>
+                <input type="number" id="rr-fail-count" value="1" min="1" style="width:80px">
+                <span class="rd-unit">개 미수료시, 신청제한 시작</span>
+              </td>
+            </tr>
               <th>신청개수</th>
               <td>
                 <input type="number" id="rr-count" value="1" min="1" style="width:80px">
@@ -9280,6 +9306,7 @@ const RESTRICT_DATA_FAIL = [
   {
     no: 181, div: '미수료', unit: '-', period: '-',
     name: '미수료 신청제한 (전사)', value: '-', applyPeriod: '2026.01.01 ~ 2026.12.31',
+    historyFrom: '2025-01-01', historyTo: '2025-12-31',
     applyTarget: ['전체 임직원'], applyCourse: ['전체'],
     exceptTarget: [], exceptCourse: [],
     failCount: 1,
@@ -9288,6 +9315,7 @@ const RESTRICT_DATA_FAIL = [
   {
     no: 180, div: '미수료', unit: '-', period: '-',
     name: '미수료 신청제한 (온라인)', value: '-', applyPeriod: '2026.01.01 ~ 2026.12.31',
+    historyFrom: '2025-01-01', historyTo: '2025-12-31',
     applyTarget: ['전체 임직원'], applyCourse: ['과정유형 : 온라인'],
     exceptTarget: [], exceptCourse: [],
     failCount: 2,
@@ -9347,7 +9375,7 @@ function restrictRenderTable() {
   const isFailTab   = restrictActiveTab === 'fail';
   const isDupTab    = restrictActiveTab === 'dup';
   const isSimpleTab = isCourseTab || isFailTab || isDupTab;
-  const colCount = isDupTab ? 9 : (isCourseTab || isFailTab) ? 8 : 11;
+  const colCount = isDupTab ? 9 : isCourseTab ? 8 : isFailTab ? 9 : (isCourseTab || isFailTab) ? 8 : 11;
 
   // 헤더 동적 렌더링
   if (thead) {
@@ -9367,6 +9395,7 @@ function restrictRenderTable() {
         <th class="col-no">번호</th>
         <th class="col-name">제한명</th>
         <th class="col-value">미수료 개수</th>
+        <th class="col-applyperiod">이력 조회기간</th>
         <th class="col-applyperiod">적용기간</th>
         <th class="col-subdiv">구분</th>
         <th>신청</th>
@@ -9444,10 +9473,13 @@ function restrictRenderTable() {
         <td rowspan="2" class="col-value">${blockcost}</td>
         <td rowspan="2" class="col-applyperiod">${r.applyPeriod || '-'}</td>`;
     } else if (isFailTab) {
+      const fmtDate = d => d ? d.replace(/-/g, '.') : '-';
+      const histRange = (r.historyFrom && r.historyTo) ? `${fmtDate(r.historyFrom)} ~ ${fmtDate(r.historyTo)}` : '-';
       commonCells = `
         <td class="col-no">${rowNo}</td>
         <td class="col-name"><a class="link-cell" onclick="openRestrictDetail(${r.no})">${r.name}</a></td>
         <td class="col-value">${r.failCount != null ? r.failCount + '개' : '-'}</td>
+        <td class="col-applyperiod">${histRange}</td>
         <td class="col-applyperiod">${r.applyPeriod || '-'}</td>`;
     } else if (isDupTab) {
       const fmtDate = d => d ? d.replace(/-/g, '.') : '-';
@@ -9567,11 +9599,16 @@ function openRestrictDetail(no) {
   // 미수료 전용 필드
   const showEl = (id, v) => { const el = document.getElementById(id); if (el) el.style.display = v ? '' : 'none'; };
   showEl('rd-fail-count-row', isFail);
+  showEl('rd-fail-history-row', isFail);
   const rdFailNote = document.getElementById('rd-period-note-fail');
   if (rdFailNote) rdFailNote.style.display = isFail ? '' : 'none';
   if (isFail) {
     const fc = document.getElementById('rd-fail-count');
     if (fc) fc.value = r.failCount || 1;
+    const fhf = document.getElementById('rd-fail-history-from');
+    const fht = document.getElementById('rd-fail-history-to');
+    if (fhf) fhf.value = r.historyFrom || '';
+    if (fht) fht.value = r.historyTo   || '';
   }
 
   // 동일과정 전용 필드
@@ -9720,6 +9757,7 @@ function rrOnChange() {
 
   // 미수료 전용
   show('rr-fail-count-row', isFail);
+  show('rr-fail-history-row', isFail);
   const failNote = document.getElementById('rr-period-note-fail');
   if (failNote) failNote.style.display = isFail ? '' : 'none';
 
