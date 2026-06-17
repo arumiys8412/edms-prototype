@@ -4708,7 +4708,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
                   <label class="rr-chk-label"><input type="checkbox" class="rd-dup-status" value="수료" checked> 수료</label>
                   <label class="rr-chk-label"><input type="checkbox" class="rd-dup-status" value="미수료" checked> 미수료</label>
-                  <label class="rr-chk-label"><input type="checkbox" class="rd-dup-status" value="수료확정중" checked> 수료확정중</label>
+                  <label class="rr-chk-label"><input type="checkbox" class="rd-dup-status" value="수료처리전" checked> 수료처리전</label>
                 </div>
                 <div style="font-size:11px;color:#888;margin-top:5px">※ 선택하지 않으면 수료상태에 무관하게 동일 과정 전체를 중복으로 간주합니다.</div>
               </td>
@@ -4720,7 +4720,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <span class="rd-unit">% 이상</span>
               </td>
             </tr>
-            <tr id="rd-count-row">
+            <tr id="rd-count-row" style="display:none">
               <th>신청개수</th>
               <td>
                 <input type="number" id="rd-count" value="1" min="1" style="width:80px">
@@ -4901,7 +4901,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center">
                   <label class="rr-chk-label"><input type="checkbox" class="rr-dup-status" value="수료" checked> 수료</label>
                   <label class="rr-chk-label"><input type="checkbox" class="rr-dup-status" value="미수료" checked> 미수료</label>
-                  <label class="rr-chk-label"><input type="checkbox" class="rr-dup-status" value="수료확정중" checked> 수료확정중</label>
+                  <label class="rr-chk-label"><input type="checkbox" class="rr-dup-status" value="수료처리전" checked> 수료처리전</label>
                 </div>
                 <div style="font-size:11px;color:#888;margin-top:5px">※ 선택하지 않으면 수료상태에 무관하게 동일 과정 전체를 중복으로 간주합니다.</div>
               </td>
@@ -4935,6 +4935,8 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <span class="rd-unit">개 미수료시, 신청제한 시작</span>
               </td>
             </tr>
+            <!-- 신청개수 (개수일 때) -->
+            <tr id="rr-count-row" style="display:none">
               <th>신청개수</th>
               <td>
                 <input type="number" id="rr-count" value="1" min="1" style="width:80px">
@@ -4942,7 +4944,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </td>
             </tr>
             <!-- 신청금액 (금액일 때) -->
-            <tr id="rr-amount-row">
+            <tr id="rr-amount-row" style="display:none">
               <th>신청금액</th>
               <td>
                 <input type="number" id="rr-amount" value="" min="0" style="width:120px">
@@ -8863,16 +8865,12 @@ function scDetRenderBundleAgg() {
   const cnt = document.getElementById('sc-det-count');
   if (cnt) cnt.textContent = scBundleAggData.length.toLocaleString();
   tbody.innerHTML = slice.map(r => {
-    const stColor = r.studyStatus === '종료' ? 'color:#888'
-                  : r.studyStatus === '예정' ? 'color:#b9791f'
-                  : r.studyStatus === '학습중' ? 'color:#1a73e8'
-                  : 'color:#333';   // 수료처리전
     return `<tr>
     <td>${r.no}</td>
     <td>${maskName(r.name)}</td>
     <td>${maskEmail(r.id)}</td>
     <td>${fmtPeriod(r.period)}</td>
-    <td><span style="${stColor}">${r.studyStatus}</span></td>
+    <td>${r.studyStatus}</td>
     <td>${r.allPass} / ${r.allTotal}</td>
     <td>${r.reqPass} / ${r.reqTotal}</td>
     <td><span style="${r.bundleComplete==='수료'?'color:#333':'color:#888'}">${r.bundleComplete}</span></td>
@@ -10720,17 +10718,15 @@ function openRestrictDetail(no) {
     if (fht) fht.value = r.historyTo   || '';
   }
 
-  // 동일과정 전용 필드
+  // 동일과정 전용 필드 (진도율은 사용하지 않음 — 이력 조회기간·수료상태만)
   showEl('rd-dup-checkrange-row', isDup);
   showEl('rd-dup-status-row',     isDup);
-  showEl('rd-dup-progress-row',   isDup);
+  showEl('rd-dup-progress-row',   false);
   if (isDup) {
     const df = document.getElementById('rd-dup-from');
     const dt = document.getElementById('rd-dup-to');
-    const dp = document.getElementById('rd-dup-progress');
     if (df) df.value = r.dupFrom || '';
     if (dt) dt.value = r.dupTo   || '';
-    if (dp) dp.value = r.dupProgress ?? 50;
   }
 
   // 적용기간: 모든 탭 표시
@@ -10870,10 +10866,10 @@ function rrOnChange() {
   const failNote = document.getElementById('rr-period-note-fail');
   if (failNote) failNote.style.display = isFail ? '' : 'none';
 
-  // 동일과정 전용
+  // 동일과정 전용 (진도율은 사용하지 않음)
   show('rr-dup-checkrange-row', isDup);
   show('rr-dup-status-row',     isDup);
-  show('rr-dup-progress-row',   isDup);
+  show('rr-dup-progress-row',   false);
 
   // 미수료: 대상자 조건 숨김
   const rrTargetSection = document.getElementById('rr-target-section');
