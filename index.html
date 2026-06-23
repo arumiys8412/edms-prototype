@@ -233,6 +233,11 @@
   .page-size-wrap .select { height: 26px; font-size: 12px; }
   .pagination { display: flex; justify-content: flex-end; align-items: center; gap: 4px; }
   .main-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  /* 브라우저 폭이 좁아지면 테이블을 가로 스크롤 처리 (셀이 화면 밖으로 튀어나오지 않도록) */
+  .table-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .table-scroll > .main-table { min-width: max-content; }
+  /* 진행율 컬럼 최소 폭 강제 */
+  .main-table th.col-progress, .main-table td.col-progress { width: 56px; max-width: 56px; min-width: 56px; padding-left: 4px; padding-right: 4px; }
   .main-table th { background: var(--table-header); border: 1px solid var(--border); padding: 8px 6px; font-weight: 600; color: #444; text-align: center; white-space: nowrap; }
   .main-table td { border: 1px solid #e8eaed; padding: 7px 8px; text-align: center; color: #333; white-space: nowrap; }
   .main-table tbody tr:hover td { background: #f5f8ff; }
@@ -2582,7 +2587,7 @@ placeholder: ‘운영구분 전체’
             <button class="btn-excel" id="p-btn-excel">엑셀다운로드</button>
           </div>
         </div>
-        <table class="main-table">
+        <div class="table-scroll"><table class="main-table">
           <thead>
             <tr>
               <th>No.</th><th>이름<span class="change-badge signup in-th" data-num="6" data-memo="link화 (신규)
@@ -2594,7 +2599,7 @@ placeholder: ‘운영구분 전체’
             </tr>
           </thead>
           <tbody id="p-table-body"></tbody>
-        </table>
+        </table></div>
         <div class="table-footer">
           <div class="page-size-wrap">
             <select class="select" id="p-sel-page-size">
@@ -2631,7 +2636,7 @@ placeholder: ‘운영구분 전체’
             <button class="mbtn mbtn-gray" id="p-detail-prev-btn">이전</button>
           </div>
         </div>
-        <table class="main-table">
+        <div class="table-scroll"><table class="main-table">
           <thead>
             <tr>
               <th>이름</th><th>아이디</th><th>사번</th><th>과정유형</th>
@@ -2642,7 +2647,7 @@ placeholder: ‘운영구분 전체’
             </tr>
           </thead>
           <tbody id="p-detail-summary-body"></tbody>
-        </table>
+        </table></div>
       </div>
 
       <!-- Card 2: 교육비 결제 상세 -->
@@ -2787,7 +2792,7 @@ placeholder: ‘운영구분 전체’
             <button class="btn-excel" id="c-btn-excel">엑셀다운로드</button>
           </div>
         </div>
-        <table class="main-table">
+        <div class="table-scroll"><table class="main-table">
           <thead>
             <tr>
               <th>No.</th><th style="width:78px">운영구분<span class="change-badge signup in-th lm" data-num="1" data-memo="[러닝메이커] 운영구분 컬럼 추가 (학습현황과 일관)
@@ -2801,7 +2806,7 @@ placeholder: ‘운영구분 전체’
             </tr>
           </thead>
           <tbody id="c-table-body"></tbody>
-        </table>
+        </table></div>
         <div class="table-footer">
           <div class="page-size-wrap">
             <select class="select" id="c-sel-page-size">
@@ -2838,7 +2843,7 @@ placeholder: ‘운영구분 전체’
             <button class="mbtn mbtn-gray" id="c-detail-prev-btn">이전</button>
           </div>
         </div>
-        <table class="main-table">
+        <div class="table-scroll"><table class="main-table">
           <thead>
             <tr>
               <th>과정유형</th><th>과정명<span class="change-badge signup in-th" data-num="18" data-memo="link화 (신규)
@@ -2849,7 +2854,7 @@ placeholder: ‘운영구분 전체’
             </tr>
           </thead>
           <tbody id="c-detail-course-body"></tbody>
-        </table>
+        </table></div>
       </div>
 
       <!-- Card 2: 신청자 목록 -->
@@ -2918,7 +2923,7 @@ placeholder: ‘운영구분 전체’
             <button class="btn-excel" id="c-det-btn-excel">엑셀다운로드</button>
           </div>
         </div>
-        <table class="main-table">
+        <div class="table-scroll"><table class="main-table">
           <thead>
             <tr>
               <th>No.</th><th>이름<span class="change-badge signup in-th" data-num="20" data-memo="신규 페이지 - 신청자 목록 컬럼
@@ -2931,7 +2936,7 @@ placeholder: ‘운영구분 전체’
             </tr>
           </thead>
           <tbody id="c-det-learner-body"></tbody>
-        </table>
+        </table></div>
         <div class="table-footer">
           <div class="page-size-wrap">
             <select class="select" id="c-det-page-size">
@@ -3134,7 +3139,7 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
             <button class="btn-excel" id="sp-btn-excel">엑셀다운로드</button>
           </div>
         </div>
-        <table class="main-table">
+        <div class="table-scroll"><table class="main-table">
           <thead>
             <tr>
               <th>No.</th><th>이름</th><th>아이디</th><th style="width:78px">운영구분<span class="change-badge in-th lm" data-num="1" data-memo="[러닝메이커] 운영구분 컬럼 추가
@@ -3147,7 +3152,7 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
             </tr>
           </thead>
           <tbody id="sp-table-body"></tbody>
-        </table>
+        </table></div>
         <div class="table-footer">
           <div class="page-size-wrap">
             <select class="select" id="sp-sel-page-size">
@@ -3285,7 +3290,7 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
           </div>
         </div>
         <div style="overflow-x:auto">
-        <table class="main-table" style="min-width:1000px">
+        <div class="table-scroll"><table class="main-table" style="min-width:1000px">
           <thead>
             <tr>
               <th>No.</th><th style="width:78px">운영구분<span class="change-badge in-th lm" data-num="1" data-memo="[러닝메이커] 운영구분 컬럼 추가
@@ -3299,7 +3304,7 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
             </tr>
           </thead>
           <tbody id="sc-table-body"></tbody>
-        </table>
+        </table></div>
         </div>
         <div class="table-footer">
           <div class="page-size-wrap">
@@ -3340,7 +3345,7 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
           </div>
         </div>
         <div style="overflow-x:auto">
-        <table class="main-table" style="min-width:980px">
+        <div class="table-scroll"><table class="main-table" style="min-width:980px">
           <thead>
             <tr id="sc-detail-course-head">
               <th style="width:64px">과정유형</th><th style="min-width:200px">과정명<span class="change-badge in-th" data-num="15" data-memo="link화 (신규)
@@ -3357,7 +3362,7 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
             </tr>
           </thead>
           <tbody id="sc-detail-course-body"></tbody>
-        </table>
+        </table></div>
         </div>
       </div>
 
@@ -3368,7 +3373,7 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
 - 학습자 목록 전환은 ‘구성과정 선택’ 셀렉트로 수행 (전체 종합 집계 ↔ 개별 구성과정)
 - 필수/자율: 종합 수료는 필수과정 전부 이수 기준">7</span></div>
         <div style="font-size:12px;color:#888;margin-bottom:12px">구성과정별 수료 현황입니다. 하단 학습자 목록은 ‘구성과정 선택’에서 전체(종합 집계) 또는 개별 구성과정을 골라 확인합니다.</div>
-        <table class="main-table">
+        <div class="table-scroll"><table class="main-table">
           <thead>
             <tr>
               <th style="width:90px">과정유형</th>
@@ -3391,7 +3396,7 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
             </tr>
           </thead>
           <tbody id="sc-det-comp-body"></tbody>
-        </table>
+        </table></div>
       </div>
 
       <!-- Card 2: 학습자 목록 -->
@@ -3486,7 +3491,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             <div class="detail-section-title">콘텐츠별 학습</div>
             <button class="mbtn mbtn-gray" id="sc-content-to-course-btn">과정 학습상세</button>
           </div>
-          <table class="main-table">
+          <div class="table-scroll"><table class="main-table">
             <colgroup>
               <col style="width:60px">   <!-- No. -->
               <col style="width:80px">   <!-- 필수여부 -->
@@ -3511,7 +3516,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </tr>
             </thead>
             <tbody id="sc-content-detail-body"></tbody>
-          </table>
+          </table></div>
         </div>
 
         <!-- 결과 헤더 -->
@@ -3531,12 +3536,12 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
         </div>
 
         <!-- 학습자 테이블 (헤더 동적 전환) -->
-        <table class="main-table" id="sc-det-learner-table">
+        <div class="table-scroll"><table class="main-table" id="sc-det-learner-table">
           <thead id="sc-det-learner-thead">
             <!-- JS로 동적 렌더 -->
           </thead>
           <tbody id="sc-det-learner-body"></tbody>
-        </table>
+        </table></div>
         <div class="table-footer">
           <div class="page-size-wrap">
             <select class="select" id="sc-det-page-size">
@@ -3780,7 +3785,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <button class="btn-excel" id="cr-p-btn-excel">엑셀 다운로드</button>
             </div>
           </div>
-          <table class="main-table">
+          <div class="table-scroll"><table class="main-table">
             <thead>
               <tr>
                 <th>No.</th><th>이름</th><th>아이디</th><th>사번</th>
@@ -3789,7 +3794,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </tr>
             </thead>
             <tbody id="cr-p-body"></tbody>
-          </table>
+          </table></div>
           <div class="table-footer">
             <div class="page-size-wrap">
               <select class="select" id="cr-p-page-size">
@@ -3873,7 +3878,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             <div class="result-count">검색결과 <strong id="cr-c-count">0</strong>건</div>
             <div class="result-right"><button class="btn-excel" id="cr-c-btn-excel">엑셀 다운로드</button></div>
           </div>
-          <table class="main-table">
+          <div class="table-scroll"><table class="main-table">
             <thead>
               <tr>
                 <th>No.</th><th>과정유형</th><th>과정명</th><th>과정분류</th>
@@ -3882,7 +3887,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </tr>
             </thead>
             <tbody id="cr-c-body"></tbody>
-          </table>
+          </table></div>
           <div class="table-footer">
             <div class="page-size-wrap">
               <select class="select" id="cr-c-page-size">
@@ -3965,7 +3970,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             <div class="result-count">검색결과 <strong id="cr-m-count">0</strong>건</div>
             <div class="result-right"><button class="btn-excel" id="cr-m-btn-excel">엑셀 다운로드</button></div>
           </div>
-          <table class="main-table">
+          <div class="table-scroll"><table class="main-table">
             <thead>
               <tr>
                 <th>No.</th><th>연도</th><th>월</th>
@@ -3975,7 +3980,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </tr>
             </thead>
             <tbody id="cr-m-body"></tbody>
-          </table>
+          </table></div>
           <div class="table-footer">
             <div class="page-size-wrap">
               <select class="select" id="cr-m-page-size">
@@ -4051,7 +4056,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
         <div class="result-count" style="margin-bottom:10px">검색결과 <strong id="rp-count">0</strong>건</div>
 
         <!-- 목록 테이블 -->
-        <table class="main-table">
+        <div class="table-scroll"><table class="main-table">
           <thead>
             <tr>
               <th style="width:60px">No.</th>
@@ -4062,7 +4067,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             </tr>
           </thead>
           <tbody id="rp-table-body"></tbody>
-        </table>
+        </table></div>
 
         <div class="table-footer">
           <div class="page-size-wrap">
@@ -4142,6 +4147,10 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <label class="rp-chk-item required"><input type="checkbox" class="rp-chk" data-field="과정코드" checked disabled> 과정코드</label>
               <label class="rp-chk-item"><input type="checkbox" class="rp-chk" data-field="CP명"> CP명</label>
               <label class="rp-chk-item"><input type="checkbox" class="rp-chk" data-field="CP코드"> CP코드</label>
+              <label class="rp-chk-item"><input type="checkbox" class="rp-chk" data-field="과정구분"> 과정구분<span class="change-badge result" data-num="13" data-memo="[종합과정] 결과보고서 과정구분 컬럼
+- 값: 단과 / 종합
+- 종합은 상품 단위 1행으로 집계 (구성과정 분해 없음)
+- 종합 행은 과정유형 '—', 수료점수 '-' 표기">13</span></label>
               <label class="rp-chk-item"><input type="checkbox" class="rp-chk" data-field="과정유형"> 과정유형</label>
               <label class="rp-chk-item"><input type="checkbox" class="rp-chk" data-field="분류"> 분류</label>
             </div>
@@ -4175,12 +4184,12 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
         <div class="rp-create-section">
           <div class="rp-section-title">보고서 결과</div>
           <div class="rp-result-tags" id="rp-result-tags"></div>
-          <table class="main-table">
+          <div class="table-scroll"><table class="main-table">
             <thead id="rp-preview-head"></thead>
             <tbody>
               <tr><td id="rp-preview-empty" colspan="99" style="text-align:center;padding:24px;color:#aaa;font-size:12px">항목을 선택하면 미리보기가 표시됩니다.</td></tr>
             </tbody>
-          </table>
+          </table></div>
         </div>
 
         <!-- 하단 버튼 -->
@@ -4227,7 +4236,16 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
       </div>
 
       <!-- 결과 섹션 -->
-      <div class="detail-section-title" style="margin:4px 2px 10px">교육이력 추출</div>
+      <div class="detail-section-title" style="margin:4px 2px 10px">교육이력 추출<span class="change-badge result" data-num="12" data-memo="[종합과정] 결과보고서 — 상품 단위 1행 집계
+- 종합과정은 구성과정으로 분해하지 않고 상품 단위 1행으로 집계
+- 과정구분: 단과 / 종합 표기
+- 과정유형: 종합은 '—' (단일 유형 특정 불가)
+- 수료점수: 종합은 '-' (점수 합산 아닌 필수 구성과정 수료 AND 판정)
+- 학습상태(수료/미수료): 종합 수료 판정 기준 (필수 구성과정 전부 수료 시 수료)
+- 수료율 분모 = 종합 수료확정자(수료+미수료), 수료처리전 제외 (단과와 동일)
+- 교육비는 종합 상품가 1줄 표기 (구성과정 단가 배분은 정산 영역)
+- 구성과정별 실적은 학습현황 종합 상세에서 확인
+- 학습영역별 결과 분해는 추후 확장">12</span></div>
       <div class="card">
         <div class="result-header">
           <div class="result-count">검색결과 <strong id="rv-count">0</strong>건</div>
@@ -4235,10 +4253,10 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             <button class="btn-excel" id="rv-btn-excel">엑셀 다운로드</button>
           </div>
         </div>
-        <table class="main-table">
+        <div class="table-scroll"><table class="main-table">
           <thead id="rv-thead"></thead>
           <tbody id="rv-tbody"></tbody>
-        </table>
+        </table></div>
         <div class="table-footer">
           <div class="page-size-wrap">
             <select class="select" id="rv-page-size">
@@ -4283,12 +4301,12 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             <button class="mbtn mbtn-gray" id="detail-prev-btn">이전</button>
           </div>
         </div>
-        <table class="main-table">
+        <div class="table-scroll"><table class="main-table">
           <thead>
             <tr id="detail-summary-head"></tr>
           </thead>
           <tbody id="detail-summary-body"></tbody>
-        </table>
+        </table></div>
       </div>
 
       <!-- Card 2: 콘텐츠별 학습 (단과) / 구성과정 목록 (종합) -->
@@ -4299,7 +4317,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
 - 해당 학습자가 이수 중인 구성과정별 현황 (읽기 전용)
 - 콘텐츠별 학습 전환은 아래 카드의 ‘구성과정 선택’ 셀렉트로 수행
 - 종합은 자체 콘텐츠가 없어 콘텐츠별 학습 대신 구성과정 목록을 노출">14</span></div>
-          <table class="main-table">
+          <div class="table-scroll"><table class="main-table">
             <thead>
               <tr>
                 <th style="width:90px">과정유형</th><th>구성과정명</th><th style="width:64px">필수/자율</th>
@@ -4314,7 +4332,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </tr>
             </thead>
             <tbody id="detail-comp-body"></tbody>
-          </table>
+          </table></div>
         </div>
       </div>
 
@@ -4331,7 +4349,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
 - 구성과정 목록 표는 뷰 전용(읽기), 콘텐츠 전환은 이 셀렉트로 (과정별 상세와 동일 패턴)">15</span>
             </span>
           </div>
-          <table class="main-table" id="detail-content-table">
+          <div class="table-scroll"><table class="main-table" id="detail-content-table">
           <colgroup>
             <col style="width:90px">   <!-- 평가항목 -->
             <col style="width:100px">  <!-- 콘텐츠 유형 -->
@@ -4367,7 +4385,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             </tr>
           </thead>
           <tbody id="detail-content-body"></tbody>
-        </table>
+        </table></div>
         </div><!-- /detail-content-section -->
       </div>
 
@@ -5162,7 +5180,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <button class="btn-excel" onclick="openExcelModal()">엑셀 다운로드</button>
             </div>
           </div>
-          <table class="main-table">
+          <div class="table-scroll"><table class="main-table">
             <thead>
               <tr>
                 <th>No.</th>
@@ -5271,7 +5289,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <td><button class="btn-xs" onclick="openSettlementModal('Card')">서류보기</button></td>
               </tr>
             </tbody>
-          </table>
+          </table></div>
           <div class="table-footer">
             <div class="page-size-wrap">
               <select class="select">
@@ -5408,7 +5426,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <button class="btn-excel" onclick="openExcelModal()">엑셀 다운로드</button>
             </div>
           </div>
-          <table class="main-table">
+          <div class="table-scroll"><table class="main-table">
             <thead>
               <tr>
                 <th>No.</th>
@@ -5497,7 +5515,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <td class="fee-num">120,000</td>
               </tr>
             </tbody>
-          </table>
+          </table></div>
           <div class="table-footer">
             <div class="page-size-wrap">
               <select class="select">
@@ -5663,7 +5681,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
         </div>
 
         <!-- ─ 회사별 × 월별 (기본 노출) ─ -->
-        <table class="main-table fa-pivot-tbl" id="fa-pivot-company-month">
+        <div class="table-scroll"><table class="main-table fa-pivot-tbl" id="fa-pivot-company-month">
           <thead>
             <tr>
               <th>회사</th>
@@ -5724,10 +5742,10 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <td class="fee-num"><strong>167,231,000</strong></td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
 
         <!-- ─ 회사별 × 분기별 ─ -->
-        <table class="main-table fa-pivot-tbl" id="fa-pivot-company-quarter" style="display:none">
+        <div class="table-scroll"><table class="main-table fa-pivot-tbl" id="fa-pivot-company-quarter" style="display:none">
           <thead>
             <tr>
               <th>회사</th>
@@ -5788,10 +5806,10 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <td class="fee-num"><strong>167,231,000</strong></td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
 
         <!-- ─ 회사별 × 연도별 ─ -->
-        <table class="main-table fa-pivot-tbl" id="fa-pivot-company-year" style="display:none">
+        <div class="table-scroll"><table class="main-table fa-pivot-tbl" id="fa-pivot-company-year" style="display:none">
           <thead>
             <tr>
               <th>회사</th>
@@ -5845,10 +5863,10 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <td class="fee-num"><strong>456,881,000</strong></td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
 
         <!-- ─ 부서별 × 월별 ─ -->
-        <table class="main-table fa-pivot-tbl" id="fa-pivot-dept-month" style="display:none">
+        <div class="table-scroll"><table class="main-table fa-pivot-tbl" id="fa-pivot-dept-month" style="display:none">
           <thead>
             <tr>
               <th>부서</th>
@@ -5909,10 +5927,10 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <td class="fee-num"><strong>167,231,000</strong></td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
 
         <!-- ─ 부서별 × 분기별 ─ -->
-        <table class="main-table fa-pivot-tbl" id="fa-pivot-dept-quarter" style="display:none">
+        <div class="table-scroll"><table class="main-table fa-pivot-tbl" id="fa-pivot-dept-quarter" style="display:none">
           <thead>
             <tr>
               <th>부서</th>
@@ -5973,10 +5991,10 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <td class="fee-num"><strong>167,231,000</strong></td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
 
         <!-- ─ 부서별 × 연도별 ─ -->
-        <table class="main-table fa-pivot-tbl" id="fa-pivot-dept-year" style="display:none">
+        <div class="table-scroll"><table class="main-table fa-pivot-tbl" id="fa-pivot-dept-year" style="display:none">
           <thead>
             <tr>
               <th>부서</th>
@@ -6030,7 +6048,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <td class="fee-num"><strong>456,881,000</strong></td>
             </tr>
           </tbody>
-        </table>
+        </table></div>
 
         <div class="fa-table-note">ℹ️ 집계에 포함된 결제 건이 없는 구간은 '-'로 표시됩니다. 합계 기준 내림차순 정렬.</div>
       </div>
@@ -6154,10 +6172,10 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
       <!-- 미리보기 데이터 -->
       <div class="detail-section-title" style="margin-bottom:8px">미리보기 데이터</div>
       <div class="result-count" style="margin-bottom:10px">검색결과 <strong id="pv-count">0</strong>건</div>
-      <table class="main-table">
+      <div class="table-scroll"><table class="main-table">
         <thead id="pv-head"></thead>
         <tbody id="pv-body"></tbody>
-      </table>
+      </table></div>
     </div>
     <div class="preview-modal-footer">
       <div class="page-size-wrap">
@@ -6184,10 +6202,12 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
         아래 수료자 <strong id="cert-course-name" style="color:#222"></strong> 과정의 수료증을 전체 출력합니다.
       </div>
       <div id="cert-bundle-note" style="display:none;font-size:12px;color:#5b4a8a;margin-bottom:12px;background:#f4f1fb;border:1px solid #d9d0ee;border-radius:4px;padding:8px 12px;">
-        종합과정 수료자는 <strong>종합 수료증</strong>과 <strong>구성과정별 수료증</strong>이 각각 발급됩니다.<br>종합 수료증의 학점·수료시간은 수료한 구성과정의 합산 값을 따릅니다.<span class="change-badge lm" data-num="16" data-memo="[종합과정] 수료증 발급 단위
+        종합과정 수료자는 <strong>종합 수료증</strong>과 <strong>구성과정별 수료증</strong>이 각각 발급됩니다.<br>종합 수료증의 학점·수료시간은 필수 구성과정의 합계 값을 따릅니다. (자율 구성과정 제외)<span class="change-badge lm" data-num="16" data-memo="[종합과정] 수료증 발급 단위
 - 종합 수료자: 종합 수료증 + 구성과정별 수료증 각각 발급
-- 종합 수료증 학점·시간 = 수료 구성과정 합산
-- [미정] 합산 범위(자율 구성과정 포함 여부)는 상품 정의서와 연동 확정 예정">16</span>
+- 종합 수료증 학점 = 필수 구성과정 학점 합계
+- 종합 수료증 수료시간 = 필수 구성과정 학습시간 합계
+- 학점·수료시간은 별개 항목으로 각각 산출 (서로 환산 안 함)
+- 자율 구성과정은 수료했더라도 합산 제외">16</span>
       </div>
       <table class="cert-learner-list">
         <thead>
@@ -8220,12 +8240,10 @@ function scDetRenderHead(contentMode) {
       <th style="width:38px;text-align:center"><input type="checkbox" id="lpc-chk-all" style="width:14px;height:14px;cursor:pointer;accent-color:var(--primary)"></th>
       <th>No.</th><th>이름</th><th>아이디</th>
       <th>${periodTh}</th><th>학습상태</th>
-      ${evalTh}<th>진행율(%)<span class="change-badge in-th lm" data-num="17" data-memo="[종합과정] 진행율 컬럼 (과정별 학습현황 상세 학습자 목록)
+      ${evalTh}<th class="col-progress"><span style="white-space:nowrap">진행율(%)</span><span class="change-badge in-th lm" data-num="17" data-memo="[종합과정] 진행율 컬럼 (일반/러닝메이커 모두 표시)
 - 학습자의 콘텐츠 학습 진행 비율(%)
 - 전체 콘텐츠 개수 대비 완료한 콘텐츠 개수 비율
-- 온라인·오프라인 동일 기준
-- 예정: 0% / 학습중·수료처리전: 진행 중 비율 / 수료: 100%
-- 총점(평가 점수)과 별개 지표 (진행율=학습량, 총점=평가 결과)">17</span></th><th>총점</th>
+- 산식: 완료 콘텐츠 ÷ 전체 콘텐츠 × 100 (소수점 처리는 개발 관례)">17</span></th><th>총점</th>
       <th>수료여부</th><th>수료처리일</th><th>회사명</th><th>부서명</th>
     </tr>`;
   }
@@ -8472,7 +8490,7 @@ function scDetRenderTable() {
       <td>${r.period}</td>
       <td>${st}</td>
       ${passCell}
-      <td>${r.progress}</td>
+      <td class="col-progress">${r.progress}</td>
       <td>${r.score}</td>
       <td>${r.complete}</td>
       <td>${r.completeDate}</td>
@@ -9546,11 +9564,11 @@ crMRenderTable();
 // 교육이력 샘플 데이터 (74건)
 const RV_DATA = Array.from({length: 74}, (_, i) => {
   const pool = [
-    { id:'arumiys', name:'김이름', empno:'2023020', company:'(주)휴넷', dept:'LMS솔루션팀', grade:'-', course:'[북러닝] AI 2026 트렌드&활용백과(도서 미제공)', courseCode:'ELN000000088', period:'2026.04.01 ~ 2026.05.01', year:'2026', status:'학습중', score:'-' },
-    { id:'woosung', name:'이위기', empno:'201409',  company:'(주)휴넷', dept:'LMS솔루션팀', grade:'-', course:'[포사이트 코리아 2025] AI 혁명과 미래 경영 인사이트', courseCode:'ELN000000461', period:'2026.04.01 ~ 2026.05.01', year:'2026', status:'학습중', score:'-' },
-    { id:'inyoung', name:'최이화', empno:'2024021', company:'(주)휴넷', dept:'LMS솔루션팀', grade:'-', course:'[데이터베이스 작성법과 변환]보고서를 데이터베이스로 변환하는 방법', courseCode:'MCR000003369', period:'2026.04.02 ~ 2030.03.18', year:'2026', status:'학습중', score:'0점' },
-    { id:'seojin22', name:'강서진', empno:'2023015', company:'LABS플랫폼', dept:'기획팀', grade:'-', course:'[창의력을 자극하는 AI 에이전트]AI가 바꾸는 창작의 패러다임', courseCode:'MCR000008046', period:'2026.04.03 ~ 2030.03.18', year:'2026', status:'학습중', score:'0점' },
-    { id:'hyunwoo9', name:'조현우', empno:'2019003', company:'(주)휴넷', dept:'마케팅팀', grade:'-', course:'ChatGPT 시대의 대체불가 인재스킬, 문해력', courseCode:'MCR000009012', period:'2026.04.03 ~ 2030.03.18', year:'2026', status:'수료', score:'95점' },
+    { id:'arumiys', name:'김이름', empno:'2023020', company:'(주)휴넷', dept:'LMS솔루션팀', grade:'-', bundleDiv:'단과', type:'온라인', course:'[북러닝] AI 2026 트렌드&활용백과(도서 미제공)', courseCode:'ELN000000088', period:'2026.04.01 ~ 2026.05.01', year:'2026', status:'학습중', score:'-' },
+    { id:'woosung', name:'이위기', empno:'201409',  company:'(주)휴넷', dept:'LMS솔루션팀', grade:'-', bundleDiv:'단과', type:'온라인', course:'[포사이트 코리아 2025] AI 혁명과 미래 경영 인사이트', courseCode:'ELN000000461', period:'2026.04.01 ~ 2026.05.01', year:'2026', status:'학습중', score:'-' },
+    { id:'inyoung', name:'최이화', empno:'2024021', company:'(주)휴넷', dept:'LMS솔루션팀', grade:'-', bundleDiv:'단과', type:'마이크로러닝', course:'[데이터베이스 작성법과 변환]보고서를 데이터베이스로 변환하는 방법', courseCode:'MCR000003369', period:'2026.04.02 ~ 2030.03.18', year:'2026', status:'학습중', score:'0점' },
+    { id:'seojin22', name:'강서진', empno:'2023015', company:'LABS플랫폼', dept:'기획팀', grade:'-', bundleDiv:'종합', type:'—', course:'팀장 리더십 스쿨(종합)', courseCode:'BND000000017', period:'2026.04.01 ~ 2026.06.30', year:'2026', status:'수료', score:'-' },
+    { id:'hyunwoo9', name:'조현우', empno:'2019003', company:'(주)휴넷', dept:'마케팅팀', grade:'-', bundleDiv:'종합', type:'—', course:'직무역량 종합과정', courseCode:'BND000000023', period:'2026.04.01 ~ 2026.06.30', year:'2026', status:'미수료', score:'-' },
   ];
   const r = pool[i % pool.length];
   return { ...r, no: 74 - i };
@@ -9569,6 +9587,8 @@ const RV_COL_MAP = {
   '회사':     r => r.company,
   '부서/팀':  r => r.dept,
   '직급':     r => r.grade,
+  '과정구분': r => r.bundleDiv || '단과',
+  '과정유형': r => r.type || '-',
   '과정명':   r => r.course,
   '과정코드': r => r.courseCode,
   '학습기간': r => r.period,
@@ -9578,7 +9598,7 @@ const RV_COL_MAP = {
 };
 
 // 기본 표시 컬럼 (보고서 생성 시 저장된 항목 없을 경우 기본값)
-const RV_DEFAULT_COLS = ['아이디','이름','사번','회사','부서/팀','직급','과정명','과정코드','학습기간','연도','학습상태','수료점수'];
+const RV_DEFAULT_COLS = ['아이디','이름','사번','회사','부서/팀','직급','과정구분','과정유형','과정명','과정코드','학습기간','연도','학습상태','수료점수'];
 
 function rvGetCols() {
   // 보고서에 저장된 fields가 있으면 사용, 없으면 기본값
