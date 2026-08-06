@@ -6182,7 +6182,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
       <div style="margin-bottom:8px">
         <div style="font-size:13px;font-weight:600;color:#333;margin-bottom:6px">
           집계기간 (학습시작일 기준) <span style="color:#e53935">*</span><span class="change-badge cert" data-num="3" data-memo="셀렉트 박스 2개 — 시작년월 / 종료년월 (각각 최근 12개월 목록에서 선택)
-기본 선택값: 시작년월=종료년월=현재월
+기본 선택값: 시작년월=종료년월=당해년도 전월
 학습시작일이 시작년월 1일 ~ 종료년월 말일 범위에 속하는 수료번호 발급 대상자 (2-1 모집단 기준)
 결과보고서 목록 페이지의 검색 영역과는 독립 (양식 생성 시 데이터 집계 기준)">3</span>
         </div>
@@ -10012,9 +10012,10 @@ function updateExpCertNameDefault() {
 function openExportCertificateModal() {
   populateExpCertPeriodOptions('exp-c-start');
   populateExpCertPeriodOptions('exp-c-end');
-  // 기본값: 시작년월 = 종료년월 = 현재월
-  document.getElementById('exp-c-start').selectedIndex = 0;
-  document.getElementById('exp-c-end').selectedIndex = 0;
+  // 기본값: 시작년월 = 종료년월 = 전월 (당해년도 전월 ~ 당해년도 전월)
+  // 옵션 목록은 index 0=현재월, 1=전월 순으로 채워지므로 index 1 선택
+  document.getElementById('exp-c-start').selectedIndex = 1;
+  document.getElementById('exp-c-end').selectedIndex = 1;
   updateExpCertNameDefault();
   document.getElementById('export-certificate-modal').classList.add('open');
 }
@@ -10033,6 +10034,7 @@ document.getElementById('exp-c-btn-download').addEventListener('click', () => {
   const startVal = document.getElementById('exp-c-start').value;
   const endVal = document.getElementById('exp-c-end').value;
   if (startVal > endVal) { alert('종료년월이 시작년월보다 빠를 수 없습니다.'); return; }
+  // 보고서명 → 안전한 파일명 (특수문자는 언더바로 치환 — 제거 시 의미 오독 가능성 방지)
   const safeName = name.replace(/[\\/:*?"<>|]/g, '_');
   // 파일명 규칙: Hunet_{보고서명}_{생성일YYYYMMDD}_{생성시분HHMM}
   const now = new Date();
