@@ -4047,7 +4047,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
 4시트 구성: 표지·연간 요약 / 월별 집계 / 과정별 연간 집계 / 조직별 분석
 월별 추이·연간 누적·조직별 분석 중심
 단일 양식 (출력 타입 선택 없음)">4</span></span>
-            <span class="badge-wrap"><button class="btn" id="rp-btn-certificate" style="height:32px;padding:0 16px;font-size:13px;background:#fff;color:#1a73e8;border:1px solid #1a73e8;font-weight:600">수료확인서 다운로드</button><span class="change-badge cert" data-num="1" data-memo="수료확인서 출력 팝업 호출
+            <span class="badge-wrap"><button class="btn" id="rp-btn-certificate" style="height:32px;padding:0 16px;font-size:13px;background:#fff;color:#1a73e8;border:1px solid #1a73e8;font-weight:600">교육 수료확인서 출력</button><span class="change-badge cert" data-num="1" data-memo="수료확인서 출력 팝업 호출
 단일 시트 구성, 월간/연간 보고서와 동일한 하우스 스타일(헤더 색상·폰트) 적용
 보고서명·집계기간 입력 후 다운로드
 파일명 규칙: Hunet_{보고서명}_{생성일YYYYMMDD}_{생성시분HHMM}">1</span></span>
@@ -9908,7 +9908,7 @@ document.getElementById('rp-btn-create').addEventListener('click', () => {
   showPage('report-create');
 });
 
-// [수료확인서 다운로드] 버튼 클릭 → 모달 열기
+// [교육 수료확인서 출력] 버튼 클릭 → 모달 열기
 document.getElementById('rp-btn-certificate').addEventListener('click', () => {
   openExportCertificateModal();
 });
