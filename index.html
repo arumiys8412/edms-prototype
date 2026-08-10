@@ -1577,6 +1577,10 @@
   .change-badge.cert { background: #7c3aed; }
   .change-badge.cert:hover { background: #6d28d9; }
 
+  /* 과정 그룹 - 로즈색 */
+  .change-badge.course { background: #e11d48; }
+  .change-badge.course:hover { background: #be123c; }
+
   /* 셀렉트 위에 배지 띄우기 */
   .badge-wrap { position: relative; display: inline-block; }
   .badge-wrap > .change-badge {
@@ -1826,6 +1830,7 @@
   }
   .status-badge.success  { color: #1f8a3d; border-color: #c8e8d0; background: #f0faf3; }
   .status-badge.pending  { color: #b87100; border-color: #f0d4a0; background: #fdf6ed; }
+  .status-badge.info     { color: #1a5cc8; border-color: #b3c9f7; background: #e8f0fe; }
   .status-badge.fail     { color: #d92d4a; border-color: #f0c0c8; background: #fde8eb; }
   .status-badge.neutral  { color: #666;    border-color: #ddd;    background: #f5f5f5; }
 
@@ -2224,8 +2229,17 @@
         <a class="nav-item" data-page="" href="#">조직/역할 관리</a>
       </div>
     </div>
-    <!-- 과정조회 (1depth 단독 메뉴) -->
-    <a class="nav-flat" data-page="" href="#">과정조회</a>
+    <!-- 과정 -->
+    <div class="nav-group">
+      <div class="nav-group-header" onclick="toggleNavGroup(this)">
+        <span class="nav-group-label">과정</span>
+        <span class="nav-arrow">▶</span>
+      </div>
+      <div class="nav-sub">
+        <a class="nav-item" data-page="course-search" href="#">계약과정 조회</a>
+        <a class="nav-item" data-page="" href="#" style="opacity:.5;cursor:default;pointer-events:none" tabindex="-1" aria-disabled="true">과정 및 카테고리 설정</a>
+      </div>
+    </div>
     <!-- 수강신청 -->
     <div class="nav-group">
       <div class="nav-group-header" onclick="toggleNavGroup(this)">
@@ -2424,6 +2438,115 @@
 
 
     </div>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 과정                                                                  -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-course-search">
+      <div class="page-header-row">
+        <div class="page-header-title">계약과정 조회</div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; 과정 &gt; 계약과정 조회</div>
+      </div>
+
+      <!-- 검색 영역 -->
+      <div class="card">
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group">
+            <div class="field-label">과정검색</div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+              <select class="select" id="cs-sel-search-type" style="min-width:80px">
+                <option value="name">과정명</option>
+                <option value="id">과정아이디</option>
+              </select>
+              <input type="text" class="input" id="cs-search-name" placeholder="검색어를 입력해주세요." style="width:200px">
+              <select class="select" id="cs-op-type" style="min-width:130px">
+                <option value="all" selected>운영구분 전체</option>
+                <option value="일반">일반</option>
+                <option value="러닝메이커">러닝메이커</option>
+              </select>
+              <select class="select" id="cs-course-type" style="min-width:120px">
+                <option value="all" selected>과정유형 전체</option>
+                <option value="온라인">온라인</option>
+                <option value="오프라인">오프라인</option>
+                <option value="하이브리드">하이브리드</option>
+                <option value="마이크로러닝">마이크로러닝</option>
+              </select>
+              <select class="select" id="cs-cat-large" style="min-width:130px">
+                <option value="all" selected>카테고리1 전체</option>
+                <option value="외국어">외국어</option>
+                <option value="자격·공인과정">자격·공인과정</option>
+                <option value="자기개발">자기개발</option>
+                <option value="전문직무">전문직무</option>
+                <option value="직무공통">직무공통</option>
+              </select>
+              <select class="select" id="cs-apply-status" style="min-width:130px">
+                <option value="all" selected>신청상태 전체</option>
+                <option value="신청중">신청중</option>
+                <option value="신청예정">신청예정</option>
+                <option value="신청종료">신청종료</option>
+                <option value="미개설">미개설</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 검색 / 초기화 -->
+        <div class="search-form-actions">
+          <button class="btn btn-primary" id="cs-btn-search">검색</button>
+          <button class="btn btn-reset" id="cs-btn-reset">초기화</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <!-- 검색결과 건수 -->
+        <div class="result-count" style="margin-bottom:10px">검색결과 <strong id="cs-count">0</strong>건</div>
+
+        <!-- 목록 테이블 -->
+        <div class="table-scroll"><table class="main-table">
+          <thead>
+            <tr>
+              <th style="width:56px">No.</th>
+              <th style="width:90px">운영구분</th>
+              <th style="width:100px">과정유형<span class="change-badge course" data-num="1" data-memo="값 자체는 SSOT 고정 4종(온라인/오프라인/하이브리드/마이크로러닝) — 새로운 값 추가 아님
+단, 고객사가 실제 콘텐츠 전달 방식과 다르게 재지정(오버라이드) 가능 (예: 실제 마이크로러닝 콘텐츠를 고객사가 '온라인'으로 지정)
+[SSOT 예외] 종합과정은 원칙상 과정유형 값 없음('—')이지만, 계약과정에서는 '온라인'으로 고정 표기하기로 결정 (일반 과정유형 정책과 다른 계약과정만의 예외)">1</span></th>
+              <th style="text-align:left;padding-left:14px">과정명<span class="change-badge course" data-num="2" data-memo="고객상품명 기준 — 휴넷 표준 과정명이 아닌, 계약 고객사가 정한 상품명 그대로 노출">2</span></th>
+              <th style="width:130px">과정아이디</th>
+              <th style="width:100px">카테고리1<span class="change-badge course" data-num="3" data-memo="고객사 카테고리 기준 — 휴넷 표준 과정분류(외국어/자격·공인과정/자기개발/전문직무/직무공통)가 아닌, 계약 고객사가 정한 분류체계 그대로 노출 (카테고리2·3 동일)
+'대분류/중분류/소분류'라는 계층 의미 대신 중립적 명칭(카테고리1/2/3) 사용 — 고객사마다 실제 분류 체계·뎁스가 다를 수 있음
+고객사 카테고리가 3뎁스보다 깊어도 화면은 카테고리1~3까지만 노출 (그 이하는 절삭)">3</span></th>
+              <th style="width:100px">카테고리2</th>
+              <th style="width:100px">카테고리3</th>
+              <th style="width:80px">과정시간</th>
+              <th style="width:80px">운영횟수<span class="change-badge course" data-num="4" data-memo="운영횟수 정의: 해당 과정에 생성된(삭제되지 않은) 가격정책별 누적 개수
+개강 전후 여부 무관 전부 포함 (생성 시점에 이미 회차로 카운트)
+집계기간 별도 한정 없음 — 가격정책별은 연수원 계약기간 내에서만 생성되므로 자동 한정됨">4</span></th>
+              <th style="width:150px">마지막 신청기간<span class="change-badge course" data-num="5" data-memo="정의: 가장 마지막에 생성된 가격정책별의 신청시작일~신청종료일
+신청상태(우측 컬럼) 판정에 사용한 것과 동일한 가격정책별 기준 — 두 컬럼이 같은 가격정책별을 가리킴
+등록된 가격정책별이 없으면(미개설) '-' 표기">5</span></th>
+              <th style="width:90px">신청상태<span class="change-badge course" data-num="6" data-memo="분류 기준: 가장 마지막에 생성된 가격정책별의 수강신청기간과 오늘 날짜 비교
+※ 가격정책별 간 수강신청기간은 서로 겹치지 않음 → '신청중'은 최대 1개
+- 신청중: 가격정책별 중 하나라도 신청시작일 ≤ 오늘 ≤ 신청종료일 (지금 신청 가능)
+- 신청예정: 신청중인 가격정책별은 없고, 신청시작일 &gt; 오늘인 가격정책별이 하나라도 있음
+- 신청종료: 등록된 가격정책별은 있지만 전부 신청종료일 &lt; 오늘
+- 미개설: 등록된 가격정책별 자체가 없음 (운영횟수 0)
+- 정렬 : 최근 등록 &gt; 과정명 순">6</span></th>
+            </tr>
+          </thead>
+          <tbody id="cs-table-body"></tbody>
+        </table></div>
+
+        <div class="table-footer">
+          <div class="page-size-wrap">
+            <select class="select" id="cs-page-size">
+              <option value="30">30개씩 보기</option>
+              <option value="50" selected>50개씩 보기</option>
+            </select>
+          </div>
+          <div class="pagination" id="cs-pagination"></div>
+        </div>
+      </div>
+    </div><!-- /page-course-search -->
 
     <!-- ══════════════════════════════════════════ -->
     <!-- PAGE: 개인별 신청현황                        -->
@@ -10259,7 +10382,7 @@ function toggleNavGroup(header) {
 
 // 특정 nav-item 활성화 + 해당 그룹 열기
 function activateNavItem(item) {
-  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('.nav-item, .nav-flat').forEach(i => i.classList.remove('active'));
   item.classList.add('active');
   const group = item.closest('.nav-group');
   if (group) {
@@ -10285,7 +10408,7 @@ function navigateToPage(page) {
 }
 
 // 사이드바 클릭 → URL 해시 변경 → hashchange가 navigateToPage 호출
-document.querySelectorAll('.nav-item').forEach(item => {
+document.querySelectorAll('.nav-item, .nav-flat').forEach(item => {
   item.addEventListener('click', e => {
     e.preventDefault();
     const page = item.dataset.page;
@@ -12247,6 +12370,175 @@ function periodReset() {
     location.reload();
   }
 }
+
+// ════════════════════════════════════════════════
+// PAGE: 과정
+// ════════════════════════════════════════════════
+const CS_OP_TYPES = ['일반', '러닝메이커'];
+const CS_COURSE_TYPES = ['온라인', '오프라인', '하이브리드', '마이크로러닝'];
+const CS_CATEGORY_TREE = {
+  '외국어': { '영어': ['비즈니스 영어', '일상 영어', '영어 회화'], '중국어': ['비즈니스 중국어', '생활 중국어'], '일본어': ['비즈니스 일본어', 'JLPT 대비'] },
+  '자격·공인과정': { 'IT자격증': ['정보처리기사', 'SQLD'], '어학자격증': ['TOEIC', 'JPT'], '직무자격증': ['CS리더스', '전산회계'] },
+  '자기개발': { '리더십': ['팀장 리더십', '신임 리더십'], '커뮤니케이션': ['보고·발표 스킬', '협상 스킬'], '자기관리': ['시간관리', '스트레스 관리'] },
+  '전문직무': { '마케팅': ['디지털 마케팅', '브랜드 전략'], '재무회계': ['재무제표 분석', '원가관리'], '인사': ['채용 실무', '평가·보상'] },
+  '직무공통': { '오피스스킬': ['엑셀 실무', 'PPT 실무'], '보고서작성': ['비즈니스 라이팅', '보고서 작성법'], '문서관리': ['문서관리 실무'] }
+};
+const CS_COURSE_NAME_PREFIX = ['2026 상반기', '2026 하반기', '신입사원', '팀장', '실무자', '전사원'];
+const CS_STATUS_CLASS = { '신청중': 'success', '신청예정': 'info', '신청종료': 'neutral', '미개설': 'neutral' };
+
+// 프로토타입 기준일 (다른 모달들과 동일 기준)
+const CS_TODAY = new Date(2026, 4, 28);
+function csAddMonths(date, n) {
+  const d = new Date(date);
+  d.setMonth(d.getMonth() + n);
+  return d;
+}
+function csFmtDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+const CS_ALL_DATA = (() => {
+  const rows = [];
+  let idx = 1;
+  Object.keys(CS_CATEGORY_TREE).forEach(large => {
+    Object.keys(CS_CATEGORY_TREE[large]).forEach(mid => {
+      CS_CATEGORY_TREE[large][mid].forEach(small => {
+        const opType = CS_OP_TYPES[idx % CS_OP_TYPES.length];
+        const courseType = CS_COURSE_TYPES[idx % CS_COURSE_TYPES.length];
+        const prefix = CS_COURSE_NAME_PREFIX[idx % CS_COURSE_NAME_PREFIX.length];
+        const runCount = idx % 13; // 0~12 (0인 경우 '미개설' 데모용)
+
+        // 가격정책별 수강신청기간을 월 단위 오프셋으로 결정적 시뮬레이션 (-3개월 ~ +3개월)
+        // 학습기간이 아닌 신청기간 기준 — 수시는 가격정책별 단위 학습기간이 없을 수 있어 신청기간으로 판정
+        const instances = [];
+        for (let k = 0; k < runCount; k++) {
+          const offset = ((idx * 3 + k * 5) % 7) - 3;
+          const applyStart = csAddMonths(CS_TODAY, offset);
+          const applyEnd = csAddMonths(applyStart, 1);
+          instances.push({ applyStart, applyEnd });
+        }
+
+        let opStatus = '미개설';
+        let lastPeriod = '-';
+        if (instances.length > 0) {
+          // 신청상태 · 마지막 신청기간: 둘 다 '가장 마지막에 생성된' 동일 가격정책별 기준
+          const lastCreated = instances[instances.length - 1];
+          if (lastCreated.applyStart <= CS_TODAY && CS_TODAY <= lastCreated.applyEnd) opStatus = '신청중';
+          else if (lastCreated.applyStart > CS_TODAY) opStatus = '신청예정';
+          else opStatus = '신청종료';
+
+          lastPeriod = `${csFmtDate(lastCreated.applyStart)} ~ ${csFmtDate(lastCreated.applyEnd)}`;
+        }
+
+        rows.push({
+          no: idx,
+          opType,
+          courseType,
+          name: `${prefix} ${small}`,
+          courseId: String(10000 + idx).padStart(5, '0'),
+          large, mid, small,
+          hours: (idx % 8) * 2 + 2,
+          runCount,
+          opStatus,
+          lastPeriod,
+          createdAt: idx // 등록순서 프록시 (값이 클수록 최근 등록)
+        });
+        idx++;
+      });
+    });
+  });
+  return rows;
+})();
+
+// 기본 정렬: 최근 등록 > 과정명 순
+function csSortData(arr) {
+  return [...arr].sort((a, b) => {
+    if (b.createdAt !== a.createdAt) return b.createdAt - a.createdAt; // 최근 등록 우선
+    return a.name.localeCompare(b.name, 'ko'); // 과정명 오름차순
+  });
+}
+
+let csFilteredData = csSortData(CS_ALL_DATA);
+let csCurrentPage = 1;
+let csPageSize = 50;
+
+function csRenderTable() {
+  const tbody = document.getElementById('cs-table-body');
+  const total = csFilteredData.length;
+  document.getElementById('cs-count').textContent = total;
+  const totalPages = Math.max(1, Math.ceil(total / csPageSize));
+  if (csCurrentPage > totalPages) csCurrentPage = totalPages;
+  const start = (csCurrentPage - 1) * csPageSize;
+  const pageRows = csFilteredData.slice(start, start + csPageSize);
+
+  if (pageRows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;padding:40px;color:#999">검색 결과가 없습니다.</td></tr>`;
+  } else {
+    tbody.innerHTML = pageRows.map(r => `
+      <tr>
+        <td style="text-align:center">${r.no}</td>
+        <td style="text-align:center">${r.opType}</td>
+        <td style="text-align:center">${r.courseType}</td>
+        <td style="text-align:left;padding-left:14px">${r.name}</td>
+        <td style="text-align:center">${r.courseId}</td>
+        <td style="text-align:center">${r.large}</td>
+        <td style="text-align:center">${r.mid}</td>
+        <td style="text-align:center">${r.small}</td>
+        <td style="text-align:center">${r.hours}시간</td>
+        <td style="text-align:center">${r.runCount}회</td>
+        <td style="text-align:center">${r.lastPeriod}</td>
+        <td style="text-align:center"><span class="status-badge ${CS_STATUS_CLASS[r.opStatus]}">${r.opStatus}</span></td>
+      </tr>
+    `).join('');
+  }
+  renderPagination('cs-pagination', totalPages, csCurrentPage, (p) => { csCurrentPage = p; csRenderTable(); });
+}
+
+function csApplyFilters() {
+  const searchType = document.getElementById('cs-sel-search-type').value;
+  const opType = document.getElementById('cs-op-type').value;
+  const courseType = document.getElementById('cs-course-type').value;
+  const catLarge = document.getElementById('cs-cat-large').value;
+  const applyStatus = document.getElementById('cs-apply-status').value;
+  const keyword = document.getElementById('cs-search-name').value.trim();
+
+  const filtered = CS_ALL_DATA.filter(r => {
+    if (opType !== 'all' && r.opType !== opType) return false;
+    if (courseType !== 'all' && r.courseType !== courseType) return false;
+    if (catLarge !== 'all' && r.large !== catLarge) return false;
+    if (applyStatus !== 'all' && r.opStatus !== applyStatus) return false;
+    if (keyword) {
+      const target = searchType === 'id' ? r.courseId : r.name;
+      if (!target.includes(keyword)) return false;
+    }
+    return true;
+  });
+  csFilteredData = csSortData(filtered);
+  csCurrentPage = 1;
+  csRenderTable();
+}
+
+document.getElementById('cs-btn-search').addEventListener('click', csApplyFilters);
+document.getElementById('cs-search-name').addEventListener('keydown', (e) => { if (e.key === 'Enter') csApplyFilters(); });
+document.getElementById('cs-btn-reset').addEventListener('click', () => {
+  document.getElementById('cs-sel-search-type').value = 'name';
+  document.getElementById('cs-op-type').value = 'all';
+  document.getElementById('cs-course-type').value = 'all';
+  document.getElementById('cs-cat-large').value = 'all';
+  document.getElementById('cs-apply-status').value = 'all';
+  document.getElementById('cs-search-name').value = '';
+  csFilteredData = csSortData(CS_ALL_DATA);
+  csCurrentPage = 1;
+  csRenderTable();
+});
+document.getElementById('cs-page-size').addEventListener('change', function() {
+  csPageSize = parseInt(this.value); csCurrentPage = 1; csRenderTable();
+});
+
+csRenderTable();
 
 </script>
 <!-- ══════════════════════════════════════════ -->
