@@ -438,6 +438,12 @@
   .cond-right-divider {
     height: 1px; background: #e0e3e8; flex-shrink: 0;
   }
+  /* 텍스트 변경 표시 (점선 밑줄 + 호버 툴팁, 눈에 덜 띄게) */
+  .txt-changed {
+    border-bottom: 1px dashed #c8b088;
+    cursor: help;
+  }
+
   .cond-right-title {
     display: flex; align-items: center; gap: 7px;
     font-size: 12px; font-weight: 700; color: #222;
@@ -545,6 +551,64 @@
     font-size: 11px; background: #e8f0fe; color: #1a6ef5;
     border-radius: 20px; padding: 1px 9px; font-weight: 700;
   }
+
+  /* ══════ 제한 대상관리 — 카드형 레이아웃 (구분선택 카드 + 2단 결과) ══════ */
+  .type-card {
+    background: #f5f6fa; border: 1px solid #e0e3e8; border-radius: 10px;
+    padding: 20px 22px; margin-bottom: 20px;
+  }
+  .type-label { font-size: 13px; font-weight: 700; color: #222; margin-bottom: 10px; }
+  .type-select {
+    width: 100%; height: 40px; padding: 0 12px; border: 1px solid #ccc; border-radius: 4px;
+    background: #fff; font-size: 13px; font-family: inherit; color: #333; outline: none; cursor: pointer;
+  }
+  .type-select:focus { border-color: var(--primary); }
+  .type-body { margin-top: 14px; min-height: 210px; }
+  .type-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .type-note { font-size: 12px; color: #666; position: relative; padding-left: 12px; line-height: 1.6; }
+  .type-note::before { content: '•'; position: absolute; left: 0; }
+  .type-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .type-file-info { font-size: 11px; color: #888; margin-top: 8px; }
+
+  /* 대상구분: 테이블형 트리 */
+  .grp-table { border: 1px solid #e0e3e8; border-radius: 6px; overflow: hidden; background: #fff; }
+  .grp-table-head {
+    display: grid; grid-template-columns: 1fr 1fr 60px; padding: 8px 14px;
+    background: #f0f2f5; border-bottom: 1px solid #e0e3e8; font-size: 11px; color: #999;
+  }
+  .grp-row-type {
+    display: grid; grid-template-columns: 1fr 1fr 60px; align-items: center;
+    padding: 9px 14px; cursor: pointer; border-bottom: 1px solid #e0e3e8; background: #fafbfc;
+  }
+  .grp-row-type:hover { background: #f0f4ff; }
+  .grp-row-type .lead { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #222; }
+  .grp-toggle { font-size: 11px; color: #999; width: 10px; text-align: center; flex-shrink: 0; }
+  .grp-row-type .desc { font-size: 11.5px; color: #777; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .grp-sub-wrap.collapsed { display: none; }
+  .grp-row-item {
+    display: grid; grid-template-columns: 1fr 1fr 60px; align-items: center;
+    padding: 8px 14px 8px 30px; border-bottom: 1px solid #eceef1;
+  }
+  .grp-row-item:last-child { border-bottom: none; }
+  .grp-row-item:hover { background: #fafbfc; }
+  .grp-row-item label { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #333; cursor: pointer; }
+  .grp-row-item label.is-all { font-weight: 700; color: #1a5cc8; }
+  .grp-row-item label.disabled { opacity: .4; pointer-events: none; }
+  .grp-row-item input { accent-color: var(--primary); cursor: pointer; }
+  .grp-row-item .cnt { font-size: 11.5px; color: #999; text-align: right; }
+
+  /* 신청/제외 추가 버튼 (카드 아래, 가운데 정렬) */
+  .add-row-2col { display: flex; justify-content: center; gap: 10px; margin-bottom: 22px; }
+  .add-btn-2col {
+    height: 38px; padding: 0 18px; border: 1px solid #ccc; border-radius: 6px;
+    background: #fff; font-size: 12.5px; font-weight: 700; color: #444;
+    cursor: pointer; font-family: inherit; transition: all 0.15s;
+  }
+  .add-btn-2col:hover { background: #f5f6fa; border-color: #aaa; }
+
+  /* 신청/제외 결과 2단 그리드 (기존 cond-right-section 재사용) */
+  .result-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .result-grid-2col .cond-right-section { padding: 0; }
 
   /* 탭 상태 컨텍스트 바 */
   .cond-tab-context {
@@ -2229,50 +2293,31 @@
         <a class="nav-item" data-page="" href="#">조직/역할 관리</a>
       </div>
     </div>
-    <!-- 과정 -->
+    <!-- 교육관리 (기존 수강신청/학습/결과 3개 그룹 통합) -->
     <div class="nav-group">
       <div class="nav-group-header" onclick="toggleNavGroup(this)">
-        <span class="nav-group-label">과정</span>
-        <span class="nav-arrow">▶</span>
-      </div>
-      <div class="nav-sub">
-        <a class="nav-item" data-page="course-search" href="#">계약과정 조회</a>
-        <a class="nav-item" data-page="" href="#" style="opacity:.5;cursor:default;pointer-events:none" tabindex="-1" aria-disabled="true">과정 및 카테고리 설정</a>
-      </div>
-    </div>
-    <!-- 수강신청 -->
-    <div class="nav-group">
-      <div class="nav-group-header" onclick="toggleNavGroup(this)">
-        <span class="nav-group-label">수강신청</span>
+        <span class="nav-group-label">교육관리</span>
         <span class="nav-arrow">▶</span>
       </div>
       <div class="nav-sub">
         <a class="nav-item" data-page="personal" href="#">개인별 신청 현황</a>
         <a class="nav-item" data-page="course" href="#">과정별 신청 현황</a>
-      </div>
-    </div>
-    <!-- 학습 -->
-    <div class="nav-group">
-      <div class="nav-group-header" onclick="toggleNavGroup(this)">
-        <span class="nav-group-label">학습</span>
-        <span class="nav-arrow">▶</span>
-      </div>
-      <div class="nav-sub">
         <a class="nav-item" data-page="study-personal" href="#">개인별 학습 현황</a>
         <a class="nav-item" data-page="study-course" href="#">과정별 학습 현황</a>
+        <a class="nav-item" data-page="completion" href="#">수료결과</a>
+        <a class="nav-item" data-page="report" href="#">결과보고서</a>
       </div>
     </div>
-    <!-- 러닝메이커 (1depth 단독 메뉴, 하위메뉴 우선 제거) -->
-    <a class="nav-flat" data-page="" href="#">러닝메이커</a>
-    <!-- 결과 -->
+    <!-- 러닝메이커 (1depth 단독 → 하위메뉴 있는 그룹으로 전환) -->
     <div class="nav-group">
       <div class="nav-group-header" onclick="toggleNavGroup(this)">
-        <span class="nav-group-label">결과</span>
+        <span class="nav-group-label">러닝메이커</span>
         <span class="nav-arrow">▶</span>
       </div>
       <div class="nav-sub">
-        <a class="nav-item" data-page="completion" href="#">수료결과</a>
-        <a class="nav-item" data-page="report" href="#">결과보고서</a>
+        <a class="nav-item" data-page="" href="#">대시보드</a>
+        <a class="nav-item" data-page="" href="#">새 과정 만들기</a>
+        <a class="nav-item" data-page="" href="#">강사관리</a>
       </div>
     </div>
     <!-- 교육비용 -->
@@ -2294,7 +2339,6 @@
       </div>
       <div class="nav-sub">
         <a class="nav-item" data-page="" href="#">사외교육 관리</a>
-        <a class="nav-item" data-page="" href="#">사외교육 결과보고</a>
       </div>
     </div>
     <!-- 커넥트 -->
@@ -2307,16 +2351,15 @@
         <a class="nav-item" data-page="" href="#">커넥트 관리</a>
       </div>
     </div>
-    <!-- 게시글 -->
+    <!-- 공지 및 띠배너 (구 "게시글") -->
     <div class="nav-group">
       <div class="nav-group-header" onclick="toggleNavGroup(this)">
-        <span class="nav-group-label">게시글</span>
+        <span class="nav-group-label">공지 및 띠배너</span>
         <span class="nav-arrow">▶</span>
       </div>
       <div class="nav-sub">
         <a class="nav-item" data-page="" href="#">공지사항 관리</a>
         <a class="nav-item" data-page="" href="#">띠배너 관리</a>
-        <a class="nav-item" data-page="" href="#">게시글 관리</a>
       </div>
     </div>
     <!-- 부가서비스 -->
@@ -2327,34 +2370,67 @@
       </div>
       <div class="nav-sub">
         <a class="nav-item" data-page="" href="#">결재 관리</a>
-        <a class="nav-item" data-page="" href="#">학점 관리</a>
-        <a class="nav-item" data-page="" href="#">역량진단 관리</a>
-        <a class="nav-item" data-page="" href="#">IDP 관리</a>
-        <a class="nav-item" data-page="" href="#">필수교육 관리</a>
-        <a class="nav-item" data-page="" href="#">레벨/마일리지 관리</a>
+        <a class="nav-item" data-page="" href="#">진단 관리</a>
+        <a class="nav-item" data-page="" href="#">계획수립 관리</a>
         <a class="nav-item" data-page="" href="#">파일 다운로드</a>
+        <a class="nav-item" data-page="" href="#">활동/미션</a>
+        <a class="nav-item" data-page="" href="#">필수교육</a>
       </div>
     </div>
-    <!-- 수강신청 설정 -->
+    <!-- 학점 (기존 부가서비스 하위 → 독립 1depth 그룹으로 승격) -->
+    <div class="nav-group">
+      <div class="nav-group-header" onclick="toggleNavGroup(this)">
+        <span class="nav-group-label">학점</span>
+        <span class="nav-arrow">▶</span>
+      </div>
+      <div class="nav-sub">
+        <a class="nav-item" data-page="" href="#">학점 관리</a>
+      </div>
+    </div>
+    <!-- 과정 및 카테고리 (구 "과정") -->
+    <div class="nav-group">
+      <div class="nav-group-header" onclick="toggleNavGroup(this)">
+        <span class="nav-group-label">과정 및 카테고리</span>
+        <span class="nav-arrow">▶</span>
+      </div>
+      <div class="nav-sub">
+        <a class="nav-item" data-page="course-search" href="#">전체 과정</a>
+        <a class="nav-item" data-page="" href="#" style="opacity:.5;cursor:default;pointer-events:none" tabindex="-1" aria-disabled="true">대상구분별 과정설정</a>
+      </div>
+    </div>
+    <!-- 수강신청 설정 (라벨만 변경, data-page 동일 유지) -->
     <div class="nav-group">
       <div class="nav-group-header" onclick="toggleNavGroup(this)">
         <span class="nav-group-label">수강신청 설정</span>
         <span class="nav-arrow">▶</span>
       </div>
       <div class="nav-sub">
-        <a class="nav-item" data-page="period" href="#">수강신청 기간</a>
-        <a class="nav-item" data-page="restrict" href="#">수강신청 제한</a>
+        <a class="nav-item" data-page="period" href="#">수강신청 기간설정</a>
+        <a class="nav-item" data-page="restrict" href="#">수강신청 제한설정</a>
       </div>
     </div>
-    <!-- 연수원 설정 -->
+    <!-- 아이콘 설정 (신규 그룹) -->
     <div class="nav-group">
       <div class="nav-group-header" onclick="toggleNavGroup(this)">
-        <span class="nav-group-label">연수원 설정</span>
+        <span class="nav-group-label">아이콘 설정</span>
         <span class="nav-arrow">▶</span>
       </div>
       <div class="nav-sub">
-        <a class="nav-item" data-page="" href="#">로그인</a>
-        <a class="nav-item" data-page="" href="#">계정 권한</a>
+        <a class="nav-item" data-page="" href="#">사용 설정 (+아이콘 키 발급)</a>
+        <a class="nav-item" data-page="" href="#">주제별 대화 탭 등록</a>
+        <a class="nav-item" data-page="" href="#">대화 탭 세부 설정</a>
+      </div>
+    </div>
+    <!-- 설정 및 가이드 (구 "연수원 설정") -->
+    <div class="nav-group">
+      <div class="nav-group-header" onclick="toggleNavGroup(this)">
+        <span class="nav-group-label">설정 및 가이드</span>
+        <span class="nav-arrow">▶</span>
+      </div>
+      <div class="nav-sub">
+        <a class="nav-item" data-page="" href="#">교육담당자 계정 관리</a>
+        <a class="nav-item" data-page="" href="#">약관 설정</a>
+        <a class="nav-item" data-page="" href="#">연수원 설정</a>
       </div>
     </div>
   </nav>
@@ -4738,7 +4814,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               <th>제한값</th>
               <th>적용기간</th>
               <th style="width:52px">구분</th>
-              <th>신청</th>
+              <th><span class="txt-changed" title="변경됨: 신청 → 제한">제한</span></th>
               <th>예외</th>
               <th style="width:60px">사용여부</th>
             </tr>
@@ -4901,12 +4977,12 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <div class="cond-section" id="rd-target-section">
                   <div class="cond-section-header">
                     <div style="display:flex;align-items:center;gap:8px">
-                      <span class="cond-section-title" id="rd-target-label">신청 대상자</span>
+                      <span class="cond-section-title txt-changed" id="rd-target-label" title="변경됨: 신청 대상자 → 제한 대상자">제한 대상자</span>
                       <span class="cond-count-pill" id="rd-target-count" style="display:none">0명</span>
                     </div>
                     <button class="btn-cond-add" onclick="openTargetModal(condCurrentCtx)">+ 대상자 조건 설정</button>
                   </div>
-                  <div class="cond-tip" id="rd-target-empty">대상자 조건 설정 버튼으로 신청 대상자를 설정하세요.</div>
+                  <div class="cond-tip" id="rd-target-empty">대상자 조건 설정 버튼으로 제한 대상자를 설정하세요.</div>
                   <div id="rd-target-summary" style="display:none">
                     <div class="cond-summary-row" id="rd-target-sum-grade"></div>
                     <div class="cond-summary-row" id="rd-target-sum-company" style="margin-top:4px"></div>
@@ -4918,12 +4994,12 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <div class="cond-section" id="rd-course-section">
                   <div class="cond-section-header">
                     <div style="display:flex;align-items:center;gap:8px">
-                      <span class="cond-section-title" id="rd-course-label">신청 과정</span>
+                      <span class="cond-section-title txt-changed" id="rd-course-label" title="변경됨: 신청 과정 → 제한 과정">제한 과정</span>
                       <span class="cond-count-pill" id="rd-course-count" style="display:none">0개</span>
                     </div>
                     <button class="btn-cond-add" onclick="openCourseModal(condCurrentCtx)">+ 과정 조건 설정</button>
                   </div>
-                  <div class="cond-tip" id="rd-course-empty">과정 조건 설정 버튼으로 신청 과정을 설정하세요.</div>
+                  <div class="cond-tip" id="rd-course-empty">과정 조건 설정 버튼으로 제한 과정을 설정하세요.</div>
                   <div id="rd-course-summary" style="display:none">
                     <div class="cond-summary-row" id="rd-course-sum-type"></div>
                     <div class="cond-summary-row" id="rd-course-sum-cat" style="margin-top:4px"></div>
@@ -5120,12 +5196,12 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <div class="cond-section" id="rr-target-section">
                   <div class="cond-section-header">
                     <div style="display:flex;align-items:center;gap:8px">
-                      <span class="cond-section-title" id="rr-target-label">신청 대상자</span>
+                      <span class="cond-section-title txt-changed" id="rr-target-label" title="변경됨: 신청 대상자 → 제한 대상자">제한 대상자</span>
                       <span class="cond-count-pill" id="rr-target-count" style="display:none">0명</span>
                     </div>
                     <button class="btn-cond-add" onclick="openTargetModal('rr')">+ 대상자 조건 설정</button>
                   </div>
-                  <div class="cond-tip" id="rr-target-empty">대상자 조건 설정 버튼으로 신청 대상자를 설정하세요.</div>
+                  <div class="cond-tip" id="rr-target-empty">대상자 조건 설정 버튼으로 제한 대상자를 설정하세요.</div>
                   <div id="rr-target-summary" style="display:none">
                     <div class="cond-summary-row" id="rr-target-sum-grade"></div>
                     <div class="cond-summary-row" id="rr-target-sum-company" style="margin-top:4px"></div>
@@ -5137,12 +5213,12 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <div class="cond-section" id="rr-course-section">
                   <div class="cond-section-header">
                     <div style="display:flex;align-items:center;gap:8px">
-                      <span class="cond-section-title" id="rr-course-label">신청 과정</span>
+                      <span class="cond-section-title txt-changed" id="rr-course-label" title="변경됨: 신청 과정 → 제한 과정">제한 과정</span>
                       <span class="cond-count-pill" id="rr-course-count" style="display:none">0개</span>
                     </div>
                     <button class="btn-cond-add" onclick="openCourseModal('rr')">+ 과정 조건 설정</button>
                   </div>
-                  <div class="cond-tip" id="rr-course-empty">과정 조건 설정 버튼으로 신청 과정을 설정하세요.</div>
+                  <div class="cond-tip" id="rr-course-empty">과정 조건 설정 버튼으로 제한 과정을 설정하세요.</div>
                   <div id="rr-course-summary" style="display:none">
                     <div class="cond-summary-row" id="rr-course-sum-type"></div>
                     <div class="cond-summary-row" id="rr-course-sum-cat" style="margin-top:4px"></div>
@@ -10777,7 +10853,7 @@ function restrictRenderTable() {
         <th class="col-value">신청불가금액</th>
         <th class="col-applyperiod">적용기간</th>
         <th class="col-subdiv">구분</th>
-        <th>신청</th>
+        <th><span class="txt-changed" title="변경됨: 신청 → 제한">제한</span></th>
         <th>예외</th>
         <th class="col-use">사용여부</th>
       </tr>`;
@@ -10789,7 +10865,7 @@ function restrictRenderTable() {
         <th class="col-applyperiod">이력 조회기간</th>
         <th class="col-applyperiod">적용기간</th>
         <th class="col-subdiv">구분</th>
-        <th>신청</th>
+        <th><span class="txt-changed" title="변경됨: 신청 → 제한">제한</span></th>
         <th>예외</th>
         <th class="col-use">사용여부</th>
       </tr>`;
@@ -10800,7 +10876,7 @@ function restrictRenderTable() {
         <th class="col-applyperiod">이력 조회기간</th>
         <th class="col-applyperiod">적용기간</th>
         <th class="col-subdiv">구분</th>
-        <th>신청</th>
+        <th><span class="txt-changed" title="변경됨: 신청 → 제한">제한</span></th>
         <th>예외</th>
         <th class="col-use">사용여부</th>
       </tr>`;
@@ -10814,7 +10890,7 @@ function restrictRenderTable() {
         <th class="col-value">제한값</th>
         <th class="col-applyperiod">적용기간</th>
         <th class="col-subdiv">구분</th>
-        <th>신청</th>
+        <th><span class="txt-changed" title="변경됨: 신청 → 제한">제한</span></th>
         <th>예외</th>
         <th class="col-use">사용여부</th>
       </tr>`;
@@ -11161,8 +11237,8 @@ function rrOnChange() {
 
   const tLabel = document.getElementById('rr-target-label');
   const cLabel = document.getElementById('rr-course-label');
-  if (tLabel) tLabel.textContent = isCourse ? '신청불가 대상자' : '신청 대상자';
-  if (cLabel) cLabel.textContent = isFail ? '신청 과정' : isCourse ? '신청불가 과정' : '신청 과정';
+  if (tLabel) tLabel.textContent = isCourse ? '신청불가 대상자' : '제한 대상자';
+  if (cLabel) cLabel.textContent = isFail ? '제한 과정' : isCourse ? '신청불가 과정' : '제한 과정';
 }
 
 // 신규유형 추가 버튼
@@ -11359,6 +11435,20 @@ const COND_TARGET_OPTIONS = {
   '직급':      ['인턴', '사원', '대리', '과장', '차장', '부장', '임원'],
   '직접등록':  null, // 텍스트 입력
 };
+// 대상구분: 그룹 유형 + 하위 항목(설명/인원). 그룹 조건값 방식(동적) — 개인 명단 조회 없음
+const TARGET_GROUP_TYPES = [
+  { key: '부서', desc: '조직 내 부서 단위로 대상자를 구분합니다.', items: [
+    { label: '전체', count: 5 },
+    { label: '인사팀', count: 2 },
+    { label: '개발팀', count: 4 },
+    { label: '기획팀', count: 1 } ]},
+  { key: '진급예정자', desc: '해당 연도 진급 대상자를 구분합니다.', items: [
+    { label: '전체', count: 4 },
+    { label: '2025 진급예정자', count: 3 },
+    { label: '2026 진급예정자', count: 1 } ]},
+];
+let targetGrpCollapsed = {};
+TARGET_GROUP_TYPES.forEach(g => { targetGrpCollapsed[g.key] = true; }); // 기본값: 접힘
 const COND_COURSE_OPTIONS = {
   '전체':      ['전체 과정'],
   '과정구분':  ['정시', '수시'],
@@ -11693,26 +11783,68 @@ function renderTargetLeft() {
   const opts = COND_TARGET_OPTIONS[type];
 
   if (type === '전체') {
-    wrap.innerHTML = `<div style="font-size:12px;color:#888;line-height:1.6;padding:4px 2px">
-      전체 임직원을 조건으로 추가합니다.<br>
-      <span style="color:#e09000;font-size:11px">※ 전체 추가 시 기존 조건이 초기화됩니다.</span>
+    wrap.innerHTML = `<div class="type-row">
+      <div class="type-note">전체 임직원을 조건으로 추가합니다. 전체 추가 시 기존 조건이 초기화됩니다.</div>
     </div>`;
   } else if (type === '직접등록') {
-    wrap.innerHTML = `<div style="margin-top:4px">
-      <div style="display:flex;gap:6px;margin-bottom:8px">
+    wrap.innerHTML = `<div class="type-row">
+      <div class="type-note">첫 번째 열에 이름 또는 사번을 입력한 엑셀 파일을 업로드하세요.</div>
+      <div class="type-actions">
         <button class="mbtn mbtn-blue" onclick="document.getElementById('cond-t-xl-inp').click()">엑셀 업로드</button>
         <button class="mbtn mbtn-gray" onclick="downloadTemplate('target')">양식 다운로드</button>
       </div>
-      <input type="file" id="cond-t-xl-inp" accept=".xlsx,.xls" style="display:none" onchange="readTargetExcelNew(this)">
-      <div id="cond-t-xl-name" style="font-size:11px;color:#888;margin-bottom:4px">파일 미선택</div>
-      <div id="cond-t-xl-preview" style="font-size:11px;color:#555"></div>
-      <div style="font-size:11px;color:#aaa;margin-top:8px;line-height:1.6">첫 번째 열에 이름 또는 사번을<br>입력한 엑셀 파일을 업로드하세요.</div>
-    </div>`;
+    </div>
+    <input type="file" id="cond-t-xl-inp" accept=".xlsx,.xls" style="display:none" onchange="readTargetExcelNew(this)">
+    <div id="cond-t-xl-name" class="type-file-info">파일 미선택</div>
+    <div id="cond-t-xl-preview" class="type-file-info"></div>`;
+  } else if (type === '대상구분') {
+    wrap.innerHTML = renderTargetGroupTable();
   } else if (opts) {
     wrap.innerHTML = `<div class="cond-left-values-wrap">` +
       opts.map(v => `<label class="cond-left-chk-label"><input type="checkbox" class="cond-t-val" value="${v}"> ${v}</label>`).join('') +
       `</div>`;
   }
+}
+
+function renderTargetGroupTable() {
+  let rows = '';
+  TARGET_GROUP_TYPES.forEach(g => {
+    const collapsed = targetGrpCollapsed[g.key];
+    rows += `
+      <div class="grp-row-type" onclick="toggleTargetGrp('${g.key}')">
+        <span class="lead"><span class="grp-toggle">${collapsed ? '⌄' : '⌃'}</span>${g.key}</span>
+        <span class="desc">${g.desc}</span>
+        <span></span>
+      </div>
+      <div class="grp-sub-wrap ${collapsed ? 'collapsed' : ''}">
+        ${g.items.map(it => `
+          <div class="grp-row-item">
+            <label class="${it.label === '전체' ? 'is-all' : ''}">
+              <input type="checkbox" class="${it.label === '전체' ? 'grp-t-all' : 'grp-t-item'}" data-group="${g.key}" value="${it.label}"
+                ${it.label === '전체' ? `onchange="onTargetGrpAllChange('${g.key}', this.checked)"` : ''}>
+              ${it.label}
+            </label>
+            <span></span>
+            <span class="cnt">${it.count}명</span>
+          </div>`).join('')}
+      </div>`;
+  });
+  return `<div class="grp-table">
+      <div class="grp-table-head"><span>대상구분</span><span>설명</span><span style="text-align:right">인원</span></div>
+      ${rows}
+    </div>`;
+}
+function toggleTargetGrp(key) {
+  targetGrpCollapsed[key] = !targetGrpCollapsed[key];
+  document.getElementById('cond-t-left-values').innerHTML = renderTargetGroupTable();
+}
+function onTargetGrpAllChange(key, checked) {
+  document.querySelectorAll(`.grp-t-item[data-group="${key}"]`).forEach(cb => {
+    cb.checked = false;
+    const label = cb.closest('label');
+    if (checked) { cb.disabled = true; label.classList.add('disabled'); }
+    else { cb.disabled = false; label.classList.remove('disabled'); }
+  });
 }
 
 function renderTargetSection(tab) {
@@ -11772,6 +11904,14 @@ function addCondTarget(tab) {
     if (aIdx > -1) list.splice(aIdx, 1);
     document.getElementById('cond-t-xl-name').textContent = '미선택';
     document.getElementById('cond-t-xl-preview').textContent = '';
+  } else if (type === '대상구분') {
+    if (list.some(i => i.type === '전체')) { alert('전체가 설정되어 있습니다. 전체를 먼저 삭제하세요.'); return; }
+    TARGET_GROUP_TYPES.forEach(g => {
+      const allChecked = document.querySelector(`.grp-t-all[data-group="${g.key}"]`)?.checked;
+      if (allChecked) values.push(`${g.key} 전체`);
+      else document.querySelectorAll(`.grp-t-item[data-group="${g.key}"]:checked`).forEach(cb => values.push(cb.value));
+    });
+    if (!values.length) { alert('대상구분 항목을 선택해주세요.'); return; }
   } else {
     if (list.some(i => i.type === '전체')) { alert('전체가 설정되어 있습니다. 전체를 먼저 삭제하세요.'); return; }
     values = [...document.querySelectorAll('.cond-t-val:checked')].map(c => c.value);
@@ -11782,6 +11922,7 @@ function addCondTarget(tab) {
   if (existing) { values.forEach(v => { if (!existing.values.includes(v)) existing.values.push(v); }); }
   else { list.push({ type, values }); }
   document.querySelectorAll('.cond-t-val').forEach(c => c.checked = false);
+  if (type === '대상구분') document.getElementById('cond-t-left-values').innerHTML = renderTargetGroupTable();
   renderTargetSection(tab);
 }
 
@@ -11846,6 +11987,7 @@ function openTargetModal(ctx) {
   const sel = document.getElementById('cond-t-type-sel');
   if (sel) sel.value = '전체';
   condTargetExcelValues = [];
+  TARGET_GROUP_TYPES.forEach(g => { targetGrpCollapsed[g.key] = true; });
   renderTargetLeft();
   renderTargetSection('apply');
   renderTargetSection('except');
@@ -11862,21 +12004,20 @@ function renderCourseLeft() {
   const opts = COND_COURSE_OPTIONS[type];
 
   if (type === '전체') {
-    wrap.innerHTML = `<div style="font-size:12px;color:#888;line-height:1.6;padding:4px 2px">
-      전체 과정을 조건으로 추가합니다.<br>
-      <span style="color:#e09000;font-size:11px">※ 전체 추가 시 기존 조건이 초기화됩니다.</span>
+    wrap.innerHTML = `<div class="type-row">
+      <div class="type-note">전체 과정을 조건으로 추가합니다. 전체 추가 시 기존 조건이 초기화됩니다.</div>
     </div>`;
   } else if (type === '직접등록') {
-    wrap.innerHTML = `<div style="margin-top:4px">
-      <div style="display:flex;gap:6px;margin-bottom:8px">
+    wrap.innerHTML = `<div class="type-row">
+      <div class="type-note">첫 번째 열에 과정명을 입력한 엑셀 파일을 업로드하세요.</div>
+      <div class="type-actions">
         <button class="mbtn mbtn-blue" onclick="document.getElementById('cond-c-xl-inp').click()">엑셀 업로드</button>
         <button class="mbtn mbtn-gray" onclick="downloadTemplate('course')">양식 다운로드</button>
       </div>
-      <input type="file" id="cond-c-xl-inp" accept=".xlsx,.xls" style="display:none" onchange="readCourseExcelNew(this)">
-      <div id="cond-c-xl-name" style="font-size:11px;color:#888;margin-bottom:4px">파일 미선택</div>
-      <div id="cond-c-xl-preview" style="font-size:11px;color:#555"></div>
-      <div style="font-size:11px;color:#aaa;margin-top:8px;line-height:1.6">첫 번째 열에 과정명을<br>입력한 엑셀 파일을 업로드하세요.</div>
-    </div>`;
+    </div>
+    <input type="file" id="cond-c-xl-inp" accept=".xlsx,.xls" style="display:none" onchange="readCourseExcelNew(this)">
+    <div id="cond-c-xl-name" class="type-file-info">파일 미선택</div>
+    <div id="cond-c-xl-preview" class="type-file-info"></div>`;
   } else if (opts) {
     wrap.innerHTML = `<div class="cond-left-values-wrap">` +
       opts.map(v => `<label class="cond-left-chk-label"><input type="checkbox" class="cond-c-val" value="${v}"> ${v}</label>`).join('') +
@@ -12087,7 +12228,7 @@ function updateCondSummary(domCtx, kind, dataCtx) {
 
   if (applyEl) {
     applyEl.innerHTML = hasApply
-      ? `<span class="cond-sum-label">신청</span>${condListToTags(data.apply, 'sum-tag-target', unit)}`
+      ? `<span class="cond-sum-label txt-changed" title="변경됨: 신청 → 제한">제한</span>${condListToTags(data.apply, 'sum-tag-target', unit)}`
       : '';
   }
   if (exceptEl) {
@@ -12102,8 +12243,8 @@ function renderConditionTable(r) {
   const isCourseUnit = r.unit === '과정';
   const tLabel = document.getElementById('rd-target-label');
   const cLabel = document.getElementById('rd-course-label');
-  if (tLabel) tLabel.textContent = isCourseUnit ? '신청불가 대상자' : '신청 대상자';
-  if (cLabel) cLabel.textContent = isCourseUnit ? '신청불가 과정' : '신청 과정';
+  if (tLabel) tLabel.textContent = isCourseUnit ? '신청불가 대상자' : '제한 대상자';
+  if (cLabel) cLabel.textContent = isCourseUnit ? '신청불가 과정' : '제한 과정';
 
   // condState 키는 r.no (목록과 동일한 키 사용)
   const ctx = r.no;
@@ -12545,43 +12686,39 @@ csRenderTable();
 <!-- MODAL: 제한 대상관리 — 3-column 레이아웃    -->
 <!-- ══════════════════════════════════════════ -->
 <div class="modal-overlay" id="modal-target" onclick="if(event.target===this)closeModal('modal-target')">
-  <div class="modal-container" style="width:900px;max-width:900px;display:flex;flex-direction:column;height:580px;max-height:580px">
+  <div class="modal-container" style="width:680px;max-width:94vw;max-height:88vh;overflow-y:auto;display:block">
     <div class="modal-header">
       <h3 id="cond-target-title">제한 대상관리</h3>
       <button class="modal-close" onclick="closeModal('modal-target')">×</button>
     </div>
 
-    <div class="cond-modal-body">
+    <div style="padding:24px 28px">
 
-      <!-- ① 좌측: 구분 선택 + 값 체크박스 -->
-      <div class="cond-left-panel">
-        <div class="cond-panel-title">구분 선택</div>
-        <select class="select" id="cond-t-type-sel" style="width:100%" onchange="renderTargetLeft()">
+      <!-- 구분 선택 카드 -->
+      <div class="type-card">
+        <div class="type-label">구분 선택</div>
+        <select class="type-select" id="cond-t-type-sel" onchange="renderTargetLeft()">
           <option value="전체">전체</option>
           <option value="회사">회사</option>
           <option value="직급">직급</option>
+          <option value="대상구분">대상구분</option>
           <option value="직접등록">직접등록</option>
         </select>
-        <div class="cond-left-sep"></div>
-        <div id="cond-t-left-values"></div>
+        <div class="type-body" id="cond-t-left-values"></div>
       </div>
 
-      <!-- ② 중앙: 추가 버튼 -->
-      <div class="cond-center-panel">
-        <button class="btn-add-to-apply" onclick="addCondTarget('apply')">
-          신청 대상자<br>추가
-        </button>
-        <button class="btn-add-to-except" onclick="addCondTarget('except')">
-          제외 대상자<br>추가
-        </button>
+      <!-- 신청/제외 추가 버튼 -->
+      <div class="add-row-2col">
+        <button class="add-btn-2col" onclick="addCondTarget('apply')"><span class="txt-changed" title="변경됨: 신청 대상자 추가 → 제한 대상자 추가">제한 대상자 추가</span></button>
+        <button class="add-btn-2col" onclick="addCondTarget('except')">제외 대상자 추가</button>
       </div>
 
-      <!-- ③ 우측: 신청 대상자 / 제외 대상자 -->
-      <div class="cond-right-panel">
-        <!-- 신청 대상자 -->
+      <!-- 신청/제외 대상자 결과 (2단) -->
+      <div class="result-grid-2col">
+        <!-- 제한 대상자 -->
         <div class="cond-right-section">
           <div class="cond-right-title">
-            신청 대상자
+            <span class="txt-changed" title="변경됨: 신청 대상자 → 제한 대상자">제한 대상자</span>
             <span class="cond-list-count-badge" id="cond-t-apply-badge" style="display:none">0건</span>
           </div>
           <div class="cond-right-list" id="cond-t-apply-list">
@@ -12590,9 +12727,6 @@ csRenderTable();
             </div>
           </div>
         </div>
-
-        <div class="cond-right-divider"></div>
-
         <!-- 제외 대상자 -->
         <div class="cond-right-section">
           <div class="cond-right-title">
@@ -12620,44 +12754,39 @@ csRenderTable();
 <!-- MODAL: 제한 과정관리 — 3-column 레이아웃    -->
 <!-- ══════════════════════════════════════════ -->
 <div class="modal-overlay" id="modal-course" onclick="if(event.target===this)closeModal('modal-course')">
-  <div class="modal-container" style="width:900px;max-width:900px;display:flex;flex-direction:column;height:580px;max-height:580px">
+  <div class="modal-container" style="width:680px;max-width:94vw;max-height:88vh;overflow-y:auto;display:block">
     <div class="modal-header">
       <h3 id="cond-course-title">제한 과정관리</h3>
       <button class="modal-close" onclick="closeModal('modal-course')">×</button>
     </div>
 
-    <div class="cond-modal-body">
+    <div style="padding:24px 28px">
 
-      <!-- ① 좌측: 구분 선택 + 값 체크박스 -->
-      <div class="cond-left-panel">
-        <div class="cond-panel-title">구분 선택</div>
-        <select class="select" id="cond-c-type-sel" style="width:100%" onchange="renderCourseLeft()">
+      <!-- 구분 선택 카드 -->
+      <div class="type-card">
+        <div class="type-label">구분 선택</div>
+        <select class="type-select" id="cond-c-type-sel" onchange="renderCourseLeft()">
           <option value="전체">전체</option>
           <option value="과정구분">과정구분</option>
           <option value="과정유형">과정유형</option>
           <option value="과정분류">과정분류</option>
           <option value="직접등록">직접등록</option>
         </select>
-        <div class="cond-left-sep"></div>
-        <div id="cond-c-left-values"></div>
+        <div class="type-body" id="cond-c-left-values"></div>
       </div>
 
-      <!-- ② 중앙: 추가 버튼 -->
-      <div class="cond-center-panel">
-        <button class="btn-add-to-apply" onclick="addCondCourse('apply')">
-          신청 과정<br>추가
-        </button>
-        <button class="btn-add-to-except" onclick="addCondCourse('except')">
-          제외 과정<br>추가
-        </button>
+      <!-- 신청/제외 추가 버튼 -->
+      <div class="add-row-2col">
+        <button class="add-btn-2col" onclick="addCondCourse('apply')"><span class="txt-changed" title="변경됨: 신청 과정 추가 → 제한 과정 추가">제한 과정 추가</span></button>
+        <button class="add-btn-2col" onclick="addCondCourse('except')">제외 과정 추가</button>
       </div>
 
-      <!-- ③ 우측: 신청 과정 / 제외 과정 -->
-      <div class="cond-right-panel">
-        <!-- 신청 과정 -->
+      <!-- 신청/제외 과정 결과 (2단) -->
+      <div class="result-grid-2col">
+        <!-- 제한 과정 -->
         <div class="cond-right-section">
           <div class="cond-right-title">
-            신청 과정
+            <span class="txt-changed" title="변경됨: 신청 과정 → 제한 과정">제한 과정</span>
             <span class="cond-list-count-badge" id="cond-c-apply-badge" style="display:none">0건</span>
           </div>
           <div class="cond-right-list" id="cond-c-apply-list">
@@ -12666,9 +12795,6 @@ csRenderTable();
             </div>
           </div>
         </div>
-
-        <div class="cond-right-divider"></div>
-
         <!-- 제외 과정 -->
         <div class="cond-right-section">
           <div class="cond-right-title">
