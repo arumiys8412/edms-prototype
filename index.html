@@ -1645,6 +1645,10 @@
   .change-badge.course { background: #e11d48; }
   .change-badge.course:hover { background: #be123c; }
 
+  /* 2차 후속 작업 그룹 - 마젠타색 */
+  .change-badge.phase2 { background: #db2777; }
+  .change-badge.phase2:hover { background: #be185d; }
+
   /* 셀렉트 위에 배지 띄우기 */
   .badge-wrap { position: relative; display: inline-block; }
   .badge-wrap > .change-badge {
@@ -1760,6 +1764,13 @@
   .change-popover.lm .cp-head .cp-num { background: #0d9488; }
   .change-popover.lm.above::before { border-right-color: #0d9488; border-bottom-color: #0d9488; }
   .change-popover.lm.below::before { border-left-color: #0d9488; border-top-color: #0d9488; }
+
+  /* 2차 후속 작업 그룹 - 마젠타색 팝오버 */
+  .change-popover.phase2 { border-color: #db2777; }
+  .change-popover.phase2 .cp-head { color: #db2777; }
+  .change-popover.phase2 .cp-head .cp-num { background: #db2777; }
+  .change-popover.phase2.above::before { border-right-color: #db2777; border-bottom-color: #db2777; }
+  .change-popover.phase2.below::before { border-left-color: #db2777; border-top-color: #db2777; }
 
   /* ── 과정정보 모달 ──────────────────────────────── */
   .course-info-modal {
@@ -5394,8 +5405,14 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <th>총 교육비</th>
                 <th>결제방법</th>
                 <th>결제상태</th>
-                <th>카드결제</th>
-                <th>결제 증빙서류</th>
+                <th>카드결제<span class="change-badge phase2 in-th" data-num="1" data-memo="2단계 후속 범위
+- 목록에 &apos;카드결제&apos; 컬럼 추가
+- [결제하기] 버튼 클릭 시 결제하기 팝업(모달) 호출
+- 버튼 활성화 조건: 결제상태=입금대기 &amp; 결제방법=미정인 경우만 (정책서 4-3 참고)">1</span></th>
+                <th>결제 증빙서류<span class="change-badge phase2 in-th" data-num="2" data-memo="2단계 후속 범위
+- 목록에 &apos;결제 증빙서류&apos; 컬럼 추가
+- [서류보기] 버튼 클릭 시 결제 증빙서류 팝업(모달) 호출
+- 결제상태 무관 모든 결제 건에서 버튼 활성화 (정책서 6-1 참고)">2</span></th>
               </tr>
             </thead>
             <tbody>
@@ -5436,7 +5453,11 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <td>일괄납입</td>
                 <td><span class="fee-status fee-status-done">입금완료</span></td>
                 <td><button class="btn-xs" disabled>결제하기</button></td>
-                <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
+                <td><button class="btn-xs" onclick="openSettlementModal('Bank', false)">서류보기</button><span class="change-badge phase2" data-num="3" data-memo="2026.08.20 정책서 확정 반영
+- 세금계산서 '미발행' 상태 데모 케이스로 지정
+- 결제상태는 '입금완료'이지만 세금계산서는 아직 미발행인 경우를 보여줌
+- 세금계산서 발행 여부는 결제상태와 무관, 실제 발행일 존재 여부로 판단(정책서 6-2)
+- [서류보기] 클릭 시 세금계산서 영역이 '-' + 출력 버튼 비활성화로 표시됨">3</span></td>
               </tr>
               <tr data-month="2026.03">
                 <td>29</td>
@@ -5537,8 +5558,14 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <th>총 교육비</th>
                 <th>결제방법</th>
                 <th>결제상태</th>
-                <th>카드결제</th>
-                <th>결제 증빙서류</th>
+                <th>카드결제<span class="change-badge phase2 in-th" data-num="4" data-memo="2단계 후속 범위
+- 상세 요약에 '카드결제' 컬럼 추가
+- [결제하기] 버튼 클릭 시 결제하기 팝업(모달) 호출
+- 목록과 동일 조건, 정책서 4-3 참고">4</span></th>
+                <th>결제 증빙서류<span class="change-badge phase2 in-th" data-num="5" data-memo="2단계 후속 범위
+- 상세 요약에 '결제 증빙서류' 컬럼 추가
+- [서류보기] 버튼 클릭 시 결제 증빙서류 팝업(모달) 호출
+- 목록과 동일 조건, 정책서 6-1 참고">5</span></th>
               </tr>
             </thead>
             <tbody>
@@ -6535,8 +6562,8 @@ const DAYS   = ['일','월','화','수','목','금','토'];
       e.stopPropagation();
       activeBadge = badge;
 
-      // 신청관리(signup) 배지면 팝오버도 파란색으로, 결과(result) 초록, 학습기간변경(lpc) 노랑, 러메·종합(lm) 보라
-      popover.classList.remove('signup', 'result', 'lpc', 'lm');
+      // 신청관리(signup) 배지면 팝오버도 파란색으로, 결과(result) 초록, 학습기간변경(lpc) 노랑, 러메·종합(lm) 보라, 2차 후속(phase2) 마젠타
+      popover.classList.remove('signup', 'result', 'lpc', 'lm', 'phase2');
       if (badge.classList.contains('signup')) {
         popover.classList.add('signup');
       } else if (badge.classList.contains('result')) {
@@ -6545,6 +6572,8 @@ const DAYS   = ['일','월','화','수','목','금','토'];
         popover.classList.add('lpc');
       } else if (badge.classList.contains('lm')) {
         popover.classList.add('lm');
+      } else if (badge.classList.contains('phase2')) {
+        popover.classList.add('phase2');
       }
       numEl.textContent  = badge.dataset.num  || badge.textContent || '·';
       // 메모 줄별로 처리 — 이미 -/·/※ 로 시작하지 않으면 "- " 추가
@@ -8290,19 +8319,18 @@ function secToTime(s) {
 }
 
 // 완료기준 텍스트 생성
-// 완료기준 — 콘텐츠 유형별 설정 가능한 변수값
-function getCompleteCriteria(type) {
-  if (type === '동영상' || type === '쇼츠')   return '80%이상';
-  if (type === '이미지')             return '전체 조회';
-  if (type === '아티클')             return '조회';
-  if (type === '첨부파일')           return '전체 다운로드';
-  if (type === '시험' || type === '과제' || type === '퀴즈') return '80점';
-  if (type === '설문')               return '제출완료';
-  if (type === '토론')               return '등록완료';        // 등록완료(디폴트) 또는 제출완료 (설정 가능)
-  if (type === 'PDF')               return '전체 조회';
-  if (type === '외부링크')           return '전체 클릭완료';   // 전체 링크 클릭 완료 (첨부파일과 동일 구조)
-  if (type === '오프라인')           return '8일 출석';         // N일 출석 (설정 가능한 변수값)
-  return '열람완료';
+// 완료기준 — 콘텐츠 유형에 따라 5가지 표기로 통일: 제출 / 전체 조회 / N점 / N% / 전체 다운
+function getCompleteCriteria(type, c) {
+  if (type === '동영상' || type === '쇼츠')   return '80%';        // N% — 진도율 기준
+  if (type === '이미지' || type === 'PDF')    return '전체 조회';  // 전체 조회 시 완료
+  if (type === '아티클')             return '전체 조회';          // 전체 조회 시 완료
+  if (type === '첨부파일')           return '전체 다운로드';      // 전체 다운로드 시 완료
+  if (type === '외부링크')           return '전체 조회';          // 전체 조회(클릭) 시 완료
+  if (type === '시험' || type === '과제' || type === '퀴즈') return '80점';  // N점 — 점수 기준
+  if (type === '설문')               return '제출';               // 전체 문항 제출 시 완료
+  if (type === '토론')               return '제출';               // 등록완료(기본값) 기준, 관리자 설정으로 제출완료 전환 가능
+  if (type === '오프라인')           return '8회';                // N회 — 출석 횟수 기준(설정 가능한 변수값, 샘플 8회)
+  return '전체 조회';
 }
 
 // 콘텐츠 총 정보 — 유형별 단위 표기
@@ -9241,7 +9269,7 @@ document.getElementById('sc-det-btn-search').addEventListener('click', () => {
       <td class="cell-wrap" style="text-align:left;padding-left:10px">${c.name}</td>
       <td>${scCurrentCourse ? fmtPeriod(scCurrentCourse.period) : '-'}</td>
       <td>${getContentInfo(c)}</td>
-      <td>${getCompleteCriteria(c.type)}</td>
+      <td>${getCompleteCriteria(c.type, c)}</td>
     </tr>`;
 
     // 콘텐츠별 학습자 데이터 생성
@@ -11387,11 +11415,35 @@ function closePaymentDetail() {
 // Bank: 거래명세서·입금증·수납확인서 버튼 활성, 신용카드 전표 비활성
 // Card: 거래명세서·입금증·수납확인서 버튼 비활성, 신용카드 전표 활성
 // Prepaid(선수금 차감): 거래명세서·입금증·수납확인서 버튼 활성, 신용카드 전표 비활성
-// Pending(입금대기/결제방법 미정): 섹션2 데이터 없음 (세금계산서만 발행됨)
-function openSettlementModal(method) {
+// Pending(입금대기/결제방법 미정): 섹션2 데이터 없음
+// issued(세금계산서 발행 여부): 결제상태와 무관, 실제 발행일 존재 여부로 판단 (정책서 6-2 기준)
+//   - 미발행 시 발행방법·공급가액·발행일 "-" 표시, 출력 버튼 비활성화
+function openSettlementModal(method, issued = true) {
   const body = document.getElementById('settle-body');
-  if (!body) return;
+  const taxBody = document.getElementById('settle-tax-body');
+  if (!body || !taxBody) return;
   openModal('modal-settlement');
+
+  // 영역1: 세금계산서 발행 여부에 따른 렌더링
+  if (issued) {
+    taxBody.innerHTML = `
+      <tr>
+        <td>trusbill</td>
+        <td>40,428,500원</td>
+        <td>2026.02.27</td>
+        <td><button class="btn-xs">출력하기</button></td>
+      </tr>
+    `;
+  } else {
+    taxBody.innerHTML = `
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td><button class="btn-xs" disabled>출력하기</button></td>
+      </tr>
+    `;
+  }
 
   if (method === 'Pending') {
     body.innerHTML = `
@@ -12825,12 +12877,17 @@ csRenderTable();
 <div class="modal-overlay" id="modal-settlement" onclick="if(event.target===this)closeModal('modal-settlement')">
   <div class="modal-container" style="max-width:880px">
     <div class="modal-header">
-      <h3>결제 증빙서류</h3>
+      <h3>결제 증빙서류<span class="change-badge phase2" data-num="6" data-memo="2단계 후속 범위
+- 본 팝업(서류보기 모달) 전체가 2단계 후속 개발 범위
+- 목록/상세의 [서류보기] 버튼 클릭 시 호출됨 (정책서 6장 참고)">6</span></h3>
       <button class="modal-close" onclick="closeModal('modal-settlement')">×</button>
     </div>
     <div class="modal-body">
       <div class="settle-section">
-        <div class="settle-section-title">세금계산서/거래명세서</div>
+        <div class="settle-section-title">세금계산서<span class="change-badge phase2 in-th" data-num="7" data-memo="2026.08.20 정책서 확정 반영
+- 기존 타이틀 '세금계산서/거래명세서'가 영역2의 거래명세서 버튼과 표현 중복되어 '세금계산서'로 정정
+- 실제 거래명세서 출력은 영역2(입금증/수납확인서/신용카드 전표)에만 존재하는 문서 1종
+- 세금계산서 미발행 시(발행일 없음) 발행방법·공급가액·발행일 '-' 표시, 출력 버튼 비활성화. 결제상태와 무관하게 실제 발행일 존재 여부로 판단">7</span></div>
         <table class="settle-table">
           <thead>
             <tr>
@@ -12840,13 +12897,8 @@ csRenderTable();
               <th>출력</th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>trusbill</td>
-              <td>40,428,500원</td>
-              <td>2026.02.27</td>
-              <td><button class="btn-xs">출력하기</button></td>
-            </tr>
+          <tbody id="settle-tax-body">
+            <!-- JS에서 세금계산서 발행 여부(issued)에 따라 렌더링 -->
           </tbody>
         </table>
       </div>
@@ -12883,7 +12935,9 @@ csRenderTable();
 <div class="modal-overlay" id="modal-payment" onclick="if(event.target===this)closeModal('modal-payment')">
   <div class="modal-container" style="max-width:520px">
     <div class="modal-header">
-      <h3>결제하기</h3>
+      <h3>결제하기<span class="change-badge phase2" data-num="8" data-memo="2단계 후속 범위
+- 본 팝업(결제하기 모달) 전체가 2단계 후속 개발 범위
+- 목록의 [결제하기] 버튼 클릭 시 호출됨 (정책서 7장 참고)">8</span></h3>
       <button class="modal-close" onclick="closeModal('modal-payment')">×</button>
     </div>
     <div class="modal-body">
