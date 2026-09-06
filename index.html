@@ -5270,7 +5270,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
       </div>
 
       <!-- LIST VIEW -->
-      <div id="payment-list">
+      <div id="payment-list" style="display:flex;flex-direction:column;gap:16px">
 
         <!-- 검색 폼 -->
         <div class="card">
@@ -5320,9 +5320,8 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <select class="select" style="min-width:140px">
                   <option value="" disabled selected>결제방법</option>
                   <option value="">전체</option>
-                  <option value="Bank">일괄납입</option>
                   <option value="Card">신용카드</option>
-                  <option value="Prepaid">선수금 차감</option>
+                  <option value="Bank">무통장입금</option>
                 </select>
                 <select class="select" style="min-width:140px">
                   <option value="" disabled selected>결제상태</option>
@@ -5342,11 +5341,11 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                     <span class="multi-placeholder" id="fp-company-placeholder">회사선택</span>
                   </div>
                   <div class="multi-dropdown" id="fp-company-dropdown">
-                    <div class="multi-option" data-value="휴넷">휴넷</div>
-                    <div class="multi-option" data-value="프라임">프라임</div>
-                    <div class="multi-option" data-value="A기업">A기업</div>
-                    <div class="multi-option" data-value="B기업명">B기업명</div>
-                    <div class="multi-option" data-value="C기업명">C기업명</div>
+                    <div class="multi-option" data-value="회사A">회사A</div>
+                    <div class="multi-option" data-value="회사B">회사B</div>
+                    <div class="multi-option" data-value="회사C">회사C</div>
+                    <div class="multi-option" data-value="회사D">회사D</div>
+                    <div class="multi-option" data-value="회사E">회사E</div>
                   </div>
                 </div>
               </div>
@@ -5389,9 +5388,6 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
         <div class="card">
           <div class="result-header">
             <div class="result-count">검색결과 <strong>32</strong>건</div>
-            <div class="result-right">
-              <button class="btn-excel" onclick="openExcelModal()">엑셀 다운로드</button>
-            </div>
           </div>
           <div class="table-scroll"><table class="main-table">
             <thead>
@@ -5408,7 +5404,8 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <th>카드결제<span class="change-badge phase2 in-th" data-num="1" data-memo="2단계 후속 범위
 - 목록에 &apos;카드결제&apos; 컬럼 추가
 - [결제하기] 버튼 클릭 시 결제하기 팝업(모달) 호출
-- 버튼 활성화 조건: 결제상태=입금대기 &amp; 결제방법=미정인 경우만 (정책서 4-3 참고)">1</span></th>
+- 버튼 활성화 조건: 결제상태=입금대기 &amp; 결제방법=미정인 경우만
+- 세금계산서가 발행된 건에 한해 활성화(전자발행·수기발행 모두 인정, 미발행 건은 결제 불가) (정책서 4-3 참고)">1</span></th>
                 <th>결제 증빙서류<span class="change-badge phase2 in-th" data-num="2" data-memo="2단계 후속 범위
 - 목록에 &apos;결제 증빙서류&apos; 컬럼 추가
 - [서류보기] 버튼 클릭 시 결제 증빙서류 팝업(모달) 호출
@@ -5418,20 +5415,20 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             <tbody>
               <tr data-month="2026.04">
                 <td>32</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('휴넷', '2026.04')">휴넷</span></td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('회사A', '2026.04')">회사A</span></td>
                 <td class="fee-mono">2026.04</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">2</td>
                 <td class="fee-num">4</td>
                 <td class="fee-num">12,000</td>
-                <td>일괄납입</td>
+                <td>무통장입금</td>
                 <td><span class="fee-status fee-status-done">입금완료</span></td>
                 <td><button class="btn-xs" disabled>결제하기</button></td>
                 <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
               </tr>
               <tr data-month="2026.04">
                 <td>31</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('프라임', '2026.04')">프라임</span></td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('회사B', '2026.04')">회사B</span></td>
                 <td class="fee-mono">2026.04</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">7</td>
@@ -5443,25 +5440,8 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <td><button class="btn-xs" onclick="openSettlementModal('Pending')">서류보기</button></td>
               </tr>
               <tr data-month="2026.03">
-                <td>30</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('B기업명', '2026.03')">B기업명</span></td>
-                <td class="fee-mono">2026.03</td>
-                <td>기타(통합)</td>
-                <td class="fee-num">9</td>
-                <td class="fee-num">310</td>
-                <td class="fee-num">6,329,000</td>
-                <td>일괄납입</td>
-                <td><span class="fee-status fee-status-done">입금완료</span></td>
-                <td><button class="btn-xs" disabled>결제하기</button></td>
-                <td><button class="btn-xs" onclick="openSettlementModal('Bank', false)">서류보기</button><span class="change-badge phase2" data-num="3" data-memo="2026.08.20 정책서 확정 반영
-- 세금계산서 '미발행' 상태 데모 케이스로 지정
-- 결제상태는 '입금완료'이지만 세금계산서는 아직 미발행인 경우를 보여줌
-- 세금계산서 발행 여부는 결제상태와 무관, 실제 발행일 존재 여부로 판단(정책서 6-2)
-- [서류보기] 클릭 시 세금계산서 영역이 '-' + 출력 버튼 비활성화로 표시됨">3</span></td>
-              </tr>
-              <tr data-month="2026.03">
                 <td>29</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('C기업명', '2026.03')">C기업명</span></td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('회사C', '2026.03')">회사C</span></td>
                 <td class="fee-mono">2026.03</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">6</td>
@@ -5474,42 +5454,29 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </tr>
               <tr data-month="2026.02">
                 <td>28</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('D기업명', '2026.02')">D기업명</span></td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('회사D', '2026.02')">회사D</span></td>
                 <td class="fee-mono">2026.02</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">4</td>
                 <td class="fee-num">95</td>
                 <td class="fee-num">1,250,000</td>
-                <td>일괄납입</td>
+                <td>무통장입금</td>
                 <td><span class="fee-status fee-status-cancel">입금취소</span></td>
                 <td><button class="btn-xs" disabled>결제하기</button></td>
                 <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
               </tr>
-              <tr data-month="2026.03">
-                <td>27</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('휴넷', '2026.03')">휴넷</span></td>
-                <td class="fee-mono">2026.03</td>
+              <tr data-month="2026.02">
+                <td>25</td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('회사E', '2026.02')">회사E</span></td>
+                <td class="fee-mono">2026.02</td>
                 <td>고객사 교육비</td>
-                <td class="fee-num">5</td>
-                <td class="fee-num">120</td>
-                <td class="fee-num">38,000,000</td>
-                <td>일괄납입</td>
-                <td><span class="fee-status fee-status-done">입금완료</span></td>
+                <td class="fee-num">3</td>
+                <td class="fee-num">62</td>
+                <td class="fee-num">4,150,000</td>
+                <td>무통장입금</td>
+                <td><span class="fee-status fee-status-wait">입금대기</span></td>
                 <td><button class="btn-xs" disabled>결제하기</button></td>
                 <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
-              </tr>
-              <tr data-month="2026.03">
-                <td>26</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('프라임', '2026.03')">프라임</span></td>
-                <td class="fee-mono">2026.03</td>
-                <td>고객사 교육비</td>
-                <td class="fee-num">4</td>
-                <td class="fee-num">85</td>
-                <td class="fee-num">22,500,000</td>
-                <td>신용카드</td>
-                <td><span class="fee-status fee-status-done">입금완료</span></td>
-                <td><button class="btn-xs" disabled>결제하기</button></td>
-                <td><button class="btn-xs" onclick="openSettlementModal('Card')">서류보기</button></td>
               </tr>
             </tbody>
           </table></div>
@@ -5536,7 +5503,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
       </div>
 
       <!-- DETAIL VIEW -->
-      <div id="payment-detail" style="display:none">
+      <div id="payment-detail" style="display:none;flex-direction:column;gap:16px">
 
         <!-- 결제 요약정보 카드 (상단) -->
         <div class="card">
@@ -5570,13 +5537,13 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             </thead>
             <tbody>
               <tr>
-                <td id="fpd-company">휴넷</td>
+                <td id="fpd-company">회사A</td>
                 <td id="fpd-period">2026.04</td>
                 <td id="fpd-settlement">고객사 교육비</td>
                 <td id="fpd-courses">12</td>
                 <td id="fpd-learners">32</td>
                 <td><strong id="fpd-amount">6,329,000원</strong></td>
-                <td id="fpd-method">일괄납입</td>
+                <td id="fpd-method">무통장입금</td>
                 <td id="fpd-status"><span class="fee-status fee-status-done">입금완료</span></td>
                 <td id="fpd-pay-btn"><button class="btn-xs" disabled>결제하기</button></td>
                 <td id="fpd-docs-btn"><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
@@ -5650,7 +5617,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
 
           <!-- 리스트 -->
           <div class="result-header">
-            <div class="result-count">검색결과 <strong id="fpd-count">32</strong>건</div>
+            <div class="result-count">검색결과 <strong id="fpd-count">32</strong>건<span style="font-size:11px;color:#999;margin-left:8px">본 상세 정보는 EDMS 데이터 기준으로 표시되며, 목록과 일부 차이가 있을 수 있습니다.</span></div>
             <div class="result-right">
               <button class="btn-excel" onclick="openExcelModal()">엑셀 다운로드</button>
             </div>
@@ -5678,7 +5645,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <td>홍길동</td>
                 <td class="fee-mono">h*****@hunet.co.kr</td>
                 <td class="fee-mono">12356</td>
-                <td>휴넷</td>
+                <td>회사A</td>
                 <td>기획팀</td>
                 <td>온라인</td>
                 <td class="fee-left">초급자 Prep 과정 (1:1 멘토 집중관리)_필리핀 영어</td>
@@ -5692,7 +5659,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <td>김민수</td>
                 <td class="fee-mono">k****@hunet.co.kr</td>
                 <td class="fee-mono">12357</td>
-                <td>휴넷</td>
+                <td>회사A</td>
                 <td>개발팀</td>
                 <td>온라인</td>
                 <td class="fee-left">New 회사가 원하는 신입사원_태도 편</td>
@@ -5706,7 +5673,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <td>이수진</td>
                 <td class="fee-mono">l****@hunet.co.kr</td>
                 <td class="fee-mono">12358</td>
-                <td>휴넷</td>
+                <td>회사A</td>
                 <td>인사팀</td>
                 <td>하이브리드</td>
                 <td class="fee-left">실무자를 위한 데이터 리터러시</td>
@@ -5720,7 +5687,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <td>박정호</td>
                 <td class="fee-mono">p*****@hunet.co.kr</td>
                 <td class="fee-mono">12359</td>
-                <td>휴넷</td>
+                <td>회사A</td>
                 <td>재무팀</td>
                 <td>마이크로러닝</td>
                 <td class="fee-left">HR 담당자를 위한 노동법 기초</td>
@@ -5734,7 +5701,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
                 <td>최영희</td>
                 <td class="fee-mono">c*****@hunet.co.kr</td>
                 <td class="fee-mono">12360</td>
-                <td>휴넷</td>
+                <td>회사A</td>
                 <td>영업팀</td>
                 <td>오프라인</td>
                 <td class="fee-left">영업관리자 리더십 워크숍</td>
@@ -11360,22 +11327,21 @@ function goToPaymentWithCompany(companyName) {
 // ──────────────────────────────────────────
 
 // 교육비용 결제: 회사명+월 → 결제 건 요약 데이터
-// 목록의 7개 샘플 결제 건과 1:1 매핑 — 목록/상세 요약 정합성 보장
+// 목록의 5개 샘플 결제 건과 1:1 매핑 — 목록/상세 요약 정합성 보장
+// issued: 세금계산서 발행 여부 (전자/수기 모두 true). 세금계산서 미발행 건은 목록 조회 대상에서 제외되므로 이 목록에는 issued:false 케이스가 없음 (정책서 3-1)
 const FP_DETAIL_MAP = {
-  '휴넷|2026.04':    { settlement:'고객사 교육비', courses:2, learners:4,   amount:'12,000원',       method:'일괄납입', status:'done',   methodKey:'Bank' },
-  '프라임|2026.04':  { settlement:'고객사 교육비', courses:7, learners:160, amount:'45,000,000원',   method:'-',        status:'wait',   methodKey:'Pending' },
-  'B기업명|2026.03': { settlement:'기타(통합)',    courses:9, learners:310, amount:'6,329,000원',    method:'일괄납입', status:'done',   methodKey:'Bank' },
-  'C기업명|2026.03': { settlement:'고객사 교육비', courses:6, learners:180, amount:'3,840,000원',    method:'신용카드', status:'done',   methodKey:'Card' },
-  'D기업명|2026.02': { settlement:'고객사 교육비', courses:4, learners:95,  amount:'1,250,000원',    method:'일괄납입', status:'cancel', methodKey:'Bank' },
-  '휴넷|2026.03':    { settlement:'고객사 교육비', courses:5, learners:120, amount:'38,000,000원',   method:'일괄납입', status:'done',   methodKey:'Bank' },
-  '프라임|2026.03':  { settlement:'고객사 교육비', courses:4, learners:85,  amount:'22,500,000원',   method:'신용카드', status:'done',   methodKey:'Card' }
+  '회사A|2026.04': { settlement:'고객사 교육비', courses:2, learners:4,   amount:'12,000원',       method:'무통장입금', status:'done',   methodKey:'Bank', issued:true },
+  '회사B|2026.04': { settlement:'고객사 교육비', courses:7, learners:160, amount:'45,000,000원',   method:'-',          status:'wait',   methodKey:'Pending', issued:true },
+  '회사C|2026.03': { settlement:'고객사 교육비', courses:6, learners:180, amount:'3,840,000원',    method:'신용카드',   status:'done',   methodKey:'Card', issued:true },
+  '회사D|2026.02': { settlement:'고객사 교육비', courses:4, learners:95,  amount:'1,250,000원',    method:'무통장입금', status:'cancel', methodKey:'Bank', issued:true },
+  '회사E|2026.02': { settlement:'고객사 교육비', courses:3, learners:62,  amount:'4,150,000원',    method:'무통장입금', status:'wait',   methodKey:'Bank', issued:true }
 };
 
 const FEE_STATUS_LABEL = { done:'입금완료', wait:'입금대기', cancel:'입금취소' };
 
 function openPaymentDetail(company, month) {
-  // 파라미터 없이 호출되는 경우 (이전 호환성) 휴넷 2026.04로 디폴트
-  if (!company) { company = '휴넷'; month = '2026.04'; }
+  // 파라미터 없이 호출되는 경우 (이전 호환성) 회사A 2026.04로 디폴트
+  if (!company) { company = '회사A'; month = '2026.04'; }
   const key = `${company}|${month}`;
   const data = FP_DETAIL_MAP[key];
   if (data) {
@@ -11389,9 +11355,9 @@ function openPaymentDetail(company, month) {
     // 결제상태 뱃지
     const statusEl = document.getElementById('fpd-status');
     statusEl.innerHTML = `<span class="fee-status fee-status-${data.status}">${FEE_STATUS_LABEL[data.status]}</span>`;
-    // 결제하기 버튼 활성화 조건: 입금대기 + 결제방법 미정('-')
+    // 결제하기 버튼 활성화 조건: 입금대기 + 결제방법 미정('-') + 세금계산서 발행 건(전자/수기 모두 인정)
     const payBtnEl = document.getElementById('fpd-pay-btn');
-    const canPay = (data.status === 'wait' && data.method === '-');
+    const canPay = (data.status === 'wait' && data.method === '-' && data.issued);
     payBtnEl.innerHTML = `<button class="btn-xs"${canPay ? '' : ' disabled'}>결제하기</button>`;
     // 서류보기 버튼은 결제방법에 따라 모달 분기
     const docsBtnEl = document.getElementById('fpd-docs-btn');
@@ -11400,23 +11366,23 @@ function openPaymentDetail(company, month) {
     document.getElementById('fpd-count').textContent = data.learners;
   }
   document.getElementById('payment-list').style.display = 'none';
-  document.getElementById('payment-detail').style.display = 'block';
+  document.getElementById('payment-detail').style.display = 'flex';
   const main = document.querySelector('.main');
   if (main) main.scrollTo({ top: 0, behavior: 'smooth' });
 }
 function closePaymentDetail() {
   const list = document.getElementById('payment-list');
   const detail = document.getElementById('payment-detail');
-  if (list) list.style.display = 'block';
+  if (list) list.style.display = 'flex';
   if (detail) detail.style.display = 'none';
 }
 
-// 서류보기 모달 오픈 — 결제방법에 따라 섹션2 행 렌더링 분기
-// Bank: 거래명세서·입금증·수납확인서 버튼 활성, 신용카드 전표 비활성
-// Card: 거래명세서·입금증·수납확인서 버튼 비활성, 신용카드 전표 활성
-// Prepaid(선수금 차감): 거래명세서·입금증·수납확인서 버튼 활성, 신용카드 전표 비활성
-// Pending(입금대기/결제방법 미정): 섹션2 데이터 없음
-// issued(세금계산서 발행 여부): 결제상태와 무관, 실제 발행일 존재 여부로 판단 (정책서 6-2 기준)
+// 서류보기 모달 오픈 — 결제방법에 따라 영역2(증빙서류) 렌더링 분기
+// 2026.09.06 정책서 확정 반영: 영역2 출력 컬럼을 신용카드 전표/거래명세서 2개로 구분 (거래명세서는 우선 '-' 고정, 미구현)
+// Bank(무통장입금): 신용카드 전표 비활성
+// Card(신용카드): 신용카드 전표 활성
+// Pending(입금대기/결제방법 미정): 섹션2 안내 메시지 노출
+// issued(세금계산서 발행 여부): 결제상태와 무관, 실제 발행일 존재 여부로 판단. 전자/수기 발행 모두 인정 (정책서 6-2 기준)
 //   - 미발행 시 발행방법·공급가액·발행일 "-" 표시, 출력 버튼 비활성화
 function openSettlementModal(method, issued = true) {
   const body = document.getElementById('settle-body');
@@ -11448,7 +11414,7 @@ function openSettlementModal(method, issued = true) {
   if (method === 'Pending') {
     body.innerHTML = `
       <tr>
-        <td colspan="7" style="text-align:center;color:#999;padding:20px">
+        <td colspan="5" style="text-align:center;color:#999;padding:20px">
           결제 대기 중입니다. 결제 완료 후 입금 정보가 표시됩니다.
         </td>
       </tr>
@@ -11457,13 +11423,11 @@ function openSettlementModal(method, issued = true) {
   }
 
   const methodLabel = {
-    'Bank':    '일괄납입',
-    'Card':    '신용카드',
-    'Prepaid': '선수금 차감'
+    'Bank': '무통장입금',
+    'Card': '신용카드'
   }[method] || method;
 
   const isCard = method === 'Card';
-  const isBankOrPrepaid = method === 'Bank' || method === 'Prepaid';
   const btnActive = '<button class="btn-xs">출력하기</button>';
   const btnDisabled = '<button class="btn-xs" disabled>출력하기</button>';
 
@@ -11472,10 +11436,8 @@ function openSettlementModal(method, issued = true) {
       <td>${methodLabel}</td>
       <td>40,428,500원</td>
       <td>2026.02.27</td>
-      <td>${isBankOrPrepaid ? btnActive : btnDisabled}</td>
-      <td>${isBankOrPrepaid ? btnActive : btnDisabled}</td>
-      <td>${isBankOrPrepaid ? btnActive : btnDisabled}</td>
       <td>${isCard ? btnActive : btnDisabled}</td>
+      <td class="fee-dim">-</td>
     </tr>
   `;
 }
@@ -12342,7 +12304,7 @@ document.querySelectorAll('#modal-fee-settings .settings-list li:not(.required)'
 });
 
 // ── 교육비용 결제: 회사검색 multi-select 초기화 ──
-const COMPANY_OPTIONS_FEE = ['휴넷', '프라임', 'A기업', 'B기업명', 'C기업명'];
+const COMPANY_OPTIONS_FEE = ['회사A', '회사B', '회사C', '회사D', '회사E'];
 if (document.getElementById('fp-company-wrap')) initMultiSelect('fp', COMPANY_OPTIONS_FEE);
 
 // ── 교육비용 현황: 집계 상태 관리 (탭 + 단위) ──
@@ -12460,12 +12422,8 @@ function filterFpRows() {
   if (countEl) countEl.textContent = visibleCount;
 }
 
-// 페이지 로드 후 초기 필터 적용 (기본 모드: 월 단위)
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.querySelector('input[name="fp-period-mode"]')) {
-    filterFpRows();
-  }
-});
+// 페이지 로드 시에는 전체 샘플 행을 노출 (자동 필터 미적용)
+// 월 단위/월 범위 라디오를 직접 전환할 때만 filterFpRows()로 데모 필터링 동작 확인 가능
 
 // ── ESC 키로 열린 모든 모달 닫기 ──
 document.addEventListener('keydown', e => {
@@ -12884,10 +12842,7 @@ csRenderTable();
     </div>
     <div class="modal-body">
       <div class="settle-section">
-        <div class="settle-section-title">세금계산서<span class="change-badge phase2 in-th" data-num="7" data-memo="2026.08.20 정책서 확정 반영
-- 기존 타이틀 '세금계산서/거래명세서'가 영역2의 거래명세서 버튼과 표현 중복되어 '세금계산서'로 정정
-- 실제 거래명세서 출력은 영역2(입금증/수납확인서/신용카드 전표)에만 존재하는 문서 1종
-- 세금계산서 미발행 시(발행일 없음) 발행방법·공급가액·발행일 '-' 표시, 출력 버튼 비활성화. 결제상태와 무관하게 실제 발행일 존재 여부로 판단">7</span></div>
+        <div class="settle-section-title">세금계산서<span class="change-badge phase2 in-th" data-num="7" data-memo="세금계산서 미발행 시(발행일 없음) 발행방법·공급가액·발행일 '-' 표시, 출력 버튼 비활성화. 결제상태와 무관하게 실제 발행일 존재 여부로 판단(전자·수기 발행 모두 인정)">7</span></div>
         <table class="settle-table">
           <thead>
             <tr>
@@ -12903,21 +12858,19 @@ csRenderTable();
         </table>
       </div>
       <div class="settle-section">
-        <div class="settle-section-title">입금증/수납확인서/신용카드 전표</div>
+        <div class="settle-section-title">증빙서류<span class="change-badge phase2 in-th" data-num="10" data-memo="출력 항목은 신용카드 전표·거래명세서 2종. 거래명세서는 우선 하이픈('-') 고정 표기 (미구현)">10</span></div>
         <table class="settle-table">
           <thead>
             <tr>
               <th>결제방법</th>
               <th>결제금액</th>
               <th>결제일</th>
-              <th>거래명세서</th>
-              <th>입금증</th>
-              <th>수납확인서</th>
               <th>신용카드 전표</th>
+              <th>거래명세서</th>
             </tr>
           </thead>
           <tbody id="settle-body">
-            <!-- JS에서 결제방법(Bank/Card)에 따라 출력하기 버튼 활성/비활성 렌더링 -->
+            <!-- JS에서 결제방법(Bank/Card)에 따라 출력하기 버튼 활성/비활성 렌더링. 거래명세서는 우선 '-' 고정 -->
           </tbody>
         </table>
       </div>
@@ -12949,19 +12902,19 @@ csRenderTable();
         <div class="form-value strong">45,000,000 원</div>
 
         <div class="form-label">회사명</div>
-        <div class="form-value">프라임</div>
+        <div class="form-value">회사B</div>
 
         <div class="form-label">사업자번호</div>
         <div class="form-value">111-11-11111</div>
 
-        <div class="form-label">결제자</div>
-        <div class="form-value"><input type="text" placeholder="결제자 이름"></div>
+        <div class="form-label">결제자 <span style="color:#d8463c">*</span></div>
+        <div class="form-value"><input type="text" placeholder="결제자 이름" required></div>
 
-        <div class="form-label">이메일</div>
-        <div class="form-value"><input type="email" placeholder="email@company.com"></div>
+        <div class="form-label">이메일 <span style="color:#d8463c">*</span></div>
+        <div class="form-value"><input type="email" placeholder="email@company.com" required></div>
 
-        <div class="form-label">휴대폰</div>
-        <div class="form-value"><input type="text" placeholder="010-0000-0000"></div>
+        <div class="form-label">휴대폰 <span style="color:#d8463c">*</span><span class="change-badge phase2" data-num="9" data-memo="결제자·이메일·휴대폰은 모두 필수 입력 항목 (정책서 7-2)">9</span></div>
+        <div class="form-value"><input type="text" placeholder="010-0000-0000" required></div>
       </div>
       <div class="pay-notice">
         <strong>법인카드 결제를 권장합니다.</strong><br>
