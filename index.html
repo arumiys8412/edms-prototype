@@ -5374,11 +5374,11 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             </thead>
             <tbody>
               <tr>
-                <td>5개사</td>
-                <td>7건</td>
-                <td>37개</td>
-                <td>954명</td>
-                <td><strong>116,931,000원</strong></td>
+                <td>3개사</td>
+                <td>6건</td>
+                <td>22개</td>
+                <td>501명</td>
+                <td><strong>54,252,000원</strong></td>
               </tr>
             </tbody>
           </table>
@@ -5415,7 +5415,10 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             <tbody>
               <tr data-month="2026.04">
                 <td>32</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('회사A', '2026.04')">회사A</span></td>
+                <td rowspan="2" style="vertical-align:middle"><span class="fee-company-link" onclick="openPaymentDetail('회사A', '2026.04')">회사A</span><span class="change-badge phase2" data-num="12" data-memo="목록은 HSM 정산 데이터 기준이라 동일 회사·동일 학습시작월에도 추가발행 등으로 정산이 여러 번 처리되면 결제 건이 복수로 노출될 수 있음 (정책서 3-1, 3-2 참고)
+- 회사명 셀은 회사+학습시작월 기준으로 병합 표시하고, 상세 진입도 병합된 회사명 클릭 1곳으로만 제공함
+- 상세 화면의 결제 요약정보 표는 목록과 동일하게 결제 건 단위로 행을 그대로 나열함 (예: 정산이 2회면 요약 표도 2행)
+- 다만 하단 결제 상세내역(학습자별 목록)은 EDMS 자체 데이터 기준이며 학습시작월 단위로만 관리되어 정산 건별로 나누어 보여줄 방법이 없으므로 1개 목록으로 통합 노출함 (정책서 5-1 참고)">12</span></td>
                 <td class="fee-mono">2026.04</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">2</td>
@@ -5428,7 +5431,6 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </tr>
               <tr data-month="2026.04">
                 <td>31</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('회사B', '2026.04')">회사B</span></td>
                 <td class="fee-mono">2026.04</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">7</td>
@@ -5441,7 +5443,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </tr>
               <tr data-month="2026.03">
                 <td>29</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('회사C', '2026.03')">회사C</span></td>
+                <td><span class="fee-company-link" onclick="openPaymentDetail('회사B', '2026.03')">회사B</span></td>
                 <td class="fee-mono">2026.03</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">6</td>
@@ -5454,7 +5456,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </tr>
               <tr data-month="2026.02">
                 <td>28</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('회사D', '2026.02')">회사D</span></td>
+                <td rowspan="2" style="vertical-align:middle"><span class="fee-company-link" onclick="openPaymentDetail('회사C', '2026.02')">회사C</span></td>
                 <td class="fee-mono">2026.02</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">4</td>
@@ -5467,7 +5469,6 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
               </tr>
               <tr data-month="2026.02">
                 <td>25</td>
-                <td><span class="fee-company-link" onclick="openPaymentDetail('회사E', '2026.02')">회사E</span></td>
                 <td class="fee-mono">2026.02</td>
                 <td>고객사 교육비</td>
                 <td class="fee-num">3</td>
@@ -5535,18 +5536,18 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
 - 목록과 동일 조건, 정책서 6-1 참고">5</span></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="fpd-summary-body">
               <tr>
-                <td id="fpd-company">회사A</td>
-                <td id="fpd-period">2026.04</td>
-                <td id="fpd-settlement">고객사 교육비</td>
-                <td id="fpd-courses">12</td>
-                <td id="fpd-learners">32</td>
-                <td><strong id="fpd-amount">6,329,000원</strong></td>
-                <td id="fpd-method">무통장입금</td>
-                <td id="fpd-status"><span class="fee-status fee-status-done">입금완료</span></td>
-                <td id="fpd-pay-btn"><button class="btn-xs" disabled>결제하기</button></td>
-                <td id="fpd-docs-btn"><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
+                <td>회사A</td>
+                <td>2026.04</td>
+                <td>고객사 교육비</td>
+                <td>12</td>
+                <td>32</td>
+                <td><strong>6,329,000원</strong></td>
+                <td>무통장입금</td>
+                <td><span class="fee-status fee-status-done">입금완료</span></td>
+                <td><button class="btn-xs" disabled>결제하기</button></td>
+                <td><button class="btn-xs" onclick="openSettlementModal('Bank')">서류보기</button></td>
               </tr>
             </tbody>
           </table>
@@ -11326,15 +11327,24 @@ function goToPaymentWithCompany(companyName) {
 // 목록에서 클릭 시 해당 키의 데이터로 상세를 동적 갱신
 // ──────────────────────────────────────────
 
-// 교육비용 결제: 회사명+월 → 결제 건 요약 데이터
-// 목록의 5개 샘플 결제 건과 1:1 매핑 — 목록/상세 요약 정합성 보장
+// 교육비용 결제: 회사명+월 → 결제 건 요약 데이터 (배열)
+// 목록은 HSM 기준이라 동일 회사·동일 월에 정산이 여러 번 처리(추가발행 등)되면 결제 건이 여러 건 존재할 수 있음 (정책서 3-1, 3-2 참고)
+// → 상세 화면의 "결제 요약정보" 표는 목록과 동일하게 결제 건(정산 건) 단위로 행을 그대로 나열함
+// 다만 하단 "결제 상세내역"(학습자별 목록)은 EDMS 자체 데이터 기준이라 학습시작월 단위로만 관리되어 정산 건별로 나누어 보여줄 방법이 없으므로 통합해서 1개 목록으로만 노출함 (정책서 5-1 참고)
+// 목록의 6개 샘플 결제 건과 매핑 — 목록/상세 요약 정합성 보장
 // issued: 세금계산서 발행 여부 (전자/수기 모두 true). 세금계산서 미발행 건은 목록 조회 대상에서 제외되므로 이 목록에는 issued:false 케이스가 없음 (정책서 3-1)
 const FP_DETAIL_MAP = {
-  '회사A|2026.04': { settlement:'고객사 교육비', courses:2, learners:4,   amount:'12,000원',       method:'무통장입금', status:'done',   methodKey:'Bank', issued:true },
-  '회사B|2026.04': { settlement:'고객사 교육비', courses:7, learners:160, amount:'45,000,000원',   method:'-',          status:'wait',   methodKey:'Pending', issued:true },
-  '회사C|2026.03': { settlement:'고객사 교육비', courses:6, learners:180, amount:'3,840,000원',    method:'신용카드',   status:'done',   methodKey:'Card', issued:true },
-  '회사D|2026.02': { settlement:'고객사 교육비', courses:4, learners:95,  amount:'1,250,000원',    method:'무통장입금', status:'cancel', methodKey:'Bank', issued:true },
-  '회사E|2026.02': { settlement:'고객사 교육비', courses:3, learners:62,  amount:'4,150,000원',    method:'무통장입금', status:'wait',   methodKey:'Bank', issued:true }
+  '회사A|2026.04': [
+    { settlement:'고객사 교육비', courses:2, learners:4,   amount:'12,000원',       method:'무통장입금', status:'done', methodKey:'Bank', issued:true },
+    { settlement:'고객사 교육비', courses:7, learners:160, amount:'45,000,000원',   method:'-',          status:'wait', methodKey:'Pending', issued:true }
+  ],
+  '회사B|2026.03': [
+    { settlement:'고객사 교육비', courses:6, learners:180, amount:'3,840,000원',    method:'신용카드',   status:'done', methodKey:'Card', issued:true }
+  ],
+  '회사C|2026.02': [
+    { settlement:'고객사 교육비', courses:4, learners:95,  amount:'1,250,000원',    method:'무통장입금', status:'cancel', methodKey:'Bank', issued:true },
+    { settlement:'고객사 교육비', courses:3, learners:62,  amount:'4,150,000원',    method:'무통장입금', status:'wait',   methodKey:'Bank', issued:true }
+  ]
 };
 
 const FEE_STATUS_LABEL = { done:'입금완료', wait:'입금대기', cancel:'입금취소' };
@@ -11343,27 +11353,34 @@ function openPaymentDetail(company, month) {
   // 파라미터 없이 호출되는 경우 (이전 호환성) 회사A 2026.04로 디폴트
   if (!company) { company = '회사A'; month = '2026.04'; }
   const key = `${company}|${month}`;
-  const data = FP_DETAIL_MAP[key];
-  if (data) {
-    document.getElementById('fpd-company').textContent = company;
-    document.getElementById('fpd-period').textContent = month;
-    document.getElementById('fpd-settlement').textContent = data.settlement;
-    document.getElementById('fpd-courses').textContent = data.courses;
-    document.getElementById('fpd-learners').textContent = data.learners;
-    document.getElementById('fpd-amount').textContent = data.amount;
-    document.getElementById('fpd-method').textContent = data.method;
-    // 결제상태 뱃지
-    const statusEl = document.getElementById('fpd-status');
-    statusEl.innerHTML = `<span class="fee-status fee-status-${data.status}">${FEE_STATUS_LABEL[data.status]}</span>`;
-    // 결제하기 버튼 활성화 조건: 입금대기 + 결제방법 미정('-') + 세금계산서 발행 건(전자/수기 모두 인정)
-    const payBtnEl = document.getElementById('fpd-pay-btn');
-    const canPay = (data.status === 'wait' && data.method === '-' && data.issued);
-    payBtnEl.innerHTML = `<button class="btn-xs"${canPay ? '' : ' disabled'}>결제하기</button>`;
-    // 서류보기 버튼은 결제방법에 따라 모달 분기
-    const docsBtnEl = document.getElementById('fpd-docs-btn');
-    docsBtnEl.innerHTML = `<button class="btn-xs" onclick="openSettlementModal('${data.methodKey}')">서류보기</button>`;
-    // 검색결과 건수 = 총 학습자 수 (한 학습자 1과정 기본 가정)
-    document.getElementById('fpd-count').textContent = data.learners;
+  const rows = FP_DETAIL_MAP[key];
+  if (rows && rows.length) {
+    const body = document.getElementById('fpd-summary-body');
+    // 회사명 셀은 목록과 동일한 규칙으로 병합 표시 (첫 행에만 rowspan으로 노출)
+    body.innerHTML = rows.map((data, i) => {
+      // 결제하기 버튼 활성화 조건: 입금대기 + 결제방법 미정('-') + 세금계산서 발행 건(전자/수기 모두 인정)
+      const canPay = (data.status === 'wait' && data.method === '-' && data.issued);
+      const payBtn = `<button class="btn-xs"${canPay ? '' : ' disabled'} onclick="${canPay ? "openModal('modal-payment')" : ''}">결제하기</button>`;
+      // 서류보기 버튼은 결제방법에 따라 모달 분기
+      const docsBtn = `<button class="btn-xs" onclick="openSettlementModal('${data.methodKey}')">서류보기</button>`;
+      const companyCell = i === 0 ? `<td${rows.length > 1 ? ` rowspan="${rows.length}" style="vertical-align:middle"` : ''}>${company}</td>` : '';
+      return `<tr>
+                ${companyCell}
+                <td>${month}</td>
+                <td>${data.settlement}</td>
+                <td>${data.courses}</td>
+                <td>${data.learners}</td>
+                <td><strong>${data.amount}</strong></td>
+                <td>${data.method}</td>
+                <td><span class="fee-status fee-status-${data.status}">${FEE_STATUS_LABEL[data.status]}</span></td>
+                <td>${payBtn}</td>
+                <td>${docsBtn}</td>
+              </tr>`;
+    }).join('');
+    // 검색결과 건수(하단 학습자별 목록) = 결제 건들의 총 학습자 수 합
+    // 단, 학습자별 상세 목록 자체는 EDMS 기준으로 통합되어 있어 정산 건별 합산이 실제 인원과 다를 수 있음 (정책서 5-1 참고)
+    const totalLearners = rows.reduce((sum, d) => sum + d.learners, 0);
+    document.getElementById('fpd-count').textContent = totalLearners;
   }
   document.getElementById('payment-list').style.display = 'none';
   document.getElementById('payment-detail').style.display = 'flex';
