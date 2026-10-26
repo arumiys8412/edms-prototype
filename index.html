@@ -1645,6 +1645,10 @@
   .change-badge.course { background: #e11d48; }
   .change-badge.course:hover { background: #be123c; }
 
+  /* 아카이브 학습시간 그룹 - 인디고색 */
+  .change-badge.arc { background: #4f46e5; }
+  .change-badge.arc:hover { background: #4338ca; }
+
   /* 2차 후속 작업 그룹 - 마젠타색 */
   .change-badge.phase2 { background: #db2777; }
   .change-badge.phase2:hover { background: #be185d; }
@@ -1764,6 +1768,13 @@
   .change-popover.lm .cp-head .cp-num { background: #0d9488; }
   .change-popover.lm.above::before { border-right-color: #0d9488; border-bottom-color: #0d9488; }
   .change-popover.lm.below::before { border-left-color: #0d9488; border-top-color: #0d9488; }
+
+  /* 아카이브 학습시간 그룹 - 인디고색 팝오버 */
+  .change-popover.arc { border-color: #4f46e5; }
+  .change-popover.arc .cp-head { color: #4f46e5; }
+  .change-popover.arc .cp-head .cp-num { background: #4f46e5; }
+  .change-popover.arc.above::before { border-right-color: #4f46e5; border-bottom-color: #4f46e5; }
+  .change-popover.arc.below::before { border-left-color: #4f46e5; border-top-color: #4f46e5; }
 
   /* 2차 후속 작업 그룹 - 마젠타색 팝오버 */
   .change-popover.phase2 { border-color: #db2777; }
@@ -1891,6 +1902,13 @@
     font-weight: 600;
   }
   .apply-detail-table td { color: #333; background: #fff; }
+
+  /* ── 아카이브 학습시간 상세 기본정보 (4열 key-value) ── */
+  .arc-kv { width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed; }
+  .arc-kv th, .arc-kv td { padding:9px 12px; border:1px solid var(--border); text-align:left; }
+  .arc-kv th { width:150px; background:var(--table-header); color:#444; font-weight:600; }
+  .arc-kv td { color:#333; background:#fff; }
+  .arc-sub-title { font-size:14px; font-weight:700; color:#222; margin:22px 0 10px; }
 
   /* ── 상태 배지 (결제상태 등) ───────────── */
   .status-badge {
@@ -2311,12 +2329,20 @@
         <span class="nav-arrow">▶</span>
       </div>
       <div class="nav-sub">
-        <a class="nav-item" data-page="personal" href="#">개인별 신청 현황</a>
-        <a class="nav-item" data-page="course" href="#">과정별 신청 현황</a>
-        <a class="nav-item" data-page="study-personal" href="#">개인별 학습 현황</a>
-        <a class="nav-item" data-page="study-course" href="#">과정별 학습 현황</a>
+        <a class="nav-item" data-page="personal" href="#">신청관리</a>
+        <a class="nav-item" data-page="study-personal" href="#">학습관리</a>
         <a class="nav-item" data-page="completion" href="#">수료결과</a>
         <a class="nav-item" data-page="report" href="#">결과보고서</a>
+      </div>
+    </div>
+    <!-- 아카이브 현황 (신규 — HRD아카이브 계약 연수원만 노출) -->
+    <div class="nav-group">
+      <div class="nav-group-header" onclick="toggleNavGroup(this)">
+        <span class="nav-group-label">아카이브 현황</span>
+        <span class="nav-arrow">▶</span>
+      </div>
+      <div class="nav-sub">
+        <a class="nav-item" data-page="archive-time" href="#">학습시간 조회</a>
       </div>
     </div>
     <!-- 러닝메이커 (1depth 단독 → 하위메뉴 있는 그룹으로 전환) -->
@@ -2640,8 +2666,15 @@
     <!-- ══════════════════════════════════════════ -->
     <div class="page-section" id="page-personal">
       <div class="page-header-row">
-        <div class="page-header-title">개인별 신청현황</div>
-        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">수강신청</a> &gt; 개인별 신청현황</div>
+        <div class="page-header-title">신청관리</div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">교육관리</a> &gt; 신청관리 &gt; 개인별 신청현황</div>
+      </div>
+      <!-- 메뉴 탭 -->
+      <div class="card" style="padding:0">
+        <div class="tab-nav" style="padding:0 20px">
+          <button class="tab-btn active" data-menu-tab="personal">개인별 신청현황</button>
+          <button class="tab-btn" data-menu-tab="course">과정별 신청현황</button>
+        </div>
       </div>
       <div class="card">
         <!-- 신청일 -->
@@ -2740,7 +2773,6 @@ placeholder: ‘운영구분 전체’
           <div class="field-group">
             <div class="field-label">회사검색</div>
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-              <label class="checkbox-row"><input type="checkbox" id="p-chk-company"> 선택한 회사만 검색</label>
               <div class="multi-select-wrap" id="p-company-wrap">
                 <div class="multi-tags-box" id="p-company-box">
                   <span class="multi-placeholder" id="p-company-placeholder">회사선택</span>
@@ -2830,7 +2862,7 @@ placeholder: ‘운영구분 전체’
       <div class="page-header-row">
         <div class="page-header-title">개인별 신청현황 상세</div>
         <div class="breadcrumb">
-          <a href="#">홈</a> &gt; <a href="#">수강신청</a> &gt;
+          <a href="#">홈</a> &gt; <a href="#">교육관리</a> &gt; 신청관리 &gt;
           <a href="#" id="p-detail-breadcrumb-back">개인별 신청현황</a> &gt; 상세
         </div>
       </div>
@@ -2896,8 +2928,15 @@ placeholder: ‘운영구분 전체’
     <!-- ══════════════════════════════════════════ -->
     <div class="page-section" id="page-course">
       <div class="page-header-row">
-        <div class="page-header-title">과정별 신청현황</div>
-        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">수강신청</a> &gt; 과정별 신청현황</div>
+        <div class="page-header-title">신청관리</div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">교육관리</a> &gt; 신청관리 &gt; 과정별 신청현황</div>
+      </div>
+      <!-- 메뉴 탭 -->
+      <div class="card" style="padding:0">
+        <div class="tab-nav" style="padding:0 20px">
+          <button class="tab-btn" data-menu-tab="personal">개인별 신청현황</button>
+          <button class="tab-btn active" data-menu-tab="course">과정별 신청현황</button>
+        </div>
       </div>
       <div class="card">
         <!-- 신청기간 + 과정검색 (같은 줄) -->
@@ -3037,7 +3076,7 @@ placeholder: ‘운영구분 전체’
       <div class="page-header-row">
         <div class="page-header-title">과정별 신청현황 상세</div>
         <div class="breadcrumb">
-          <a href="#">홈</a> &gt; <a href="#">수강신청</a> &gt;
+          <a href="#">홈</a> &gt; <a href="#">교육관리</a> &gt; 신청관리 &gt;
           <a href="#" id="c-detail-breadcrumb-back">과정별 신청현황</a> &gt; 상세
         </div>
       </div>
@@ -3103,7 +3142,6 @@ placeholder: ‘운영구분 전체’
           <!-- 둘째 줄: 회사검색 / 부서검색 -->
           <div class="search-row" style="margin-top:14px">
             <div class="label">회사검색</div>
-            <label class="checkbox-row"><input type="checkbox" id="cdet-chk-company"> 선택한 회사만 검색</label>
             <div class="multi-select-wrap" id="cdet-company-wrap">
               <div class="multi-tags-box" id="cdet-company-box">
                 <span class="multi-placeholder" id="cdet-company-placeholder">회사선택</span>
@@ -3164,8 +3202,15 @@ placeholder: ‘운영구분 전체’
     <!-- ══════════════════════════════════════════ -->
     <div class="page-section" id="page-study-personal">
       <div class="page-header-row">
-        <div class="page-header-title">개인별 학습현황</div>
-        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">학습</a> &gt; 개인별 학습현황</div>
+        <div class="page-header-title">학습관리</div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">교육관리</a> &gt; 학습관리 &gt; 개인별 학습현황</div>
+      </div>
+      <!-- 메뉴 탭 -->
+      <div class="card" style="padding:0">
+        <div class="tab-nav" style="padding:0 20px">
+          <button class="tab-btn active" data-menu-tab="study-personal">개인별 학습현황</button>
+          <button class="tab-btn" data-menu-tab="study-course">과정별 학습현황</button>
+        </div>
       </div>
       <div class="card">
 
@@ -3291,7 +3336,6 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
           <div class="field-group">
             <div class="field-label">회사검색</div>
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-              <label class="checkbox-row"><input type="checkbox" id="sp-chk-company"> 선택한 회사만 검색</label>
               <div class="multi-select-wrap" id="sp-company-wrap">
                 <div class="multi-tags-box" id="sp-company-box">
                   <span class="multi-placeholder" id="sp-company-placeholder">회사선택</span>
@@ -3381,8 +3425,15 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
     <!-- ══════════════════════════════════════════ -->
     <div class="page-section" id="page-study-course">
       <div class="page-header-row">
-        <div class="page-header-title">과정별 학습현황</div>
-        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">학습</a> &gt; 과정별 학습현황</div>
+        <div class="page-header-title">학습관리</div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">교육관리</a> &gt; 학습관리 &gt; 과정별 학습현황</div>
+      </div>
+      <!-- 메뉴 탭 -->
+      <div class="card" style="padding:0">
+        <div class="tab-nav" style="padding:0 20px">
+          <button class="tab-btn" data-menu-tab="study-personal">개인별 학습현황</button>
+          <button class="tab-btn active" data-menu-tab="study-course">과정별 학습현황</button>
+        </div>
       </div>
 
       <!-- 검색 카드 -->
@@ -3536,7 +3587,7 @@ placeholder: ‘운영구분 전체’ (별도 ‘전체’ 옵션 추가 X)
       <div class="page-header-row">
         <div class="page-header-title">과정별 학습현황 상세</div>
         <div class="breadcrumb">
-          <a href="#">홈</a> &gt; <a href="#">학습</a> &gt;
+          <a href="#">홈</a> &gt; <a href="#">교육관리</a> &gt; 학습관리 &gt;
           <a href="#" id="sc-detail-breadcrumb-back">과정별 학습현황</a> &gt; 상세
         </div>
       </div>
@@ -3961,17 +4012,14 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
           <!-- 회사검색 -->
           <div class="search-row">
             <div class="label">회사검색</div>
-            <label class="checkbox-row"><input type="checkbox" id="cr-p-chk-company"> 선택한 회사만 검색</label>
             <div class="multi-select-wrap" id="cr-p-company-wrap">
               <div class="multi-tags-box" id="cr-p-company-box">
                 <span class="multi-placeholder" id="cr-p-company-placeholder">회사선택</span>
               </div>
               <div class="multi-dropdown" id="cr-p-company-dropdown">
-                <div class="multi-option" data-value="휴넷">휴넷</div>
-                <div class="multi-option" data-value="프라임">프라임</div>
-                <div class="multi-option" data-value="A기업">A기업</div>
-                <div class="multi-option" data-value="B기업명">B기업명</div>
-                <div class="multi-option" data-value="C기업명">C기업명</div>
+                <div class="multi-option" data-value="(주)휴넷">(주)휴넷</div>
+                <div class="multi-option" data-value="LABS플랫폼">LABS플랫폼</div>
+                <div class="multi-option" data-value="테스트기업">테스트기업</div>
               </div>
             </div>
           </div>
@@ -4060,17 +4108,14 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
           <!-- 회사검색 -->
           <div class="search-row">
             <div class="label">회사검색</div>
-            <label class="checkbox-row"><input type="checkbox" id="cr-c-chk-company"> 선택한 회사만 검색</label>
             <div class="multi-select-wrap" id="cr-c-company-wrap">
               <div class="multi-tags-box" id="cr-c-company-box">
                 <span class="multi-placeholder" id="cr-c-company-placeholder">회사선택</span>
               </div>
               <div class="multi-dropdown" id="cr-c-company-dropdown">
-                <div class="multi-option" data-value="휴넷">휴넷</div>
-                <div class="multi-option" data-value="프라임">프라임</div>
-                <div class="multi-option" data-value="A기업">A기업</div>
-                <div class="multi-option" data-value="B기업명">B기업명</div>
-                <div class="multi-option" data-value="C기업명">C기업명</div>
+                <div class="multi-option" data-value="(주)휴넷">(주)휴넷</div>
+                <div class="multi-option" data-value="LABS플랫폼">LABS플랫폼</div>
+                <div class="multi-option" data-value="테스트기업">테스트기업</div>
               </div>
             </div>
           </div>
@@ -4152,17 +4197,14 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
           <!-- 회사검색 -->
           <div class="search-row">
             <div class="label">회사검색</div>
-            <label class="checkbox-row"><input type="checkbox" id="cr-m-chk-company"> 선택한 회사만 검색</label>
             <div class="multi-select-wrap" id="cr-m-company-wrap">
               <div class="multi-tags-box" id="cr-m-company-box">
                 <span class="multi-placeholder" id="cr-m-company-placeholder">회사선택</span>
               </div>
               <div class="multi-dropdown" id="cr-m-company-dropdown">
-                <div class="multi-option" data-value="휴넷">휴넷</div>
-                <div class="multi-option" data-value="프라임">프라임</div>
-                <div class="multi-option" data-value="A기업">A기업</div>
-                <div class="multi-option" data-value="B기업명">B기업명</div>
-                <div class="multi-option" data-value="C기업명">C기업명</div>
+                <div class="multi-option" data-value="(주)휴넷">(주)휴넷</div>
+                <div class="multi-option" data-value="LABS플랫폼">LABS플랫폼</div>
+                <div class="multi-option" data-value="테스트기업">테스트기업</div>
               </div>
             </div>
           </div>
@@ -4498,7 +4540,7 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
       <div class="page-header-row">
         <div class="page-header-title">개인별 학습현황</div>
         <div class="breadcrumb">
-          <a href="#">홈</a> &gt; <a href="#">학습</a> &gt;
+          <a href="#">홈</a> &gt; <a href="#">교육관리</a> &gt; 학습관리 &gt;
           <a href="#" id="detail-breadcrumb-back">개인별 학습현황</a> &gt; 상세
         </div>
       </div>
@@ -4604,6 +4646,308 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
 
     </div><!-- /page-study-detail -->
 
+
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 아카이브 학습시간 (목록)                 -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-archive-time">
+      <div class="page-header-row">
+        <div class="page-header-title">학습시간 조회<span class="change-badge arc" data-num="1" data-memo="[아카이브] 신규 메뉴 — 아카이브 현황(1depth 신규) > 학습시간 조회
+Admin ‘아카이브 현황 > 학습시간 조회 > 개인별 학습시간’과 같은 구조
+- EDMS는 로그인한 연수원 1곳의 데이터만 조회 → 연수원 검색·연수원 컬럼 제외
+- 메뉴 노출: HRD아카이브 계약이 있는 연수원만 노출 (계약 없는 연수원은 메뉴 미노출)
+- 조회 대상: 아카이브 대상자 (활성 소속 계약 = HRD아카이브 계약)
+- 재직상태 ‘퇴사’ 제외, HRD아카이브 계약 과정만 집계
+- 인정시간 산정·이수 기준은 Admin 정책서 3장과 동일">1</span></div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">아카이브 현황</a> &gt; 학습시간 조회</div>
+      </div>
+
+      <div class="card">
+        <!-- 학습기간 -->
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group" style="min-width:500px">
+            <div class="field-label">학습기간<span class="change-badge arc" data-num="2" data-memo="학습관리(개인별 학습현황)와 같은 형식
+- 유형: 기간 검색 (디폴트) / 학습시작일 / 학습종료일
+- 기준: 학습자의 학습기간 (아카이브는 학습기간 1종이라 기준 선택 없음)
+- 학습시작일: 학습기간 시작일이 선택 범위에 포함
+- 학습종료일: 학습기간 종료일이 선택 범위에 포함
+- 기간 검색: 학습기간 시작일·종료일이 선택한 시작일·종료일과 각각 일치
+- 디폴트: 기간 검색, 학습시작일이 오늘 이전인 훈련과정 중 가장 최근 훈련과정의 학습기간
+  예: 오늘 2026.10.24 → 2026.07.01 ~ 2026.12.31
+- 해당 훈련과정이 없으면 기간 검색, 당해 연도 1월 1일 ~ 오늘
+- 시작일·종료일 필수 입력, 삭제 불가
+- [초기화] 시 디폴트로 복귀">2</span></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+              <select class="select" id="arc-sel-period-type" style="min-width:100px">
+                <option value="period" selected>기간 검색</option>
+                <option value="start">학습시작일</option>
+                <option value="end">학습종료일</option>
+              </select>
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="arc-date-from" value="" placeholder="날짜 선택" readonly>
+                <span class="cal-icon">📅</span>
+                <div class="cal-popup" id="arc-cal-from"></div>
+              </div>
+              <span class="date-sep">~</span>
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="arc-date-to" value="" placeholder="날짜 선택" readonly>
+                <span class="cal-icon">📅</span>
+                <div class="cal-popup" id="arc-cal-to"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 학습자검색 (이수여부·근무상태 포함) -->
+        <div class="search-form-row" style="margin-bottom:14px">
+          <div class="field-group" style="min-width:460px">
+            <div class="field-label">학습자검색</div>
+            <div style="display:flex;gap:6px;align-items:center;flex-wrap:nowrap">
+              <select class="select" id="arc-sel-learner-type" style="min-width:80px">
+                <option value="name">이름</option>
+                <option value="id">아이디</option>
+                <option value="empno">사번</option>
+              </select>
+              <input type="text" class="input" id="arc-input-learner" placeholder="검색어를 입력해주세요." style="width:200px">
+              <span class="badge-wrap"><select class="select" id="arc-sel-pass" style="min-width:130px">
+                <option value="">이수여부 전체</option>
+                <option value="이수">이수</option>
+                <option value="미이수">미이수</option>
+              </select><span class="change-badge arc" data-num="3" data-memo="placeholder: ‘이수여부 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 이수여부 전체 / 이수 / 미이수
+- 학습관리의 ‘수료여부’와 같은 위치·형식">3</span></span>
+              <span class="badge-wrap"><select class="select" id="arc-sel-work" style="min-width:130px">
+                <option value="">재직상태 전체</option>
+                <option value="재직" selected>재직</option>
+                <option value="모니터링">모니터링</option>
+              </select><span class="change-badge arc" data-num="4" data-memo="placeholder: ‘재직상태 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 재직상태 전체 / 재직 / 모니터링 (디폴트: 재직)
+- 신청관리 등 EDMS 다른 메뉴와 같은 형식·용어 (Admin ‘근무상태’와 같은 값)
+- 퇴사자는 조회 대상에서 제외">4</span></span>
+            </div>
+          </div>
+        </div>
+        <!-- 회사검색 -->
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group">
+            <div class="field-label">회사검색<span class="change-badge arc" data-num="5" data-memo="단일 선택 (셀렉트박스)
+placeholder: ‘회사 전체’ (별도 ‘전체’ 옵션 추가 X)
+옵션: 회사 전체 / 연수원 소속 회사 목록
+디폴트: 회사 전체">5</span></div>
+            <select class="select" id="arc-sel-company" style="min-width:200px">
+              <option value="">회사 전체</option>
+              <option value="회사1">회사1</option>
+              <option value="회사2">회사2</option>
+              <option value="회사3">회사3</option>
+            </select>
+          </div>
+        </div>
+        <div class="search-form-actions">
+          <button class="btn btn-primary" id="arc-btn-search">검색</button>
+          <button class="btn btn-reset" id="arc-btn-reset">초기화</button>
+        </div>
+      </div>
+
+      <!-- 요약 -->
+      <div class="card">
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center"><span>검색결과 요약<span class="change-badge arc" data-num="6" data-memo="검색 조건이 적용된 목록 중 재직 회원 기준 집계 (Admin ‘기업별 학습시간’ 집계 항목)
+- 모니터링 계정은 재직상태 검색 조건과 관계없이 요약에서 제외
+- 요약 영역에 ‘재직 회원 기준’ 고정 표기
+- 재직상태 ‘모니터링’ 검색 시 요약 전 항목 ‘-’
+- 학습자 수: 재직 회원 목록 행 수 (회원 × 학습기간)
+- 1인당 평균 누적시간: 총 누적시간 합계 ÷ 학습자 수 (초 단위 절사). 학습 이력 없는 학습자 포함
+  표기: H시간 M분 S초(N초)
+- 이수 인원수: 이수여부 ‘이수’ 행 수
+- 이수율: 이수 인원수 ÷ 학습자 수 × 100 (소수점 첫째 자리 반올림, 정수는 소수점 없이)
+- 총 교육비: 학습자 수 × 1인 교육비(140,000원)
+- 정부지원금(예상): 회사별 이수 인원수 × 1인 교육비 × 지원 비율의 합계
+  · 지원 비율: 사업장규모 우선지원 90%, 중견 80% / 대기업·사업장규모 없음은 산정 제외
+  · 사업장규모: 거래처 정보 기준
+  · 산정 대상(지원 대상 회사의 이수자)이 없으면 ‘-’">6</span></span><span style="font-size:12px;font-weight:400;color:#666">재직 회원 기준</span></div>
+        <table class="summary-table">
+          <thead>
+            <tr><th>학습자 수</th><th>1인당 평균 누적시간</th><th>이수 인원수</th><th>이수율</th><th>총 교육비</th><th>정부지원금(예상)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td id="arc-s-total">-</td><td id="arc-s-avg">-</td><td id="arc-s-pass">-</td><td id="arc-s-rate">-</td><td id="arc-s-fee">-</td><td id="arc-s-support">-</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 목록 -->
+      <div class="card">
+        <div class="result-header">
+          <div class="result-count">검색결과 <strong id="arc-count">0</strong>건</div>
+          <div class="result-right">
+            <button class="btn-excel" id="arc-btn-excel">엑셀 다운로드<span class="change-badge arc" data-num="7" data-memo="[예] 선택 시 파일 다운로드 메뉴로 이동, 비밀번호 설정 후 다운로드 (다른 메뉴와 동일)
+- 범위: 현재 검색 조건 기준 전체 결과
+- 항목: 목록과 동일
+- 이름·아이디: 비식별처리 미적용 (식별 정보로 다운로드)
+- 검색 결과 0건이면 비활성">7</span></button>
+          </div>
+        </div>
+        <div class="table-scroll"><table class="main-table">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>이름<span class="change-badge arc in-th" data-num="8" data-memo="비식별처리 (예: 홍*동, 2자는 홍*)
+(클릭) 학습시간 상세 진입">8</span></th>
+              <th>아이디</th>
+              <th>회사명</th>
+              <th>학습기간<span class="change-badge arc in-th" data-num="9" data-memo="HRD아카이브 계약의 학습 인정 기간
+- YYYY.MM.DD ~ YYYY.MM.DD
+- 훈련과정 ID는 EDMS 화면에 노출하지 않음 (목록·상세·검색 모두 제외)
+- 1행 = 회원 × 학습기간: 훈련과정 ID가 2개 이상이고 학습기간이 다르면 학습기간별로 행 구분
+- 예시 데이터: 일부 회원은 이전 학습기간 행이 추가로 있음 (학습기간 구분을 학습시작일·학습종료일로 바꾸면 확인 가능)">9</span></th>
+              <th>총 누적시간<span class="change-badge arc in-th" data-num="10" data-memo="학습기간 내 아카이브 인정시간 합계 (온라인·마이크로러닝·라이브 누적시간의 합)
+- 이력구분별(온라인·마이크로러닝·라이브) 누적시간 함께 노출
+- 목록 표기: H시간 M분 S초 (괄호 초 환산 없음), 0인 단위 생략, 0은 ‘0초’
+- 상세 누적 학습시간은 괄호 초 환산 포함 표기 유지
+- 학습 이력 없음: 모두 ‘0초’, 이수여부 ‘미이수’">10</span></th>
+              <th>온라인 누적시간</th><th>마이크로러닝 누적시간</th><th>라이브 누적시간</th>
+              <th>이수여부<span class="change-badge arc in-th" data-num="11" data-memo="학습기간 내 총 누적시간이 15시간(54,000초) 이상이면 ‘이수’
+- 예: 15시간 0분 0초 → 이수 / 14시간 59분 59초 → 미이수">11</span></th>
+            </tr>
+          </thead>
+          <tbody id="arc-table-body"></tbody>
+        </table></div>
+        <div class="table-footer">
+          <div class="page-size-wrap">
+            <select class="select" id="arc-page-size">
+              <option value="30">30개씩 보기</option>
+              <option value="50" selected>50개씩 보기</option>
+              <option value="100">100개씩 보기</option>
+            </select>
+          </div>
+          <div class="pagination" id="arc-pagination"></div>
+        </div>
+      </div>
+    </div><!-- /page-archive-time -->
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 아카이브 학습시간 상세                   -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-archive-time-detail">
+      <div class="page-header-row">
+        <div class="page-header-title">학습시간 상세</div>
+        <div class="breadcrumb">
+          <a href="#">홈</a> &gt; <a href="#">아카이브 현황</a> &gt;
+          <a href="#" id="arcd-breadcrumb-back">학습시간 조회</a> &gt; 상세
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="detail-section-header">
+          <div class="detail-section-title">기본정보<span class="change-badge arc" data-num="12" data-memo="선택한 행의 학습기간 기준으로 표시
+- 이름·아이디 비식별처리 미적용
+- Admin의 연수원·기업 항목은 회사명·부서명으로 대체">12</span></div>
+          <div style="display:flex;gap:6px">
+            <button class="mbtn mbtn-gray" id="arcd-back-btn">목록</button>
+            <button class="mbtn mbtn-gray" id="arcd-prev-btn">이전</button>
+          </div>
+        </div>
+        <table class="arc-kv"><tbody id="arcd-basic-body"></tbody></table>
+
+        <div class="arc-sub-title">누적 학습시간<span class="change-badge arc" data-num="13" data-memo="총 / 온라인 / 마이크로러닝 / 라이브 누적시간
+- 학습기간 내 이력 기준
+- 하단 상세 학습이력 검색 조건과 무관하게 고정값 노출">13</span></div>
+        <table class="summary-table">
+          <thead><tr><th>총 누적시간</th><th>온라인 누적시간</th><th>마이크로러닝 누적시간</th><th>라이브 누적시간</th></tr></thead>
+          <tbody id="arcd-sum-body"></tbody>
+        </table>
+
+        <div class="arc-sub-title">상세 학습이력</div>
+        <div style="font-size:12px;color:#666;margin:-4px 0 10px">※ 아카이브 인정시간은 콘텐츠시간까지만 인정되며, 하루 학습시간 합계가 8시간을 초과한 부분은 인정되지 않습니다.<span class="change-badge arc" data-num="14" data-memo="인정 기준 안내 문구 (고정 노출)
+- 학습시간과 인정시간이 다른 이유를 화면에서 안내
+- 1일 상한은 하루 전체 학습을 합산해 적용하므로 행 단위로는 확인 불가">14</span></div>
+        <div style="border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px">
+          <div class="search-form-row" style="gap:28px">
+            <div class="field-group">
+              <div class="field-label">이력구분</div>
+              <select class="select" id="arcd-sel-cat" style="min-width:130px">
+                <option value="">이력구분 전체</option>
+                <option value="온라인">온라인</option>
+                <option value="마이크로러닝">마이크로러닝</option>
+                <option value="라이브">라이브</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <div class="field-label">학습일<span class="change-badge arc" data-num="15" data-memo="기간 선택: 시작일 ~ 종료일 (당일 포함)
+- 디폴트: 해당 학습자의 학습기간
+- 검색 범위: 학습기간 내로 제한
+- 학습기간 밖 날짜로 검색 시 [학습기간(YYYY.MM.DD ~ YYYY.MM.DD) 내에서 선택해주세요.] 안내 후 조회 불가
+- 종료일이 시작일보다 빠르면 검색 불가">15</span></div>
+              <div style="display:flex;gap:8px;align-items:center">
+                <div class="date-wrap">
+                  <input type="text" class="input-date" id="arcd-date-from" readonly>
+                  <span class="cal-icon">📅</span>
+                  <div class="cal-popup" id="arcd-cal-from"></div>
+                </div>
+                <span class="date-sep">~</span>
+                <div class="date-wrap">
+                  <input type="text" class="input-date" id="arcd-date-to" readonly>
+                  <span class="cal-icon">📅</span>
+                  <div class="cal-popup" id="arcd-cal-to"></div>
+                </div>
+              </div>
+            </div>
+            <div class="field-group">
+              <div class="field-label">과정검색</div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <select class="select" id="arcd-sel-ctype" style="min-width:90px">
+                  <option value="title">과정명</option>
+                  <option value="code">과정아이디</option>
+                </select>
+                <input type="text" class="input" id="arcd-input-course" placeholder="검색어를 입력해주세요." style="width:200px">
+              </div>
+            </div>
+          </div>
+          <div class="search-form-actions" style="margin-top:14px">
+            <button class="btn btn-primary" id="arcd-btn-search">검색</button>
+            <button class="btn btn-reset" id="arcd-btn-reset">초기화</button>
+          </div>
+        </div>
+
+        <div class="result-header">
+          <div class="result-count">검색결과 <strong id="arcd-count">0</strong>건</div>
+        </div>
+        <div class="table-scroll"><table class="main-table">
+          <thead>
+            <tr>
+              <th>No.</th><th>학습일</th><th>이력구분</th>
+              <th>과정명</th><th>과정아이디</th>
+              <th>콘텐츠명<span class="change-badge arc in-th" data-num="16" data-memo="이력 1건 = 학습일 × 콘텐츠
+- 정렬: 학습일 최신순, 같은 학습일은 최근 학습 종료 시각순
+- 학습기간 내 이력만 노출 (학습기간 외 학습은 이력·누적시간 모두 미포함)
+- 이력의 아카이브 인정시간 합계 = 상단 누적시간">16</span></th>
+              <th>콘텐츠시간<span class="change-badge arc in-th" data-num="17" data-memo="콘텐츠의 ‘콘텐츠시간’ 필드 값. 인정시간 상한 기준
+- 라이브: 방송시간 (방송 시작 ~ 방송 종료)
+- 표기: H시간 M분 S초 (괄호 초 환산 없음)">17</span></th>
+              <th>학습시간<span class="change-badge arc in-th" data-num="18" data-memo="해당 학습일에 콘텐츠를 학습한 시간 (인정 기준 적용 전)
+- 구간별 (종료 − 시작)의 합계 (Admin 정책서 3-2 기준)
+- 인정시간과 차이가 나는 경우: 콘텐츠시간 초과분 · 1일 상한
+- 표기: H시간 M분 S초(N초)
+- Admin 상세 학습이력에도 동일 항목 추가 필요">18</span></th>
+              <th>아카이브 인정시간<span class="change-badge arc in-th" data-num="19" data-memo="학습시간에 인정 기준을 적용한 시간 (Admin 정책서 3장)
+- 콘텐츠 상한 → 1일 상한(8시간) 순서로 적용
+- 콘텐츠 상한: 같은 콘텐츠의 인정시간 누적이 콘텐츠시간에 도달하면 이후 학습은 미인정
+- 콘텐츠시간 0인 콘텐츠: 이력 노출, 인정시간 ‘0초’ (라이브 제외)">19</span></th>
+              <th>수료처리일</th>
+            </tr>
+          </thead>
+          <tbody id="arcd-table-body"></tbody>
+        </table></div>
+        <div class="table-footer">
+          <div class="page-size-wrap">
+            <select class="select" id="arcd-page-size">
+              <option value="30">30개씩 보기</option>
+              <option value="50" selected>50개씩 보기</option>
+            </select>
+          </div>
+          <div class="pagination" id="arcd-pagination"></div>
+        </div>
+      </div>
+    </div><!-- /page-archive-time-detail -->
 
     <!-- ══════════════════════════════════════════ -->
     <!-- PAGE: 수강신청 기간설정                      -->
@@ -5335,7 +5679,6 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
             <div class="field-group" style="min-width:380px">
               <div class="field-label">회사검색</div>
               <div style="display:flex;gap:8px;align-items:center;flex-wrap:nowrap">
-                <label class="checkbox-row"><input type="checkbox" id="fp-chk-company"> 선택한 회사만 검색</label>
                 <div class="multi-select-wrap" id="fp-company-wrap">
                   <div class="multi-tags-box" id="fp-company-box">
                     <span class="multi-placeholder" id="fp-company-placeholder">회사선택</span>
@@ -6531,7 +6874,7 @@ const DAYS   = ['일','월','화','수','목','금','토'];
       activeBadge = badge;
 
       // 신청관리(signup) 배지면 팝오버도 파란색으로, 결과(result) 초록, 학습기간변경(lpc) 노랑, 러메·종합(lm) 보라, 2차 후속(phase2) 마젠타
-      popover.classList.remove('signup', 'result', 'lpc', 'lm', 'phase2');
+      popover.classList.remove('signup', 'result', 'lpc', 'lm', 'phase2', 'arc');
       if (badge.classList.contains('signup')) {
         popover.classList.add('signup');
       } else if (badge.classList.contains('result')) {
@@ -6542,6 +6885,8 @@ const DAYS   = ['일','월','화','수','목','금','토'];
         popover.classList.add('lm');
       } else if (badge.classList.contains('phase2')) {
         popover.classList.add('phase2');
+      } else if (badge.classList.contains('arc')) {
+        popover.classList.add('arc');
       }
       numEl.textContent  = badge.dataset.num  || badge.textContent || '·';
       // 메모 줄별로 처리 — 이미 -/·/※ 로 시작하지 않으면 "- " 추가
@@ -6886,7 +7231,6 @@ document.getElementById('p-btn-reset').addEventListener('click', () => {
   document.getElementById('p-sel-bundle').selectedIndex       = 0;
   document.getElementById('p-sel-op-div').selectedIndex       = 0;
   document.getElementById('p-sel-course-cat').selectedIndex   = 0;
-  document.getElementById('p-chk-company').checked = false;
   resetMultiSelect('p');
   pDoSearch();
 });
@@ -7120,7 +7464,6 @@ function openCourseApplyDetail(r) {
   document.getElementById('c-det-search-val').value = '';
   document.getElementById('c-det-status-sel').value = '';
   document.getElementById('c-det-emp-sel').value    = '재직';
-  document.getElementById('cdet-chk-company').checked = false;
   resetMultiSelect('cdet');
   document.getElementById('c-det-dept-input').value  = '';
   cDetApplyFilter();
@@ -7211,7 +7554,6 @@ function cDetApplyFilter() {
     document.getElementById('c-det-search-val').value = '';
     document.getElementById('c-det-status-sel').value = '';
     document.getElementById('c-det-emp-sel').value    = '재직';   // 디폴트
-    document.getElementById('cdet-chk-company').checked = false;
     resetMultiSelect('cdet');
     document.getElementById('c-det-dept-input').value  = '';
     cDetApplyFilter();
@@ -7466,7 +7808,6 @@ document.getElementById('sp-btn-reset').addEventListener('click', () => {
   document.getElementById('sp-sel-course-div').value           = 'all';
   document.querySelector('input[name="sp-period-base"][value="learner"]').checked = true;
   document.getElementById('sp-sel-period-type').selectedIndex  = 1;
-  document.getElementById('sp-chk-company').checked = false;
   resetMultiSelect('sp');
   spApplyPeriodBaseRule();
   spFilteredData = [...SP_ALL_DATA];
@@ -8909,7 +9250,7 @@ function openCourseDetail(r) {
     scDetRenderTable();
   }
 
-  const navItem = document.querySelector('[data-page="study-course"]');
+  const navItem = document.querySelector('[data-page="study-personal"]');
   activateNavItem(navItem);
   showPage('study-course-detail');
 }
@@ -9554,19 +9895,12 @@ initMultiSelect('cr-p', ['(주)휴넷','LABS플랫폼','테스트기업']);
 
 // 회사검색 체크박스 → 멀티셀렉 활성화
 const crPCompanyBox = document.getElementById('cr-p-company-box');
-document.getElementById('cr-p-chk-company').addEventListener('change', function() {
-  crPCompanyBox.style.pointerEvents = this.checked ? 'auto' : 'none';
-  crPCompanyBox.style.opacity = this.checked ? '1' : '0.5';
-});
-crPCompanyBox.style.pointerEvents = 'none';
-crPCompanyBox.style.opacity = '0.5';
 
 document.getElementById('cr-p-btn-search').addEventListener('click', () => {
   const checkedTypes = crPTypeChks
     .filter(id => document.getElementById(id).checked)
     .map(id => document.getElementById(id).value);
-  const useCompany = document.getElementById('cr-p-chk-company').checked;
-  const selectedCos = useCompany ? [...(multiState['cr-p'] || [])] : [];
+  const selectedCos = [...(multiState['cr-p'] || [])];
   crPFilteredData = CR_PERSONAL_DATA.filter(r => {
     if (checkedTypes.length && !checkedTypes.includes(r.type)) return false;
     if (selectedCos.length && !selectedCos.includes(r.company)) return false;
@@ -9580,9 +9914,6 @@ document.getElementById('cr-p-btn-reset').addEventListener('click', () => {
   crPSetDateEnabled(false);
   document.getElementById('cr-p-chk-all').checked = true;
   crPTypeChks.forEach(id => { document.getElementById(id).checked = true; });
-  document.getElementById('cr-p-chk-company').checked = false;
-  crPCompanyBox.style.pointerEvents = 'none';
-  crPCompanyBox.style.opacity = '0.5';
   resetMultiSelect('cr-p');
   crPFilteredData = [...CR_PERSONAL_DATA];
   crPCurrentPage = 1;
@@ -9658,12 +9989,6 @@ crCTypeChks.forEach(id => {
 // 회사검색 멀티셀렉
 initMultiSelect('cr-c', ['(주)휴넷','LABS플랫폼','테스트기업']);
 const crCCompanyBox = document.getElementById('cr-c-company-box');
-document.getElementById('cr-c-chk-company').addEventListener('change', function() {
-  crCCompanyBox.style.pointerEvents = this.checked ? 'auto' : 'none';
-  crCCompanyBox.style.opacity = this.checked ? '1' : '0.5';
-});
-crCCompanyBox.style.pointerEvents = 'none';
-crCCompanyBox.style.opacity = '0.5';
 
 document.getElementById('cr-c-btn-search').addEventListener('click', () => {
   crCFilteredData = [...CR_COURSE_DATA]; crCCurrentPage = 1; crCRenderTable();
@@ -9673,9 +9998,6 @@ document.getElementById('cr-c-btn-reset').addEventListener('click', () => {
   crCSetDateEnabled(false);
   document.getElementById('cr-c-chk-all').checked = true;
   crCTypeChks.forEach(id => { document.getElementById(id).checked = true; });
-  document.getElementById('cr-c-chk-company').checked = false;
-  crCCompanyBox.style.pointerEvents = 'none';
-  crCCompanyBox.style.opacity = '0.5';
   resetMultiSelect('cr-c');
   crCFilteredData = [...CR_COURSE_DATA]; crCCurrentPage = 1; crCRenderTable();
 });
@@ -9750,12 +10072,6 @@ crMTypeChks.forEach(id => {
 // 회사검색 멀티셀렉
 initMultiSelect('cr-m', ['(주)휴넷','LABS플랫폼','테스트기업']);
 const crMCompanyBox = document.getElementById('cr-m-company-box');
-document.getElementById('cr-m-chk-company').addEventListener('change', function() {
-  crMCompanyBox.style.pointerEvents = this.checked ? 'auto' : 'none';
-  crMCompanyBox.style.opacity = this.checked ? '1' : '0.5';
-});
-crMCompanyBox.style.pointerEvents = 'none';
-crMCompanyBox.style.opacity = '0.5';
 
 document.getElementById('cr-m-btn-search').addEventListener('click', () => {
   crMFilteredData = [...CR_MONTHLY_DATA]; crMCurrentPage = 1; crMRenderTable();
@@ -9765,9 +10081,6 @@ document.getElementById('cr-m-btn-reset').addEventListener('click', () => {
   crMSetDateEnabled(false);
   document.getElementById('cr-m-chk-all').checked = true;
   crMTypeChks.forEach(id => { document.getElementById(id).checked = true; });
-  document.getElementById('cr-m-chk-company').checked = false;
-  crMCompanyBox.style.pointerEvents = 'none';
-  crMCompanyBox.style.opacity = '0.5';
   resetMultiSelect('cr-m');
   crMFilteredData = [...CR_MONTHLY_DATA]; crMCurrentPage = 1; crMRenderTable();
 });
@@ -10467,8 +10780,10 @@ function activateNavItem(item) {
 // 페이지 진입 통합 함수
 // 사이드바 클릭, URL 해시 변경, 초기 진입 시 공통 사용
 // ────────────────────────────────────────────
+// 탭으로 묶인 페이지 → 사이드바 메뉴 (신청관리 / 학습관리)
+const MENU_TAB_PARENT = { 'course': 'personal', 'study-course': 'study-personal' };
 function navigateToPage(page) {
-  const navItem = document.querySelector(`[data-page="${page}"]`);
+  const navItem = document.querySelector(`.nav-item[data-page="${MENU_TAB_PARENT[page] || page}"]`);
   if (!navItem) return false;
   activateNavItem(navItem);
   showPage(page);
@@ -10478,6 +10793,15 @@ function navigateToPage(page) {
   }
   return true;
 }
+
+// 메뉴 탭 클릭 → 해당 탭 페이지로 이동 (URL 해시 변경)
+document.querySelectorAll('.tab-btn[data-menu-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const page = btn.dataset.menuTab;
+    if (location.hash === '#' + page) navigateToPage(page);
+    else location.hash = page;
+  });
+});
 
 // 사이드바 클릭 → URL 해시 변경 → hashchange가 navigateToPage 호출
 document.querySelectorAll('.nav-item, .nav-flat').forEach(item => {
@@ -12707,6 +13031,309 @@ document.getElementById('cs-page-size').addEventListener('change', function() {
 });
 
 csRenderTable();
+
+// ════════════════════════════════════════════════
+// PAGE: 아카이브 학습시간 (교육관리)
+// - Admin '아카이브 현황 > 학습시간 조회 > 개인별 학습시간'과 같은 구조
+// - EDMS는 로그인한 연수원 1곳의 데이터만 조회 (연수원 검색·컬럼 없음)
+// - 1행 = 회원 × 학습기간(훈련과정 단위, 화면 미노출) / 누적시간 = 학습기간 내 아카이브 인정시간 합계
+// ════════════════════════════════════════════════
+const ARC_CATS = ['온라인', '마이크로러닝', '라이브'];
+const ARC_PASS_SEC = 15 * 3600;   // 이수 기준: FLOOR(누적 초 ÷ 3,600) ≥ 15
+const ARC_TODAY = new Date(2026, 9, 24);
+const arcPad = n => String(n).padStart(2, '0');
+const arcYmd = d => `${d.getFullYear()}.${arcPad(d.getMonth() + 1)}.${arcPad(d.getDate())}`;
+const arcIso = d => `${d.getFullYear()}-${arcPad(d.getMonth() + 1)}-${arcPad(d.getDate())}`;
+
+// 시간 표기 — 'H시간 M분 S초(N초)'. 0인 단위 생략, 1분 미만은 괄호 없음, 0은 '0초'
+function arcHmsText(sec) {
+  const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), x = sec % 60;
+  return [h ? `${h}시간` : '', m ? `${m}분` : '', x ? `${x}초` : ''].filter(Boolean).join(' ') || '0초';
+}
+function arcHms(sec) { return sec >= 60 ? `${arcHmsText(sec)}(${sec}초)` : arcHmsText(sec); }
+const arcPass = total => Math.floor(total / 3600) >= 15 ? '이수' : '미이수';
+
+// 훈련과정 — 학습기간은 훈련과정 ID 단위 (프로토타입: 2개 훈련과정)
+const ARC_TRAININGS = {
+  'ABA20267001095628': { from: new Date(2026, 6, 1), to: new Date(2026, 11, 31) },
+  'ABA20261001071234': { from: new Date(2026, 0, 1), to: new Date(2026, 5, 30) },
+  'ABA20257001063318': { from: new Date(2025, 6, 1), to: new Date(2025, 11, 31) }
+  // 연수원 내 훈련과정 ID 간 학습기간은 겹치지 않음
+};
+const ARC_SUBJECTS = [
+  { code: '41208', name: '공감 스위치 ON! 관계를 바꾸는 말 습관', dur: 13036, cat: '온라인' },
+  { code: '52317', name: '[SSS급 루키] 탑티어 기획자의 생각법', dur: 13803, cat: '온라인' },
+  { code: '41455', name: '[북러닝] 나의 가치를 높이는 우아한 대화법(도서 미제공)', dur: 9076, cat: '온라인' },
+  { code: '63102', name: 'AI로 완성하는 프로젝트 관리 스킬1', dur: 1603, cat: '마이크로러닝' },
+  { code: '52790', name: '[SSS급 인재] 실리콘밸리식 협업 스킬, 애자일 커뮤니케이션', dur: 14197, cat: '온라인' },
+  { code: '70412', name: '3분 경제 브리핑', dur: 180, cat: '마이크로러닝' },
+  { code: '70419', name: '보고서 한 장 요약법', dur: 240, cat: '마이크로러닝' },
+  { code: '41620', name: '데이터 리터러시 : 숫자로 말하는 보고서', dur: 15120, cat: '온라인' },
+  { code: '41733', name: '[북러닝] 일 잘하는 사람의 시간 관리법', dur: 12600, cat: '온라인' },
+  { code: '52904', name: '생성형 AI 업무 활용 실무', dur: 16200, cat: '온라인' },
+  // 라이브: 콘텐츠시간 = 방송시간. 실시간 시청만 인정, 1회성(같은 방송 재시청 없음)
+  { code: '80105', name: '[LIVE] 2026 하반기 HR 트렌드', dur: 3600, cat: '라이브' },
+  { code: '80112', name: '[LIVE] 리더의 피드백 대화법', dur: 5400, cat: '라이브' }
+];
+// 온라인: 과정 콘텐츠시간을 콘텐츠 3개로 분할 / 마이크로러닝: 콘텐츠 1개 (콘텐츠명 = 과정명)
+ARC_SUBJECTS.forEach(sj => {
+  if (sj.cat !== '온라인') { sj.contents = [{ name: sj.name, dur: sj.dur }]; return; }
+  const a = Math.round(sj.dur * 0.2), b = Math.round(sj.dur * 0.45);
+  sj.contents = [{ name: '01. 과정 소개', dur: a }, { name: '02. 핵심 개념', dur: b }, { name: '03. 실전 적용', dur: sj.dur - a - b }];
+});
+
+const ARC_FLAT = ARC_SUBJECTS.flatMap(sj => sj.contents.map(ct => [sj, ct]));
+// 학습 이력 (결정적 샘플) — 이력 1건 = 학습일 × 콘텐츠, 학습기간 내 이력만
+// study = 학습시간(구간 합계, 인정 기준 적용 전) / sec = 아카이브 인정시간
+// 콘텐츠 상한: 같은 콘텐츠의 누적 인정시간이 콘텐츠시간에 도달하면 이후 학습은 미인정(콘텐츠시간 초과분)
+function arcBuildHistory(i, tr) {
+  const n = (i % 11 === 10) ? 0 : 10 + (i * 7) % 45;   // 일부 회원은 이력 없음
+  const ps = arcYmd(tr.from), pe = arcYmd(ARC_TODAY < tr.to ? ARC_TODAY : tr.to);
+  const raw = [];
+  for (let k = 0; k < n; k++) {
+    const [sj, ct] = ARC_FLAT[(i * 5 + k) % ARC_FLAT.length];   // 과정·콘텐츠 순환
+    const d = new Date(tr.to < ARC_TODAY ? tr.to : new Date(2026, 9, 22)); d.setDate(d.getDate() - k * 2 - (i % 3));
+    const date = arcYmd(d);
+    if (date < ps || date > pe) continue;                 // 학습기간 외 학습 제외
+    if (sj.cat === '라이브' && raw.some(r => r.sj.code === sj.code)) continue;   // 라이브는 방송당 1건
+    const study = Math.floor(ct.dur * (0.5 + ((i * 13 + k * 17) % 70) / 100));   // 콘텐츠시간 대비 50~119%
+    const endAt = `${arcPad(9 + (i + k * 5) % 13)}:${arcPad((k * 17) % 60)}:00`;
+    raw.push({ sj, ct, d, date, endAt, study, k });
+  }
+  // 오래된 학습부터 콘텐츠별 누적 인정시간 계산
+  const acc = {};
+  return raw.reverse().map(r => {
+    const key = r.sj.code + '|' + r.ct.name;
+    const left = Math.max(0, r.ct.dur - (acc[key] || 0));
+    const sec = Math.min(r.study, left);
+    acc[key] = (acc[key] || 0) + sec;
+    const done = acc[key] >= r.ct.dur * 0.8 && r.sj.cat !== '라이브';   // 라이브는 수료처리 없음
+    const dd = new Date(r.d); dd.setDate(dd.getDate() + r.k % 4);
+    return { code: r.sj.code, title: r.sj.name, content: r.ct.name, cat: r.sj.cat, dur: r.ct.dur, study: r.study, sec,
+      date: r.date, endAt: r.endAt, doneDate: done ? arcYmd(dd > ARC_TODAY ? r.d : dd) : '-' };
+  }).reverse();
+}
+
+const ARC_WORK = ['재직', '재직', '재직', '모니터링', '재직', '재직', '퇴사'];
+// 목록 1행 = 회원 × 학습기간. 일부 회원(i % 9 === 0)은 이전 학습기간 행이 추가로 있음
+function arcMakeRow(i, trainId, seed) {
+  const tr = ARC_TRAININGS[trainId];
+  const history = arcBuildHistory(seed, tr);
+  const ps = arcYmd(tr.from), pe = arcYmd(tr.to);
+  const by = Object.fromEntries(ARC_CATS.map(c => [c, history.filter(h => h.cat === c).reduce((a, h) => a + h.sec, 0)]));
+  const total = ARC_CATS.reduce((a, c) => a + by[c], 0);
+  return {
+    name: P_NAMES[i % P_NAMES.length] + '이름',
+    id: `arc${String(i + 1).padStart(2, '0')}`,
+    empno: `3000${String(i + 1).padStart(2, '0')}`,
+    company: P_COS[i % 3],
+    dept: P_DEPTS[i % P_DEPTS.length],
+    work: ARC_WORK[i % ARC_WORK.length],
+    trainId, period: `${ps} ~ ${pe}`, from: arcIso(tr.from), to: arcIso(tr.to),
+    history, by, total, pass: arcPass(total),
+    last: history.reduce((m, h) => h.date > m ? h.date : m, '')
+  };
+}
+const ARC_ALL_DATA = [];
+for (let i = 0; i < 60; i++) {
+  const main = i % 5 === 4 ? 'ABA20261001071234' : 'ABA20267001095628';
+  ARC_ALL_DATA.push(arcMakeRow(i, main, i));
+  if (i % 9 === 0) ARC_ALL_DATA.push(arcMakeRow(i, main === 'ABA20261001071234' ? 'ABA20257001063318' : 'ABA20261001071234', i + 7));
+}
+
+// 요약 — 교육비·정부지원금 산정 기준 (Admin 기업별 학습시간과 동일)
+const ARC_FEE = 140000;
+const ARC_BIZ = { '회사1': '우선지원', '회사2': '중견', '회사3': '대기업' };   // 사업장규모 (거래처 정보, 가상 값)
+const ARC_SUPPORT = { '우선지원': 0.9, '중견': 0.8 };
+function arcUpdateSummary() {
+  const d = arcFiltered.filter(r => r.work === '재직'), n = d.length;   // 요약은 재직 기준 (모니터링 제외)
+  if (!n) { ['total','avg','pass','rate','fee','support'].forEach(k => document.getElementById('arc-s-' + k).textContent = '-'); return; }
+  const pass = d.filter(r => r.pass === '이수');
+  const sum = d.reduce((a, r) => a + r.total, 0);
+  const rate = n ? Math.round(pass.length / n * 1000) / 10 : 0;
+  const support = pass.reduce((a, r) => { const sr = ARC_SUPPORT[ARC_BIZ[r.company]]; return sr ? a + Math.round(ARC_FEE * sr) : a; }, 0);
+  const anySupport = pass.some(r => ARC_SUPPORT[ARC_BIZ[r.company]]);   // 산정 대상(지원 대상 회사 이수자) 없으면 '-'
+  document.getElementById('arc-s-total').textContent = n.toLocaleString();
+  document.getElementById('arc-s-avg').textContent = n ? arcHms(Math.floor(sum / n)) : '-';
+  document.getElementById('arc-s-pass').textContent = pass.length.toLocaleString();
+  document.getElementById('arc-s-rate').textContent = n ? `${Number.isInteger(rate) ? rate : rate.toFixed(1)}%` : '-';
+  document.getElementById('arc-s-fee').textContent = n ? (n * ARC_FEE).toLocaleString() : '-';
+  document.getElementById('arc-s-support').textContent = anySupport ? support.toLocaleString() : '-';
+}
+
+let arcFiltered = [], arcPage = 1, arcPageSize = 50;
+
+function arcRenderTable() {
+  const tbody = document.getElementById('arc-table-body');
+  const start = (arcPage - 1) * arcPageSize;
+  const slice = arcFiltered.slice(start, start + arcPageSize);
+  document.getElementById('arc-count').textContent = arcFiltered.length.toLocaleString();
+  const xb = document.getElementById('arc-btn-excel'); xb.disabled = !arcFiltered.length; xb.style.opacity = arcFiltered.length ? '' : '.4';
+  if (!slice.length) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    document.getElementById('arc-pagination').innerHTML = '';
+    return;
+  }
+  tbody.innerHTML = slice.map((r, idx) => `<tr>
+    <td>${arcFiltered.length - (start + idx)}</td>
+    <td class="link-cell" data-arc-idx="${start + idx}">${maskName(r.name)}</td>
+    <td>${maskEmail(r.id)}</td>
+    <td>${r.company}</td>
+    <td>${r.period}</td>
+    <td>${arcHmsText(r.total)}</td>
+    ${ARC_CATS.map(c => `<td>${arcHmsText(r.by[c])}</td>`).join('')}
+    <td>${r.pass}</td>
+  </tr>`).join('');
+  tbody.querySelectorAll('.link-cell[data-arc-idx]').forEach(cell => {
+    cell.addEventListener('click', () => openArchiveDetail(arcFiltered[parseInt(cell.dataset.arcIdx)]));
+  });
+  renderPagination('arc-pagination', Math.ceil(arcFiltered.length / arcPageSize), arcPage, p => { arcPage = p; arcRenderTable(); });
+}
+
+function arcDoSearch() {
+  const co = document.getElementById('arc-sel-company').value;
+  const work = document.getElementById('arc-sel-work').value;
+  const lt = document.getElementById('arc-sel-learner-type').value;
+  const lv = document.getElementById('arc-input-learner').value.trim().toLowerCase();
+  const pt = document.getElementById('arc-sel-period-type').value;
+  const pf = document.getElementById('arc-date-from').value, pto = document.getElementById('arc-date-to').value;
+  if (pf && pto && pf > pto) { alert('종료일은 시작일 이후로 선택해주세요.'); return; }
+  arcFiltered = ARC_ALL_DATA.filter(r => {
+    if (r.work === '퇴사') return false;                    // 퇴사자 제외
+    // 학습기간: 학습시작일 / 학습종료일 / 기간 검색(정확히 일치)
+    if (pf || pto) {
+      const lo = pf || '0000-00-00', hi = pto || '9999-12-31';
+      if (pt === 'start' && !(r.from >= lo && r.from <= hi)) return false;
+      if (pt === 'end' && !(r.to >= lo && r.to <= hi)) return false;
+      if (pt === 'period' && !(r.from === lo && r.to === hi)) return false;   // 학습기간과 선택 기간이 정확히 일치
+    }
+    if (co && r.company !== co) return false;
+    if (work && r.work !== work) return false;
+    const pv = document.getElementById('arc-sel-pass').value;
+    if (pv && r.pass !== pv) return false;
+    if (lv && !String(r[lt]).toLowerCase().includes(lv)) return false;
+    return true;
+  }).sort((a, b) => b.last.localeCompare(a.last));         // 최근 학습일순, 이력 없음은 하단
+  arcPage = 1;
+  arcUpdateSummary();
+  arcRenderTable();
+}
+
+// 학습기간 디폴트: 기간 검색, 학습시작일이 오늘 이전인 훈련과정 중 가장 최근 훈련과정의 학습기간
+// 해당 훈련과정이 없으면 기간 검색, 당해 연도 1월 1일 ~ 오늘
+function arcSetDefaultPeriod() {
+  const t = ARC_TODAY;
+  const cur = Object.values(ARC_TRAININGS).filter(tr => tr.from <= t).sort((a, b) => b.from - a.from)[0];
+  document.getElementById('arc-sel-period-type').value = 'period';
+  document.getElementById('arc-date-from').value = arcIso(cur ? cur.from : new Date(t.getFullYear(), 0, 1));
+  document.getElementById('arc-date-to').value = arcIso(cur ? cur.to : t);
+}
+function arcReset() {
+  arcSetDefaultPeriod();
+  document.getElementById('arc-sel-company').value = '';
+  document.getElementById('arc-sel-work').value = '재직';   // 초기화 시 디폴트(재직)로 복귀
+  document.getElementById('arc-sel-learner-type').selectedIndex = 0;
+  document.getElementById('arc-input-learner').value = '';
+  document.getElementById('arc-sel-pass').value = '';
+  arcDoSearch();
+}
+
+setupDatePicker('arc-date-from', 'arc-cal-from');
+setupDatePicker('arc-date-to', 'arc-cal-to');
+arcSetDefaultPeriod();
+document.getElementById('arc-btn-search').addEventListener('click', arcDoSearch);
+document.getElementById('arc-btn-reset').addEventListener('click', arcReset);
+['arc-input-learner'].forEach(id => {
+  document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') arcDoSearch(); });
+});
+document.getElementById('arc-page-size').addEventListener('change', function () {
+  arcPageSize = parseInt(this.value); arcPage = 1; arcRenderTable();
+});
+document.getElementById('arc-btn-excel').addEventListener('click', () => openExcelModal());
+
+// ── 상세 (이름 클릭)
+let arcCur = null, arcdRows = [], arcdPage = 1, arcdPageSize = 50;
+
+function arcdSetDefault() {
+  document.getElementById('arcd-sel-cat').value = '';
+  document.getElementById('arcd-date-from').value = arcCur.from;
+  document.getElementById('arcd-date-to').value = arcCur.to;
+  document.getElementById('arcd-sel-ctype').value = 'title';
+  document.getElementById('arcd-input-course').value = '';
+}
+
+function arcdApplyFilter() {
+  const cat = document.getElementById('arcd-sel-cat').value;
+  const from = document.getElementById('arcd-date-from').value.replace(/-/g, '.');
+  const to = document.getElementById('arcd-date-to').value.replace(/-/g, '.');
+  if (from && to && from > to) { alert('종료일은 시작일 이후로 선택해주세요.'); return; }
+  const ps = arcCur.from.replace(/-/g, '.'), pe = arcCur.to.replace(/-/g, '.');
+  if ((from && from < ps) || (to && to > pe)) { alert(`학습기간(${arcCur.period}) 내에서 선택해주세요.`); return; }
+  const ct = document.getElementById('arcd-sel-ctype').value;
+  const ck = document.getElementById('arcd-input-course').value.trim().toLowerCase();
+  arcdRows = arcCur.history
+    .filter(h => (!cat || h.cat === cat) && (!from || h.date >= from) && (!to || h.date <= to)
+      && (!ck || String(h[ct]).toLowerCase().includes(ck)))
+    .sort((a, b) => (b.date + b.endAt).localeCompare(a.date + a.endAt));   // 학습일 최신순 → 학습 종료 시각순
+  arcdPage = 1;
+  arcdRenderTable();
+}
+
+function arcdRenderTable() {
+  const tbody = document.getElementById('arcd-table-body');
+  const start = (arcdPage - 1) * arcdPageSize;
+  const slice = arcdRows.slice(start, start + arcdPageSize);
+  document.getElementById('arcd-count').textContent = arcdRows.length.toLocaleString();
+  if (!slice.length) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    document.getElementById('arcd-pagination').innerHTML = '';
+    return;
+  }
+  tbody.innerHTML = slice.map((h, idx) => `<tr>
+    <td>${arcdRows.length - (start + idx)}</td>
+    <td>${h.date}</td>
+    <td>${h.cat}</td>
+    <td style="text-align:left;padding-left:10px">${h.title}</td>
+    <td>${h.code}</td>
+    <td style="text-align:left;padding-left:10px">${h.content}</td>
+    <td>${arcHmsText(h.dur)}</td>
+    <td>${arcHms(h.study)}</td>
+    <td>${arcHms(h.sec)}</td>
+    <td>${h.doneDate}</td>
+  </tr>`).join('');
+  renderPagination('arcd-pagination', Math.ceil(arcdRows.length / arcdPageSize), arcdPage, p => { arcdPage = p; arcdRenderTable(); });
+}
+
+function openArchiveDetail(r) {
+  arcCur = r;
+  const row2 = (k1, v1, k2, v2) => `<tr><th>${k1}</th><td>${v1}</td><th>${k2}</th><td>${v2}</td></tr>`;
+  document.getElementById('arcd-basic-body').innerHTML =
+    row2('이름', r.name, '아이디', `${r.id}@hunet.co.kr`) +
+    row2('회사명', r.company, '부서명', r.dept) +
+    row2('재직상태', r.work, '이수여부', r.pass) +
+    `<tr><th>학습기간</th><td colspan="3">${r.period}</td></tr>`;
+  document.getElementById('arcd-sum-body').innerHTML =
+    `<tr><td>${arcHms(r.total)}</td>${ARC_CATS.map(c => `<td>${arcHms(r.by[c])}</td>`).join('')}</tr>`;
+  arcdSetDefault();
+  arcdApplyFilter();
+  activateNavItem(document.querySelector('[data-page="archive-time"]'));
+  showPage('archive-time-detail');
+}
+
+setupDatePicker('arcd-date-from', 'arcd-cal-from');
+setupDatePicker('arcd-date-to', 'arcd-cal-to');
+document.getElementById('arcd-btn-search').addEventListener('click', arcdApplyFilter);
+document.getElementById('arcd-btn-reset').addEventListener('click', () => { arcdSetDefault(); arcdApplyFilter(); });
+document.getElementById('arcd-input-course').addEventListener('keydown', e => { if (e.key === 'Enter') arcdApplyFilter(); });
+document.getElementById('arcd-page-size').addEventListener('change', function () {
+  arcdPageSize = parseInt(this.value); arcdPage = 1; arcdRenderTable();
+});
+// [목록] → 검색 초기화 후 복귀 / [이전] → 검색 조건 유지 복귀 (다른 교육관리 메뉴와 동일)
+document.getElementById('arcd-back-btn').addEventListener('click', () => { arcReset(); showPage('archive-time'); });
+document.getElementById('arcd-prev-btn').addEventListener('click', () => showPage('archive-time'));
+document.getElementById('arcd-breadcrumb-back').addEventListener('click', e => { e.preventDefault(); showPage('archive-time'); });
+
+arcDoSearch();
 
 </script>
 <!-- ══════════════════════════════════════════ -->
