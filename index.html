@@ -4658,7 +4658,8 @@ Admin ‘아카이브 현황 > 학습시간 조회 > 개인별 학습시간’�
 - EDMS는 로그인한 연수원 1곳의 데이터만 조회 → 연수원 검색·연수원 컬럼 제외
 - 메뉴 노출: HRD아카이브 계약이 있는 연수원만 노출 (계약 없는 연수원은 메뉴 미노출)
 - 조회 대상: 아카이브 대상자 (활성 소속 계약 = HRD아카이브 계약)
-- 재직상태 ‘퇴사’ 제외, HRD아카이브 계약 과정만 집계
+- 조회 시점의 임직원 정보 기준 (퇴사로 임직원 정보가 삭제된 회원은 제외)
+- HRD아카이브 계약 과정만 집계
 - 인정시간 산정·이수 기준은 Admin 정책서 3장과 동일">1</span></div>
         <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">아카이브 현황</a> &gt; 학습시간 조회</div>
       </div>
@@ -4723,7 +4724,7 @@ Admin ‘아카이브 현황 > 학습시간 조회 > 개인별 학습시간’�
               </select><span class="change-badge arc" data-num="4" data-memo="placeholder: ‘재직상태 전체’ (별도 ‘전체’ 옵션 추가 X)
 옵션: 재직상태 전체 / 재직 / 모니터링 (디폴트: 재직)
 - 신청관리 등 EDMS 다른 메뉴와 같은 형식·용어 (Admin ‘근무상태’와 같은 값)
-- 퇴사자는 조회 대상에서 제외">4</span></span>
+- 재직상태 값은 재직 / 모니터링 (퇴사 시 임직원 정보 삭제)">4</span></span>
             </div>
           </div>
         </div>
@@ -13114,7 +13115,7 @@ function arcBuildHistory(i, tr) {
   }).reverse();
 }
 
-const ARC_WORK = ['재직', '재직', '재직', '모니터링', '재직', '재직', '퇴사'];
+const ARC_WORK = ['재직', '재직', '재직', '모니터링', '재직', '재직', '재직'];   // 퇴사 시 임직원 정보 삭제 → 값 없음
 // 목록 1행 = 회원 × 학습기간. 일부 회원(i % 9 === 0)은 이전 학습기간 행이 추가로 있음
 function arcMakeRow(i, trainId, seed) {
   const tr = ARC_TRAININGS[trainId];
@@ -13199,7 +13200,6 @@ function arcDoSearch() {
   const pf = document.getElementById('arc-date-from').value, pto = document.getElementById('arc-date-to').value;
   if (pf && pto && pf > pto) { alert('종료일은 시작일 이후로 선택해주세요.'); return; }
   arcFiltered = ARC_ALL_DATA.filter(r => {
-    if (r.work === '퇴사') return false;                    // 퇴사자 제외
     // 학습기간: 학습시작일 / 학습종료일 / 기간 검색(정확히 일치)
     if (pf || pto) {
       const lo = pf || '0000-00-00', hi = pto || '9999-12-31';
