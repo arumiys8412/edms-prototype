@@ -4657,10 +4657,11 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
 Admin ‘아카이브 현황 > 학습시간 조회 > 개인별 학습시간’과 같은 구조
 - EDMS는 로그인한 연수원 1곳의 데이터만 조회 → 연수원 검색·연수원 컬럼 제외
 - 메뉴 노출: HRD아카이브 계약이 있는 연수원만 노출 (계약 없는 연수원은 메뉴 미노출)
-- 조회 대상: 아카이브 대상자 (활성 소속 계약 = HRD아카이브 계약)
+- 조회 대상: 아카이브 대상자 (계약관리 정책서 기준). 학습기간 종료 후에도 해당 HRD아카이브 계약에 소속되었던 회원 조회
 - 조회 시점의 임직원 정보 기준 (퇴사로 임직원 정보가 삭제된 회원은 제외)
-- HRD아카이브 계약 과정만 집계
-- 인정시간 산정·이수 기준은 Admin 정책서 3장과 동일">1</span></div>
+- 근무상태 '모니터링' 계정은 집계·목록에서 제외 (산인공 전송 대상 아님)
+- 아카이브 대상 상품 학습과 아카이브 대상 라이브 시청만 집계. 자체 제작 콘텐츠는 미집계
+- 인정시간 산정·이수 기준은 Admin 개인별 학습시간 정책서 3장과 동일">1</span></div>
         <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">아카이브 현황</a> &gt; 학습시간 조회</div>
       </div>
 
@@ -4699,7 +4700,7 @@ Admin ‘아카이브 현황 > 학습시간 조회 > 개인별 학습시간’�
             </div>
           </div>
         </div>
-        <!-- 학습자검색 (이수여부·근무상태 포함) -->
+        <!-- 학습자검색 (이수여부 포함) -->
         <div class="search-form-row" style="margin-bottom:14px">
           <div class="field-group" style="min-width:460px">
             <div class="field-label">학습자검색</div>
@@ -4717,14 +4718,7 @@ Admin ‘아카이브 현황 > 학습시간 조회 > 개인별 학습시간’�
               </select><span class="change-badge arc" data-num="3" data-memo="placeholder: ‘이수여부 전체’ (별도 ‘전체’ 옵션 추가 X)
 옵션: 이수여부 전체 / 이수 / 미이수
 - 학습관리의 ‘수료여부’와 같은 위치·형식">3</span></span>
-              <span class="badge-wrap"><select class="select" id="arc-sel-work" style="min-width:130px">
-                <option value="">근무상태 전체</option>
-                <option value="재직" selected>재직</option>
-                <option value="모니터링">모니터링</option>
-              </select><span class="change-badge arc" data-num="4" data-memo="placeholder: ‘근무상태 전체’ (별도 ‘전체’ 옵션 추가 X)
-옵션: 근무상태 전체 / 재직 / 모니터링 (디폴트: 재직)
-- Admin 아카이브 현황과 같은 용어 ‘근무상태’ 사용
-- 근무상태 값은 재직 / 모니터링 (퇴사 시 임직원 정보 삭제)">4</span></span>
+              
             </div>
           </div>
         </div>
@@ -4756,23 +4750,18 @@ placeholder: ‘회사선택’
 
       <!-- 요약 -->
       <div class="card">
-        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center"><span>검색결과 요약<span class="change-badge arc" data-num="6" data-memo="검색 조건이 적용된 목록 중 재직 회원 기준 집계 (Admin ‘기업별 학습시간’ 집계 항목)
-- 모니터링 계정은 근무상태 검색 조건과 관계없이 요약에서 제외
-- 요약 영역에 ‘재직 회원 기준’ 고정 표기
-- 근무상태 ‘모니터링’ 검색 시 요약 전 항목 ‘-’
-- 학습자 수: 재직 회원 목록 행 수 (회원 × 학습기간)
-- 1인당 평균 누적시간: 총 누적시간 합계 ÷ 학습자 수 (초 단위 절사). 학습 이력 없는 학습자 포함
-  표기: H시간 M분 S초(N초)
-- 이수 인원수: 이수여부 ‘이수’ 행 수
-- 이수율: 이수 인원수 ÷ 학습자 수 × 100 (소수점 첫째 자리까지 표기, 정수는 소수점 없이)
-- 총 교육비: 학습자 수 × 1인 교육비(140,000원)
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center"><span>검색결과 요약<span class="change-badge arc" data-num="6" data-memo="검색 조건이 적용된 결과 전체 기준으로 집계 (Admin 기업별 학습시간 3-2 산식)
+- 대상자 수: 검색 결과의 아카이브 대상자 수. 학습 이력이 없는 회원 포함
+- 1인당 평균 누적 인정시간: 누적 인정시간 합계 ÷ 대상자 수 (초 단위 절사). 표기: H시간 M분 S초(N초)
+- 이수 인원수: 이수여부 '이수' 인원
+- 이수율: 이수 인원수 ÷ 대상자 수 × 100 (소수점 둘째 자리에서 반올림하여 첫째 자리까지, 정수는 소수점 없이)
+- 총 교육비: 대상자 수 × 1인 교육비(140,000원)
 - 정부지원금(예상): 회사별 이수 인원수 × 1인 교육비 × 지원 비율의 합계
-  · 지원 비율: 사업장규모 우선지원 90%, 중견 80% / 대기업·사업장규모 없음은 산정 제외
-  · 사업장규모: 거래처 정보 기준
-  · 산정 대상(지원 대상 회사의 이수자)이 없으면 ‘-’">6</span></span><span style="font-size:12px;font-weight:400;color:#666">재직 회원 기준</span></div>
+  · 지원 비율: 사업장규모 우선지원 90%, 중견 80% / 대기업·사업장규모 값 없음은 미적용
+  · 산정 대상이 없으면 '-'">6</span></span></div>
         <table class="summary-table">
           <thead>
-            <tr><th>학습자 수</th><th>1인당 평균 누적시간</th><th>이수 인원수</th><th>이수율</th><th>총 교육비</th><th>정부지원금(예상)</th></tr>
+            <tr><th>대상자 수</th><th>1인당 평균 누적 인정시간</th><th>이수 인원수</th><th>이수율</th><th>총 교육비</th><th>정부지원금(예상)</th></tr>
           </thead>
           <tbody>
             <tr><td id="arc-s-total">-</td><td id="arc-s-avg">-</td><td id="arc-s-pass">-</td><td id="arc-s-rate">-</td><td id="arc-s-fee">-</td><td id="arc-s-support">-</td></tr>
@@ -4806,13 +4795,12 @@ placeholder: ‘회사선택’
 - 훈련과정 ID는 EDMS 화면에 노출하지 않음 (목록·상세·검색 모두 제외)
 - 1행 = 회원 × 학습기간: 훈련과정 ID가 2개 이상이고 학습기간이 다르면 학습기간별로 행 구분
 - 예시 데이터: 일부 회원은 이전 학습기간 행이 추가로 있음 (학습기간 구분을 학습시작일·학습종료일로 바꾸면 확인 가능)">9</span></th>
-              <th>총 누적시간<span class="change-badge arc in-th" data-num="10" data-memo="학습기간 내 아카이브 인정시간 합계 (온라인·마이크로러닝·라이브 누적시간의 합)
-- 이력구분별(온라인·마이크로러닝·라이브) 누적시간 함께 노출
-- 목록 표기: H시간 M분 S초 (괄호 초 환산 없음), 0인 단위 생략, 0은 ‘0초’
-- 상세 누적 학습시간은 괄호 초 환산 포함 표기 유지
-- 학습 이력 없음: 모두 ‘0초’, 이수여부 ‘미이수’">10</span></th>
-              <th>온라인 누적시간</th><th>마이크로러닝 누적시간</th><th>라이브 누적시간</th>
-              <th>이수여부<span class="change-badge arc in-th" data-num="11" data-memo="학습기간 내 총 누적시간이 15시간(54,000초) 이상이면 ‘이수’
+              <th>전체 누적 인정시간<span class="change-badge arc in-th" data-num="10" data-memo="학습기간 내 인정시간 합계 (과정·라이브 누적 인정시간의 합)
+- 과정: 아카이브 대상 상품 학습 (기존 온라인·마이크로러닝 통합) / 라이브: 아카이브 대상 라이브 시청
+- 목록 표기: H시간 M분 S초 (괄호 초 환산 없음), 0인 단위 생략, 0은 '0초'
+- 학습 이력 없음: 모두 '0초', 이수여부 '미이수'">10</span></th>
+              <th>과정 누적 인정시간</th><th>라이브 누적 인정시간</th>
+              <th>이수여부<span class="change-badge arc in-th" data-num="11" data-memo="학습기간 내 누적 인정시간이 15시간(54,000초) 이상이면 ‘이수’
 - 예: 15시간 0분 0초 → 이수 / 14시간 59분 59초 → 미이수">11</span></th>
             </tr>
           </thead>
@@ -4847,7 +4835,8 @@ placeholder: ‘회사선택’
         <div class="detail-section-header">
           <div class="detail-section-title">기본정보<span class="change-badge arc" data-num="12" data-memo="선택한 행의 학습기간 기준으로 표시
 - 이름·아이디 비식별처리 미적용
-- Admin의 연수원·기업 항목은 회사명·부서명으로 대체">12</span></div>
+- Admin의 연수원·기업 항목은 회사명·부서명으로 대체
+- 학습기간 / 이수여부 (근무상태 삭제)">12</span></div>
           <div style="display:flex;gap:6px">
             <button class="mbtn mbtn-gray" id="arcd-back-btn">목록</button>
             <button class="mbtn mbtn-gray" id="arcd-prev-btn">이전</button>
@@ -4855,28 +4844,35 @@ placeholder: ‘회사선택’
         </div>
         <table class="arc-kv"><tbody id="arcd-basic-body"></tbody></table>
 
-        <div class="arc-sub-title">누적 학습시간<span class="change-badge arc" data-num="13" data-memo="총 / 온라인 / 마이크로러닝 / 라이브 누적시간
+        <div class="arc-sub-title">누적 인정시간<span class="change-badge arc" data-num="13" data-memo="전체 / 과정 / 라이브 누적 인정시간
 - 학습기간 내 이력 기준
 - 하단 상세 학습이력 검색 조건과 무관하게 고정값 노출">13</span></div>
         <table class="summary-table">
-          <thead><tr><th>총 누적시간</th><th>온라인 누적시간</th><th>마이크로러닝 누적시간</th><th>라이브 누적시간</th></tr></thead>
+          <thead><tr><th>전체 누적 인정시간</th><th>과정 누적 인정시간</th><th>라이브 누적 인정시간</th></tr></thead>
           <tbody id="arcd-sum-body"></tbody>
         </table>
 
         <div class="arc-sub-title">상세 학습이력</div>
-        <div style="font-size:12px;color:#666;margin:-4px 0 10px">※ 아카이브 인정시간은 콘텐츠시간까지만 인정되며, 하루 학습시간 합계가 8시간을 초과한 부분은 인정되지 않습니다.<span class="change-badge arc" data-num="14" data-memo="인정 기준 안내 문구 (고정 노출)
+        <div style="font-size:12px;color:#666;margin:-4px 0 10px">※ 인정시간은 콘텐츠시간까지만 인정되며, 하루 인정시간 합계가 8시간을 초과한 부분은 인정되지 않습니다.<span class="change-badge arc" data-num="14" data-memo="인정 기준 안내 문구 (고정 노출)
 - 학습시간과 인정시간이 다른 이유를 화면에서 안내
 - 1일 상한은 하루 전체 학습을 합산해 적용하므로 행 단위로는 확인 불가">14</span></div>
+        <div class="tab-nav">
+          <button class="tab-btn active" data-arcd-tab="course">과정</button>
+          <button class="tab-btn" data-arcd-tab="live">라이브<span class="change-badge arc" data-num="20" data-memo="[과정] / [라이브] 탭 분리. 디폴트 [과정]
+- 검색 조건은 탭별로 유지. 탭 전환 시 해당 탭의 마지막 조회 결과 노출
+- [과정]: 대분류·중분류('HRD아카이브' 계약구분 카테고리) / 학습일 / 과정검색
+- [라이브]: 학습일 / 라이브검색
+- 이력구분·수료처리일 삭제">20</span></button>
+        </div>
         <div style="border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px">
           <div class="search-form-row" style="gap:28px">
-            <div class="field-group">
-              <div class="field-label">이력구분</div>
-              <select class="select" id="arcd-sel-cat" style="min-width:130px">
-                <option value="">이력구분 전체</option>
-                <option value="온라인">온라인</option>
-                <option value="마이크로러닝">마이크로러닝</option>
-                <option value="라이브">라이브</option>
-              </select>
+            <div class="field-group arcd-course-only">
+              <div class="field-label">대분류</div>
+              <select class="select" id="arcd-sel-cat1" style="min-width:130px"></select>
+            </div>
+            <div class="field-group arcd-course-only">
+              <div class="field-label">중분류</div>
+              <select class="select" id="arcd-sel-cat2" style="min-width:130px"></select>
             </div>
             <div class="field-group">
               <div class="field-label">학습일<span class="change-badge arc" data-num="15" data-memo="기간 선택: 시작일 ~ 종료일 (당일 포함)
@@ -4898,7 +4894,7 @@ placeholder: ‘회사선택’
                 </div>
               </div>
             </div>
-            <div class="field-group">
+            <div class="field-group arcd-course-only">
               <div class="field-label">과정검색</div>
               <div style="display:flex;gap:6px;align-items:center">
                 <select class="select" id="arcd-sel-ctype" style="min-width:90px">
@@ -4907,6 +4903,10 @@ placeholder: ‘회사선택’
                 </select>
                 <input type="text" class="input" id="arcd-input-course" placeholder="검색어를 입력해주세요." style="width:200px">
               </div>
+            </div>
+            <div class="field-group arcd-live-only" style="display:none">
+              <div class="field-label">라이브검색</div>
+              <input type="text" class="input" id="arcd-input-live" placeholder="라이브명을 입력해주세요." style="width:240px">
             </div>
           </div>
           <div class="search-form-actions" style="margin-top:14px">
@@ -4920,27 +4920,7 @@ placeholder: ‘회사선택’
         </div>
         <div class="table-scroll"><table class="main-table">
           <thead>
-            <tr>
-              <th>No.</th><th>학습일</th><th>이력구분</th>
-              <th>과정명</th><th>과정아이디</th>
-              <th>콘텐츠명<span class="change-badge arc in-th" data-num="16" data-memo="이력 1건 = 학습일 × 콘텐츠
-- 정렬: 학습일 최신순, 같은 학습일은 최근 학습 종료 시각순
-- 학습기간 내 이력만 노출 (학습기간 외 학습은 이력·누적시간 모두 미포함)
-- 이력의 아카이브 인정시간 합계 = 상단 누적시간">16</span></th>
-              <th>콘텐츠시간<span class="change-badge arc in-th" data-num="17" data-memo="콘텐츠의 ‘콘텐츠시간’ 필드 값. 인정시간 상한 기준
-- 라이브: 방송시간 (방송 시작 ~ 방송 종료)
-- 표기: H시간 M분 S초 (괄호 초 환산 없음)">17</span></th>
-              <th>학습시간<span class="change-badge arc in-th" data-num="18" data-memo="해당 학습일에 콘텐츠를 학습한 시간 (인정 기준 적용 전)
-- 구간별 (종료 − 시작)의 합계 (Admin 정책서 3-2 기준)
-- 인정시간과 차이가 나는 경우: 콘텐츠시간 초과분 · 1일 상한
-- 표기: H시간 M분 S초(N초)
-- Admin 상세 학습이력에도 동일 항목 추가 필요">18</span></th>
-              <th>아카이브 인정시간<span class="change-badge arc in-th" data-num="19" data-memo="학습시간에 인정 기준을 적용한 시간 (Admin 정책서 3장)
-- 콘텐츠 상한 → 1일 상한(8시간) 순서로 적용
-- 콘텐츠 상한: 같은 콘텐츠의 인정시간 누적이 콘텐츠시간에 도달하면 이후 학습은 미인정
-- 콘텐츠시간 0인 콘텐츠: 이력 노출, 인정시간 ‘0초’">19</span></th>
-              <th>수료처리일</th>
-            </tr>
+            <tr id="arcd-head-row"></tr>
           </thead>
           <tbody id="arcd-table-body"></tbody>
         </table></div>
@@ -13044,9 +13024,9 @@ csRenderTable();
 // PAGE: 아카이브 학습시간 (교육관리)
 // - Admin '아카이브 현황 > 학습시간 조회 > 개인별 학습시간'과 같은 구조
 // - EDMS는 로그인한 연수원 1곳의 데이터만 조회 (연수원 검색·컬럼 없음)
-// - 1행 = 회원 × 학습기간(훈련과정 단위, 화면 미노출) / 누적시간 = 학습기간 내 아카이브 인정시간 합계
+// - 1행 = 회원 × 학습기간(훈련과정 단위, 화면 미노출) / 누적 인정시간 = 학습기간 내 인정시간 합계
 // ════════════════════════════════════════════════
-const ARC_CATS = ['온라인', '마이크로러닝', '라이브'];
+const ARC_CATS = ['과정', '라이브'];   // 이력구분. 과정은 'HRD아카이브' 계약구분 카테고리(대분류·중분류)로 구분
 const ARC_PASS_SEC = 15 * 3600;   // 이수 기준: FLOOR(누적 초 ÷ 3,600) ≥ 15
 const ARC_TODAY = new Date(2026, 9, 24);
 const arcPad = n => String(n).padStart(2, '0');
@@ -13069,30 +13049,30 @@ const ARC_TRAININGS = {
   // 연수원 내 훈련과정 ID 간 학습기간은 겹치지 않음
 };
 const ARC_SUBJECTS = [
-  { code: '41208', name: '공감 스위치 ON! 관계를 바꾸는 말 습관', dur: 13036, cat: '온라인' },
-  { code: '52317', name: '[SSS급 루키] 탑티어 기획자의 생각법', dur: 13803, cat: '온라인' },
-  { code: '41455', name: '[북러닝] 나의 가치를 높이는 우아한 대화법(도서 미제공)', dur: 9076, cat: '온라인' },
-  { code: '63102', name: 'AI로 완성하는 프로젝트 관리 스킬1', dur: 1603, cat: '마이크로러닝' },
-  { code: '52790', name: '[SSS급 인재] 실리콘밸리식 협업 스킬, 애자일 커뮤니케이션', dur: 14197, cat: '온라인' },
-  { code: '70412', name: '3분 경제 브리핑', dur: 180, cat: '마이크로러닝' },
-  { code: '70419', name: '보고서 한 장 요약법', dur: 240, cat: '마이크로러닝' },
-  { code: '41620', name: '데이터 리터러시 : 숫자로 말하는 보고서', dur: 15120, cat: '온라인' },
-  { code: '41733', name: '[북러닝] 일 잘하는 사람의 시간 관리법', dur: 12600, cat: '온라인' },
-  { code: '52904', name: '생성형 AI 업무 활용 실무', dur: 16200, cat: '온라인' },
-  // 라이브: 콘텐츠시간 = 방송시간. 실시간 시청만 인정, 1회성(같은 방송 재시청 없음)
+  { code: '41208', name: '공감 스위치 ON! 관계를 바꾸는 말 습관', dur: 13036, cat: '과정', cat1: '직무공통', cat2: '온라인' },
+  { code: '52317', name: '[SSS급 루키] 탑티어 기획자의 생각법', dur: 13803, cat: '과정', cat1: '직무전문', cat2: '온라인' },
+  { code: '41455', name: '[북러닝] 나의 가치를 높이는 우아한 대화법(도서 미제공)', dur: 9076, cat: '과정', cat1: '자기계발', cat2: '온라인' },
+  { code: '63102', name: 'AI로 완성하는 프로젝트 관리 스킬1', dur: 1603, cat: '과정', cat1: '직무전문', cat2: '마이크로러닝' },
+  { code: '52790', name: '[SSS급 인재] 실리콘밸리식 협업 스킬, 애자일 커뮤니케이션', dur: 14197, cat: '과정', cat1: '리더십', cat2: '온라인' },
+  { code: '70412', name: '3분 경제 브리핑', dur: 180, cat: '과정', cat1: '직무공통', cat2: '숏폼' },
+  { code: '70419', name: '보고서 한 장 요약법', dur: 240, cat: '과정', cat1: '직무공통', cat2: '숏폼' },
+  { code: '41620', name: '데이터 리터러시 : 숫자로 말하는 보고서', dur: 15120, cat: '과정', cat1: '직무공통', cat2: '온라인' },
+  { code: '41733', name: '[북러닝] 일 잘하는 사람의 시간 관리법', dur: 12600, cat: '과정', cat1: '자기계발', cat2: '온라인' },
+  { code: '52904', name: '생성형 AI 업무 활용 실무', dur: 16200, cat: '과정', cat1: '직무전문', cat2: '온라인' },
+  // 라이브: 콘텐츠시간 = 방송시간. 실시간 시청만 인정, 1회성(같은 방송 재시청 없음). 분류 없음
   { code: '80105', name: '[LIVE] 2026 하반기 HR 트렌드', dur: 3600, cat: '라이브' },
   { code: '80112', name: '[LIVE] 리더의 피드백 대화법', dur: 5400, cat: '라이브' }
 ];
-// 온라인: 과정 콘텐츠시간을 콘텐츠 3개로 분할 / 마이크로러닝: 콘텐츠 1개 (콘텐츠명 = 과정명)
+// 중분류 '온라인': 과정 콘텐츠시간을 콘텐츠 3개로 분할 / 그 외: 콘텐츠 1개 (콘텐츠명 = 과정명)
 ARC_SUBJECTS.forEach(sj => {
-  if (sj.cat !== '온라인') { sj.contents = [{ name: sj.name, dur: sj.dur }]; return; }
+  if (sj.cat2 !== '온라인') { sj.contents = [{ name: sj.name, dur: sj.dur }]; return; }
   const a = Math.round(sj.dur * 0.2), b = Math.round(sj.dur * 0.45);
   sj.contents = [{ name: '01. 과정 소개', dur: a }, { name: '02. 핵심 개념', dur: b }, { name: '03. 실전 적용', dur: sj.dur - a - b }];
 });
 
 const ARC_FLAT = ARC_SUBJECTS.flatMap(sj => sj.contents.map(ct => [sj, ct]));
 // 학습 이력 (결정적 샘플) — 이력 1건 = 학습일 × 콘텐츠, 학습기간 내 이력만
-// study = 학습시간(구간 합계, 인정 기준 적용 전) / sec = 아카이브 인정시간
+// study = 학습시간(구간 합계, 인정 기준 적용 전) / sec = 인정시간
 // 콘텐츠 상한: 같은 콘텐츠의 누적 인정시간이 콘텐츠시간에 도달하면 이후 학습은 미인정(콘텐츠시간 초과분)
 function arcBuildHistory(i, tr) {
   const n = (i % 11 === 10) ? 0 : 10 + (i * 7) % 45;   // 일부 회원은 이력 없음
@@ -13115,10 +13095,8 @@ function arcBuildHistory(i, tr) {
     const left = Math.max(0, r.ct.dur - (acc[key] || 0));
     const sec = Math.min(r.study, left);
     acc[key] = (acc[key] || 0) + sec;
-    const done = acc[key] >= r.ct.dur * 0.8 && r.sj.cat !== '라이브';   // 라이브는 수료처리 없음
-    const dd = new Date(r.d); dd.setDate(dd.getDate() + r.k % 4);
-    return { code: r.sj.code, title: r.sj.name, content: r.ct.name, cat: r.sj.cat, dur: r.ct.dur, study: r.study, sec,
-      date: r.date, endAt: r.endAt, doneDate: done ? arcYmd(dd > ARC_TODAY ? r.d : dd) : '-' };
+    return { code: r.sj.code, title: r.sj.name, content: r.ct.name, cat: r.sj.cat, cat1: r.sj.cat1 || '-', cat2: r.sj.cat2 || '-',
+      dur: r.ct.dur, study: r.study, sec, date: r.date, endAt: r.endAt };
   }).reverse();
 }
 
@@ -13148,13 +13126,15 @@ for (let i = 0; i < 60; i++) {
   ARC_ALL_DATA.push(arcMakeRow(i, main, i));
   if (i % 9 === 0) ARC_ALL_DATA.push(arcMakeRow(i, main === 'ABA20261001071234' ? 'ABA20257001063318' : 'ABA20261001071234', i + 7));
 }
+// 근무상태 '모니터링' 계정은 집계·목록에서 제외 (산인공 전송 대상 아님)
+const ARC_DATA = ARC_ALL_DATA.filter(r => r.work !== '모니터링');
 
 // 요약 — 교육비·정부지원금 산정 기준 (Admin 기업별 학습시간과 동일)
 const ARC_FEE = 140000;
 const ARC_BIZ = { '회사1': '우선지원', '회사2': '중견', '회사3': '대기업' };   // 사업장규모 (거래처 정보, 가상 값)
 const ARC_SUPPORT = { '우선지원': 0.9, '중견': 0.8 };
 function arcUpdateSummary() {
-  const d = arcFiltered.filter(r => r.work === '재직'), n = d.length;   // 요약은 재직 기준 (모니터링 제외)
+  const d = arcFiltered, n = d.length;   // 검색 결과 전체 기준 (모니터링 계정은 조회 대상에서 제외)
   if (!n) { ['total','avg','pass','rate','fee','support'].forEach(k => document.getElementById('arc-s-' + k).textContent = '-'); return; }
   const pass = d.filter(r => r.pass === '이수');
   const sum = d.reduce((a, r) => a + r.total, 0);
@@ -13178,7 +13158,7 @@ function arcRenderTable() {
   document.getElementById('arc-count').textContent = arcFiltered.length.toLocaleString();
   const xb = document.getElementById('arc-btn-excel'); xb.disabled = !arcFiltered.length; xb.style.opacity = arcFiltered.length ? '' : '.4';
   if (!slice.length) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
     document.getElementById('arc-pagination').innerHTML = '';
     return;
   }
@@ -13200,13 +13180,12 @@ function arcRenderTable() {
 
 function arcDoSearch() {
   const cos = getMultiSelected('arc');   // 회사검색 복수 선택. 미선택 시 전체
-  const work = document.getElementById('arc-sel-work').value;
   const lt = document.getElementById('arc-sel-learner-type').value;
   const lv = document.getElementById('arc-input-learner').value.trim().toLowerCase();
   const pt = document.getElementById('arc-sel-period-type').value;
   const pf = document.getElementById('arc-date-from').value, pto = document.getElementById('arc-date-to').value;
   if (pf && pto && pf > pto) { alert('종료일은 시작일 이후로 선택해주세요.'); return; }
-  arcFiltered = ARC_ALL_DATA.filter(r => {
+  arcFiltered = ARC_DATA.filter(r => {
     // 학습기간: 학습시작일 / 학습종료일 / 기간 검색(정확히 일치)
     if (pf || pto) {
       const lo = pf || '0000-00-00', hi = pto || '9999-12-31';
@@ -13215,7 +13194,6 @@ function arcDoSearch() {
       if (pt === 'period' && !(r.from === lo && r.to === hi)) return false;   // 학습기간과 선택 기간이 정확히 일치
     }
     if (cos.length && !cos.includes(r.company)) return false;
-    if (work && r.work !== work) return false;
     const pv = document.getElementById('arc-sel-pass').value;
     if (pv && r.pass !== pv) return false;
     if (lv && !String(r[lt]).toLowerCase().includes(lv)) return false;
@@ -13240,7 +13218,6 @@ function arcSetDefaultPeriod() {
 function arcReset() {
   arcSetDefaultPeriod();
   resetMultiSelect('arc');
-  document.getElementById('arc-sel-work').value = '재직';   // 초기화 시 디폴트(재직)로 복귀
   document.getElementById('arc-sel-learner-type').selectedIndex = 0;
   document.getElementById('arc-input-learner').value = '';
   document.getElementById('arc-sel-pass').value = '';
@@ -13262,27 +13239,62 @@ document.getElementById('arc-btn-excel').addEventListener('click', () => openExc
 
 // ── 상세 (이름 클릭)
 let arcCur = null, arcdRows = [], arcdPage = 1, arcdPageSize = 50;
+// 상세 학습이력 탭 — [과정] / [라이브]. 검색 조건은 탭별로 유지
+let arcdTab = 'course';
+const arcdState = { course: null, live: null };
+const ARCD_COLS = {
+  course: ['No.', '학습일', '과정명', '대분류', '중분류', '과정아이디', '콘텐츠명', '콘텐츠시간', '학습시간', '인정시간'],
+  live:   ['No.', '학습일', '라이브명', '방송시간', '학습시간', '인정시간']
+};
+const arcdOpt = (arr, all) => `<option value="">${all}</option>` + arr.map(v => `<option value="${v}">${v}</option>`).join('');
+const arcdCat1s = () => [...new Set(ARC_SUBJECTS.filter(s => s.cat === '과정').map(s => s.cat1))];
+const arcdCat2s = c1 => [...new Set(ARC_SUBJECTS.filter(s => s.cat === '과정' && (!c1 || s.cat1 === c1)).map(s => s.cat2))];
+const arcdDefault = () => ({ cat1: '', cat2: '', from: arcCur.from, to: arcCur.to, ctype: 'title', course: '', live: '' });
 
+function arcdWriteForm(f) {
+  document.getElementById('arcd-sel-cat1').innerHTML = arcdOpt(arcdCat1s(), '대분류 전체');
+  document.getElementById('arcd-sel-cat1').value = f.cat1;
+  document.getElementById('arcd-sel-cat2').innerHTML = arcdOpt(arcdCat2s(f.cat1), '중분류 전체');
+  document.getElementById('arcd-sel-cat2').value = f.cat2;
+  document.getElementById('arcd-date-from').value = f.from;
+  document.getElementById('arcd-date-to').value = f.to;
+  document.getElementById('arcd-sel-ctype').value = f.ctype;
+  document.getElementById('arcd-input-course').value = f.course;
+  document.getElementById('arcd-input-live').value = f.live;
+}
+function arcdReadForm() {
+  return {
+    cat1: document.getElementById('arcd-sel-cat1').value, cat2: document.getElementById('arcd-sel-cat2').value,
+    from: document.getElementById('arcd-date-from').value, to: document.getElementById('arcd-date-to').value,
+    ctype: document.getElementById('arcd-sel-ctype').value,
+    course: document.getElementById('arcd-input-course').value.trim(), live: document.getElementById('arcd-input-live').value.trim()
+  };
+}
+function arcdSetTabUI() {
+  document.querySelectorAll('[data-arcd-tab]').forEach(b => b.classList.toggle('active', b.dataset.arcdTab === arcdTab));
+  document.querySelectorAll('.arcd-course-only').forEach(el => el.style.display = arcdTab === 'course' ? '' : 'none');
+  document.querySelectorAll('.arcd-live-only').forEach(el => el.style.display = arcdTab === 'live' ? '' : 'none');
+  document.getElementById('arcd-head-row').innerHTML = ARCD_COLS[arcdTab].map(c => `<th>${c}</th>`).join('');
+}
 function arcdSetDefault() {
-  document.getElementById('arcd-sel-cat').value = '';
-  document.getElementById('arcd-date-from').value = arcCur.from;
-  document.getElementById('arcd-date-to').value = arcCur.to;
-  document.getElementById('arcd-sel-ctype').value = 'title';
-  document.getElementById('arcd-input-course').value = '';
+  arcdState[arcdTab] = arcdDefault();
+  arcdWriteForm(arcdState[arcdTab]);
 }
 
 function arcdApplyFilter() {
-  const cat = document.getElementById('arcd-sel-cat').value;
-  const from = document.getElementById('arcd-date-from').value.replace(/-/g, '.');
-  const to = document.getElementById('arcd-date-to').value.replace(/-/g, '.');
+  const f = arcdReadForm();
+  const from = f.from.replace(/-/g, '.'), to = f.to.replace(/-/g, '.');
   if (from && to && from > to) { alert('종료일은 시작일 이후로 선택해주세요.'); return; }
   const ps = arcCur.from.replace(/-/g, '.'), pe = arcCur.to.replace(/-/g, '.');
   if ((from && from < ps) || (to && to > pe)) { alert(`학습기간(${arcCur.period}) 내에서 선택해주세요.`); return; }
-  const ct = document.getElementById('arcd-sel-ctype').value;
-  const ck = document.getElementById('arcd-input-course').value.trim().toLowerCase();
+  arcdState[arcdTab] = f;
+  const cat = arcdTab === 'course' ? '과정' : '라이브';
+  const ck = (arcdTab === 'course' ? f.course : f.live).toLowerCase();
+  const key = arcdTab === 'course' ? f.ctype : 'title';
   arcdRows = arcCur.history
-    .filter(h => (!cat || h.cat === cat) && (!from || h.date >= from) && (!to || h.date <= to)
-      && (!ck || String(h[ct]).toLowerCase().includes(ck)))
+    .filter(h => h.cat === cat && (!f.cat1 || arcdTab !== 'course' || h.cat1 === f.cat1) && (!f.cat2 || arcdTab !== 'course' || h.cat2 === f.cat2)
+      && (!from || h.date >= from) && (!to || h.date <= to)
+      && (!ck || String(h[key]).toLowerCase().includes(ck)))
     .sort((a, b) => (b.date + b.endAt).localeCompare(a.date + a.endAt));   // 학습일 최신순 → 학습 종료 시각순
   arcdPage = 1;
   arcdRenderTable();
@@ -13294,23 +13306,39 @@ function arcdRenderTable() {
   const slice = arcdRows.slice(start, start + arcdPageSize);
   document.getElementById('arcd-count').textContent = arcdRows.length.toLocaleString();
   if (!slice.length) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="${ARCD_COLS[arcdTab].length}" style="text-align:center;padding:24px;color:#aaa;">현재 조회된 데이터가 없습니다.</td></tr>`;
     document.getElementById('arcd-pagination').innerHTML = '';
     return;
   }
-  tbody.innerHTML = slice.map((h, idx) => `<tr>
+  tbody.innerHTML = slice.map((h, idx) => arcdTab === 'course' ? `<tr>
     <td>${arcdRows.length - (start + idx)}</td>
     <td>${h.date}</td>
-    <td>${h.cat}</td>
     <td style="text-align:left;padding-left:10px">${h.title}</td>
+    <td>${h.cat1}</td>
+    <td>${h.cat2}</td>
     <td>${h.code}</td>
     <td style="text-align:left;padding-left:10px">${h.content}</td>
     <td>${arcHmsText(h.dur)}</td>
     <td>${arcHms(h.study)}</td>
     <td>${arcHms(h.sec)}</td>
-    <td>${h.doneDate}</td>
+  </tr>` : `<tr>
+    <td>${arcdRows.length - (start + idx)}</td>
+    <td>${h.date}</td>
+    <td style="text-align:left;padding-left:10px">${h.title}</td>
+    <td>${arcHmsText(h.dur)}</td>
+    <td>${arcHms(h.study)}</td>
+    <td>${arcHms(h.sec)}</td>
   </tr>`).join('');
   renderPagination('arcd-pagination', Math.ceil(arcdRows.length / arcdPageSize), arcdPage, p => { arcdPage = p; arcdRenderTable(); });
+}
+function arcdSwitchTab(tab) {
+  if (tab === arcdTab) return;
+  arcdState[arcdTab] = arcdReadForm();   // 현재 탭 입력값 유지
+  arcdTab = tab;
+  arcdSetTabUI();
+  if (!arcdState[tab]) arcdState[tab] = arcdDefault();
+  arcdWriteForm(arcdState[tab]);
+  arcdApplyFilter();
 }
 
 function openArchiveDetail(r) {
@@ -13319,10 +13347,11 @@ function openArchiveDetail(r) {
   document.getElementById('arcd-basic-body').innerHTML =
     row2('이름', r.name, '아이디', `${r.id}@hunet.co.kr`) +
     row2('회사명', r.company, '부서명', r.dept) +
-    row2('근무상태', r.work, '이수여부', r.pass) +
-    `<tr><th>학습기간</th><td colspan="3">${r.period}</td></tr>`;
+    row2('학습기간', r.period, '이수여부', r.pass);
   document.getElementById('arcd-sum-body').innerHTML =
     `<tr><td>${arcHms(r.total)}</td>${ARC_CATS.map(c => `<td>${arcHms(r.by[c])}</td>`).join('')}</tr>`;
+  arcdTab = 'course'; arcdState.course = null; arcdState.live = null;   // 진입 시 [과정] 탭, 디폴트 조건
+  arcdSetTabUI();
   arcdSetDefault();
   arcdApplyFilter();
   activateNavItem(document.querySelector('[data-page="archive-time"]'));
@@ -13333,7 +13362,14 @@ setupDatePicker('arcd-date-from', 'arcd-cal-from');
 setupDatePicker('arcd-date-to', 'arcd-cal-to');
 document.getElementById('arcd-btn-search').addEventListener('click', arcdApplyFilter);
 document.getElementById('arcd-btn-reset').addEventListener('click', () => { arcdSetDefault(); arcdApplyFilter(); });
-document.getElementById('arcd-input-course').addEventListener('keydown', e => { if (e.key === 'Enter') arcdApplyFilter(); });
+['arcd-input-course', 'arcd-input-live'].forEach(id => document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') arcdApplyFilter(); }));
+document.getElementById('arcd-sel-cat1').addEventListener('change', function () {   // 대분류 변경 시 중분류 전체로 초기화
+  document.getElementById('arcd-sel-cat2').innerHTML = arcdOpt(arcdCat2s(this.value), '중분류 전체');
+});
+document.querySelectorAll('[data-arcd-tab]').forEach(b => b.addEventListener('click', e => {
+  if (e.target.classList.contains('change-badge')) return;
+  arcdSwitchTab(b.dataset.arcdTab);
+}));
 document.getElementById('arcd-page-size').addEventListener('change', function () {
   arcdPageSize = parseInt(this.value); arcdPage = 1; arcdRenderTable();
 });
