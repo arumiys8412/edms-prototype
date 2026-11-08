@@ -4656,8 +4656,8 @@ placeholder: ‘학습상태 전체’ (별도 ‘전체’ 옵션 추가 X)
         <div class="page-header-title">학습시간 조회<span class="change-badge arc" data-num="1" data-memo="[아카이브] 신규 메뉴 — 아카이브 현황(1depth 신규) > 학습시간 조회
 Admin ‘아카이브 현황 > 학습시간 조회 > 개인별 학습시간’과 같은 구조
 - EDMS는 로그인한 연수원 1곳의 데이터만 조회 → 연수원 검색·연수원 컬럼 제외
-- 메뉴 노출: HRD아카이브 계약이 있는 연수원만 노출 (계약 없는 연수원은 메뉴 미노출)
-- 조회 대상: 아카이브 대상자 (계약관리 정책서 기준). 학습기간 종료 후에도 해당 HRD아카이브 계약에 소속되었던 회원 조회
+- 메뉴 노출: 계약구분이 HRD아카이브인 계약이 있는 연수원만 노출 (계약 없는 연수원은 메뉴 미노출)
+- 조회 대상: 아카이브 대상자 (계약관리 정책서 CTR-19 기준). 대상자 지정은 EDMS 임직원 등록 시 계약에 자동 매핑(이 화면은 조회만). 학습기간 종료 후에도 해당 HRD아카이브 계약에 소속되었던 회원 조회
 - 조회 시점의 임직원 정보 기준 (퇴사로 임직원 정보가 삭제된 회원은 제외)
 - 근무상태 '모니터링' 계정은 집계·목록에서 제외 (산인공 전송 대상 아님)
 - 아카이브 대상 상품 학습과 아카이브 대상 라이브 시청만 집계. 자체 제작 콘텐츠는 미집계
@@ -4750,10 +4750,11 @@ placeholder: ‘회사선택’
 
       <!-- 요약 -->
       <div class="card">
-        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center"><span>검색결과 요약<span class="change-badge arc" data-num="6" data-memo="검색 조건이 적용된 결과 전체 기준으로 집계 (Admin 기업별 학습시간 3-2 산식)
-- 대상자 수: 검색 결과의 아카이브 대상자 수. 학습 이력이 없는 회원 포함
+        <div class="card-title" style="display:flex;justify-content:space-between;align-items:center"><span>검색결과 요약<span class="change-badge arc" data-num="6" data-memo="검색 조건이 적용된 결과 전체 기준으로 집계 (산식은 Admin 기업별 학습시간 3-2와 같음)
+- 대상자 수: 검색 결과 목록 행 수 (회원 × 학습기간). 학습 이력이 없는 회원 포함
+  · 같은 회원의 학습기간이 2개 이상 조회되면 학습기간별로 각각 집계
 - 1인당 평균 누적 인정시간: 누적 인정시간 합계 ÷ 대상자 수 (초 단위 절사). 표기: H시간 M분 S초(N초)
-- 이수 인원수: 이수여부 '이수' 인원
+- 이수 인원수: 검색 결과 중 이수여부 '이수' 행 수
 - 이수율: 이수 인원수 ÷ 대상자 수 × 100 (소수점 둘째 자리에서 반올림하여 첫째 자리까지, 정수는 소수점 없이)
 - 총 교육비: 대상자 수 × 1인 교육비(140,000원)
 - 정부지원금(예상): 회사별 이수 인원수 × 1인 교육비 × 지원 비율의 합계
@@ -4858,11 +4859,11 @@ placeholder: ‘회사선택’
 - 1일 상한은 하루 전체 학습을 합산해 적용하므로 행 단위로는 확인 불가">14</span></div>
         <div class="tab-nav">
           <button class="tab-btn active" data-arcd-tab="course">과정</button>
-          <button class="tab-btn" data-arcd-tab="live">라이브<span class="change-badge arc" data-num="20" data-memo="[과정] / [라이브] 탭 분리. 디폴트 [과정]
+          <button class="tab-btn" data-arcd-tab="live">라이브<span class="change-badge arc" data-num="15" data-memo="[과정] / [라이브] 탭 분리. 디폴트 [과정]
 - 검색 조건은 탭별로 유지. 탭 전환 시 해당 탭의 마지막 조회 결과 노출
 - [과정]: 대분류·중분류('HRD아카이브' 계약구분 카테고리) / 학습일 / 과정검색
 - [라이브]: 학습일 / 라이브검색
-- 이력구분·수료처리일 삭제">20</span></button>
+- 이력구분·수료처리일 삭제">15</span></button>
         </div>
         <div style="border:1px solid var(--border);border-radius:4px;padding:16px;margin-bottom:14px">
           <div class="search-form-row" style="gap:28px">
@@ -4875,11 +4876,11 @@ placeholder: ‘회사선택’
               <select class="select" id="arcd-sel-cat2" style="min-width:130px"></select>
             </div>
             <div class="field-group">
-              <div class="field-label">학습일<span class="change-badge arc" data-num="15" data-memo="기간 선택: 시작일 ~ 종료일 (당일 포함)
+              <div class="field-label">학습일<span class="change-badge arc" data-num="16" data-memo="기간 선택: 시작일 ~ 종료일 (당일 포함)
 - 디폴트: 해당 학습자의 학습기간
 - 검색 범위: 학습기간 내로 제한
 - 학습기간 밖 날짜로 검색 시 [학습기간(YYYY.MM.DD ~ YYYY.MM.DD) 내에서 선택해주세요.] 안내 후 조회 불가
-- 종료일이 시작일보다 빠르면 검색 불가">15</span></div>
+- 종료일이 시작일보다 빠르면 검색 불가">16</span></div>
               <div style="display:flex;gap:8px;align-items:center">
                 <div class="date-wrap">
                   <input type="text" class="input-date" id="arcd-date-from" readonly>
@@ -4916,7 +4917,13 @@ placeholder: ‘회사선택’
         </div>
 
         <div class="result-header">
-          <div class="result-count">검색결과 <strong id="arcd-count">0</strong>건</div>
+          <div class="result-count">검색결과 <strong id="arcd-count">0</strong>건<span class="change-badge arc" data-num="17" data-memo="이력 1건 = 학습일 × 콘텐츠 ([라이브] 탭은 학습일 × 라이브)
+- 정렬: 학습일 최신순, 같은 학습일은 최근 학습 종료 시각순
+- 학습기간 내 이력만 노출. 라이브는 방송 종료 후 시청 기록이 반영된 이력만 노출
+- 콘텐츠시간: 콘텐츠의 '콘텐츠시간' 필드 값 (라이브는 방송시간). 괄호 초 환산 없음
+- 학습시간: 인정 기준 적용 전 학습 구간 합계. H시간 M분 S초(N초)
+- 인정시간: 콘텐츠 상한 → 1일 상한(8시간) 순서로 적용한 시간. 콘텐츠시간 0인 콘텐츠도 노출, 인정시간 '0초'
+- 이력의 인정시간 합계 = 상단 누적 인정시간">17</span></div>
         </div>
         <div class="table-scroll"><table class="main-table">
           <thead>
@@ -13049,16 +13056,16 @@ const ARC_TRAININGS = {
   // 연수원 내 훈련과정 ID 간 학습기간은 겹치지 않음
 };
 const ARC_SUBJECTS = [
-  { code: '41208', name: '공감 스위치 ON! 관계를 바꾸는 말 습관', dur: 13036, cat: '과정', cat1: '직무공통', cat2: '온라인' },
-  { code: '52317', name: '[SSS급 루키] 탑티어 기획자의 생각법', dur: 13803, cat: '과정', cat1: '직무전문', cat2: '온라인' },
-  { code: '41455', name: '[북러닝] 나의 가치를 높이는 우아한 대화법(도서 미제공)', dur: 9076, cat: '과정', cat1: '자기계발', cat2: '온라인' },
-  { code: '63102', name: 'AI로 완성하는 프로젝트 관리 스킬1', dur: 1603, cat: '과정', cat1: '직무전문', cat2: '마이크로러닝' },
-  { code: '52790', name: '[SSS급 인재] 실리콘밸리식 협업 스킬, 애자일 커뮤니케이션', dur: 14197, cat: '과정', cat1: '리더십', cat2: '온라인' },
-  { code: '70412', name: '3분 경제 브리핑', dur: 180, cat: '과정', cat1: '직무공통', cat2: '숏폼' },
-  { code: '70419', name: '보고서 한 장 요약법', dur: 240, cat: '과정', cat1: '직무공통', cat2: '숏폼' },
-  { code: '41620', name: '데이터 리터러시 : 숫자로 말하는 보고서', dur: 15120, cat: '과정', cat1: '직무공통', cat2: '온라인' },
-  { code: '41733', name: '[북러닝] 일 잘하는 사람의 시간 관리법', dur: 12600, cat: '과정', cat1: '자기계발', cat2: '온라인' },
-  { code: '52904', name: '생성형 AI 업무 활용 실무', dur: 16200, cat: '과정', cat1: '직무전문', cat2: '온라인' },
+  { code: '41208', name: '공감 스위치 ON! 관계를 바꾸는 말 습관', dur: 13036, cat: '과정', cat1: '공통역량', cat2: '온라인' },
+  { code: '52317', name: '[SSS급 루키] 탑티어 기획자의 생각법', dur: 13803, cat: '과정', cat1: '직무역량', cat2: '온라인' },
+  { code: '41455', name: '[북러닝] 나의 가치를 높이는 우아한 대화법(도서 미제공)', dur: 9076, cat: '과정', cat1: '공통역량', cat2: '온라인' },
+  { code: '63102', name: 'AI로 완성하는 프로젝트 관리 스킬1', dur: 1603, cat: '과정', cat1: '직무역량', cat2: '마이크로러닝' },
+  { code: '52790', name: '[SSS급 인재] 실리콘밸리식 협업 스킬, 애자일 커뮤니케이션', dur: 14197, cat: '과정', cat1: '리더십역량', cat2: '온라인' },
+  { code: '70412', name: '3분 경제 브리핑', dur: 180, cat: '과정', cat1: '공통역량', cat2: '숏폼' },
+  { code: '70419', name: '보고서 한 장 요약법', dur: 240, cat: '과정', cat1: '공통역량', cat2: '숏폼' },
+  { code: '41620', name: '데이터 리터러시 : 숫자로 말하는 보고서', dur: 15120, cat: '과정', cat1: '공통역량', cat2: '온라인' },
+  { code: '41733', name: '[북러닝] 일 잘하는 사람의 시간 관리법', dur: 12600, cat: '과정', cat1: '공통역량', cat2: '온라인' },
+  { code: '52904', name: '생성형 AI 업무 활용 실무', dur: 16200, cat: '과정', cat1: '직무역량', cat2: '온라인' },
   // 라이브: 콘텐츠시간 = 방송시간. 실시간 시청만 인정, 1회성(같은 방송 재시청 없음). 분류 없음
   { code: '80105', name: '[LIVE] 2026 하반기 HR 트렌드', dur: 3600, cat: '라이브' },
   { code: '80112', name: '[LIVE] 리더의 피드백 대화법', dur: 5400, cat: '라이브' }
