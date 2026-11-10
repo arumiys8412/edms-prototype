@@ -2343,6 +2343,8 @@
       </div>
       <div class="nav-sub">
         <a class="nav-item" data-page="archive-time" href="#">학습시간 조회</a>
+        <a class="nav-item" href="#">훈련인증서 발급 현황</a>
+        <a class="nav-item" data-page="archive-report" href="#">훈련결과보고서</a>
       </div>
     </div>
     <!-- 러닝메이커 (1depth 단독 → 하위메뉴 있는 그룹으로 전환) -->
@@ -4942,6 +4944,144 @@ placeholder: ‘회사선택’
         </div>
       </div>
     </div><!-- /page-archive-time-detail -->
+
+    <!-- ══════════════════════════════════════════ -->
+    <!-- PAGE: 아카이브 훈련결과보고서                  -->
+    <!-- ══════════════════════════════════════════ -->
+    <div class="page-section" id="page-archive-report">
+      <div class="page-header-row">
+        <div class="page-header-title">훈련결과보고서<span class="change-badge arc" data-num="1" data-memo="[아카이브] 신규 메뉴 — 아카이브 현황 &gt; 훈련결과보고서
+Admin &#x27;아카이브 현황 &gt; 훈련결과보고서&#x27;와 같은 기능
+- 메뉴 노출: 계약구분이 HRD아카이브인 계약이 있는 연수원만
+- 아카이브 대상자: &#x27;HRD아카이브&#x27; 계약구분에 소속된 회원
+- 근무상태 &#x27;모니터링&#x27; 계정, 퇴사자 미집계 ([공통] 아카이브 근무상태별 처리 기준)
+- 조회 범위: 로그인한 연수원에서 로그인 계정의 회사 계층 범위 안의 회사 (회사 계층별 조회 범위 공통 정책)
+  · 그룹사 보고서는 그룹사 회사가 조회 범위 안에 있을 때 조회
+  · 프로토타입은 그룹사(회사1) 교육담당자로 로그인한 상태
+- 권한: 아카이브 현황 메뉴 권한 준용
+- 훈련과정 ID는 화면에 노출하지 않음
+- 훈련결과보고서(출력 파일)의 구성·항목·산식: [ADMIN] 아카이브 결과보고서 구성 및 산정 기준">1</span></div>
+        <div class="breadcrumb"><a href="#">홈</a> &gt; <a href="#">아카이브 현황</a> &gt; 훈련결과보고서</div>
+      </div>
+
+      <div class="card">
+        <div class="search-form-row" style="gap:28px;margin-bottom:14px">
+          <div class="field-group">
+            <div class="field-label">학습기간<span class="change-badge arc" data-num="2" data-memo="구분 선택 + 기간 선택 (학습시간 조회와 같은 형식)
+- 구분: 기간 검색 / 학습시작일 / 학습종료일
+- 학습시작일: 학습기간 시작일이 선택 기간에 포함
+- 학습종료일: 학습기간 종료일이 선택 기간에 포함
+- 기간 검색: 학습기간 시작일·종료일이 선택한 시작일·종료일과 각각 일치
+- 종료된 학습기간만 조회 (종료일 다음 날부터). 진행 중인 학습기간은 선택 기간에 포함되어도 미조회
+- 디폴트: 기간 검색, 학습종료일이 오늘 이전인 훈련과정 중 가장 최근 훈련과정의 학습기간
+  예: 2026.11.10 기준 2026.01.01 ~ 2026.06.30
+- 학습종료일이 오늘 이전인 훈련과정이 없으면 디폴트는 기간 검색, 당해 연도 1월 1일 ~ 오늘
+- 시작일·종료일 필수 입력, 삭제 불가
+- 검색 일치 방식, 기간 선택 동작은 EDMS 공통 정책을 따름">2</span></div>
+            <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+              <select class="select" id="arr-sel-period-type" style="min-width:100px">
+                <option value="period" selected>기간 검색</option>
+                <option value="start">학습시작일</option>
+                <option value="end">학습종료일</option>
+              </select>
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="arr-date-from" value="" placeholder="날짜 선택" readonly>
+                <span class="cal-icon">📅</span>
+                <div class="cal-popup" id="arr-cal-from"></div>
+              </div>
+              <span class="date-sep">~</span>
+              <div class="date-wrap">
+                <input type="text" class="input-date" id="arr-date-to" value="" placeholder="날짜 선택" readonly>
+                <span class="cal-icon">📅</span>
+                <div class="cal-popup" id="arr-cal-to"></div>
+              </div>
+            </div>
+          </div>
+          <div class="field-group">
+            <div class="field-label">회사검색<span class="change-badge arc" data-num="3" data-memo="복수 선택 (placeholder &#x27;회사선택&#x27;)
+- 옵션: 조회 범위 안의 회사
+- 디폴트: 미선택 (범위 전체 조회)
+- 선택한 회사가 1개 이상이면 선택한 회사의 보고서만 조회. 그룹사 보고서는 그룹사 회사 선택 시 조회">3</span></div>
+            <div class="multi-select-wrap" id="arr-company-wrap">
+              <div class="multi-tags-box" id="arr-company-box">
+                <span class="multi-placeholder" id="arr-company-placeholder">회사선택</span>
+              </div>
+              <div class="multi-dropdown" id="arr-company-dropdown">
+                <div class="multi-option" data-value="회사1">회사1</div>
+                <div class="multi-option" data-value="회사2">회사2</div>
+                <div class="multi-option" data-value="회사3">회사3</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="search-form-actions">
+          <button class="btn btn-primary" id="arr-btn-search">검색</button>
+          <button class="btn btn-reset" id="arr-btn-reset">초기화</button>
+        </div>
+      </div>
+
+
+      <!-- 보고서 목록 -->
+      <div class="card">
+        <div class="result-header">
+          <div class="result-count">검색결과 <strong id="arr-count">0</strong>건</div>
+          <div class="result-right" style="gap:8px;align-items:center">
+            <span id="arr-sel-count" style="font-size:12px;color:#666">선택 0건</span>
+            <button class="btn btn-primary" id="arr-btn-download" style="padding:5px 12px;font-size:12px">훈련결과보고서 다운로드<span class="change-badge arc" data-num="6" data-memo="선택한 보고서로 다운로드 팝업 노출. 선택 0건이면 비활성
+- 행별 [다운로드]: 해당 보고서 1건으로 팝업 노출 (항상 활성)
+- 선택 건수 표기: &#x27;선택 N건&#x27;
+- 전체 선택: 현재 페이지의 행 전체 선택·해제
+- 페이지 이동 시 선택 유지, [검색]·[초기화] 시 선택 해제">6</span></button>
+          </div>
+        </div>
+        <div class="table-scroll"><table class="main-table">
+          <thead>
+            <tr>
+              <th style="width:36px"><input type="checkbox" id="arr-chk-all" aria-label="전체 선택"></th>
+              <th>No.</th>
+              <th>회사명<span class="change-badge arc in-th" data-num="4" data-memo="1행 = 훈련결과보고서 1건 × 학습기간. 보고서 구분(계열사 / 그룹사)은 미표기
+- 계열사 보고서: 회사 1곳의 대상자 집계
+- 그룹사 보고서: 그룹사와 같은 연수원에 등록된 소속 계열사 대상자 합산. 회사명은 그룹사명. 그룹사·계열사 합쳐 2곳 이상일 때만 생성
+- 조회 시점에 대상자가 0명인 회사는 훈련결과보고서 미생성. 그룹사 보고서 생성 조건(2곳 이상) 산정에서도 제외
+- 정렬: 학습기간 시작일 최신순 → 같은 학습기간 안에서 그룹사 보고서 → 그룹사 회사의 계열사 보고서 → 소속 계열사 보고서(회사명 가나다순). 묶음과 단독 회사 사이는 회사명 가나다순(묶음은 그룹사명 기준)
+- 기준 시점: 화면 값은 조회 시점, 다운로드 파일 값은 보고서 생성 시점 (생성 이후 퇴사 시 다를 수 있음)
+- 사업장규모: 학습기간 시작일 기준값 고정 (시작일에 저장). 이후 거래처 정보가 바뀌어도 지원 비율·정부지원금(예상) 변경 없음
+  · 학습기간 시작일 이후 연수원에 등록된 회사는 등록 시점 값으로 저장
+- 학습기간은 조회 시점의 HRD아카이브 계약기간 기준. 계약 종료일 변경 시 변경된 종료일 기준으로 노출
+- 결과 없음: 연수원에 학습기간이 종료된 HRD아카이브 계약이 없으면(검색 조건과 무관) [학습기간이 종료된 훈련과정이 없습니다.], 그 밖에는 EDMS 공통 결과 없음 문구
+- 페이징, 검색결과 건수 표기는 EDMS 공통 정책을 따름
+- 프로토타입: 회사1 = 그룹사, 회사2·회사3 = 소속 계열사">4</span></th>
+              <th>학습기간</th>
+              <th>대상자 수</th>
+              <th>1인당 평균 누적 인정시간</th>
+              <th>이수 인원수</th>
+              <th>이수율</th>
+              <th>총 교육비</th>
+              <th>사업장규모</th>
+              <th>지원 비율</th>
+              <th>정부지원금(예상)<span class="change-badge arc in-th" data-num="5" data-memo="이수 인원수 × 1인 교육비(140,000원) × 지원 비율
+- 지원 비율: 우선지원 90%, 중견 80%. 대기업·사업장규모 값 없음은 &#x27;-&#x27;
+- 사업장규모는 학습기간 시작일 기준값 (이후 변경 미반영)
+- 그룹사 보고서: 사업장규모·지원 비율 &#x27;-&#x27;, 정부지원금(예상)은 계열사 보고서 금액 합계 (&#x27;-&#x27;인 계열사 제외, 모두 &#x27;-&#x27;이면 &#x27;-&#x27;)
+- 1인당 평균 누적 인정시간: 누적 인정시간 합계 ÷ 대상자 수, 초 단위 절사. H시간 M분 S초 (괄호 초 환산 없음)
+- 산식·그룹사 보고서 기준: [ADMIN] 아카이브 현황 &gt; 훈련결과보고서 3-2 ~ 3-4">5</span></th>
+              <th>훈련결과보고서</th>
+            </tr>
+          </thead>
+          <tbody id="arr-table-body"></tbody>
+        </table></div>
+        <div class="table-footer">
+          <div class="page-size-wrap">
+            <select class="select" id="arr-page-size">
+              <option value="30">30개씩 보기</option>
+              <option value="50" selected>50개씩 보기</option>
+              <option value="100">100개씩 보기</option>
+            </select>
+          </div>
+          <div class="pagination" id="arr-pagination"></div>
+        </div>
+      </div>
+    </div><!-- /page-archive-report -->
 
     <!-- ══════════════════════════════════════════ -->
     <!-- PAGE: 수강신청 기간설정                      -->
@@ -13244,6 +13384,158 @@ document.getElementById('arc-page-size').addEventListener('change', function () 
 });
 document.getElementById('arc-btn-excel').addEventListener('click', () => openExcelModal());
 
+// ════════════════════════════════════════════════
+// PAGE: 아카이브 훈련결과보고서 (아카이브 현황)
+// - Admin '아카이브 현황 > 결과보고서'와 같은 기능. EDMS는 학습기간 선택 + 대상 회사 목록 한 화면
+// - 조회 범위: 로그인한 연수원 + 회사 계층별 조회 범위 (프로토타입: 그룹사 회사1 교육담당자)
+// - 1행 = 훈련결과보고서 1건 (계열사 보고서 / 그룹사 보고서)
+// ════════════════════════════════════════════════
+const ARR_GROUPS = { '회사1': ['회사2', '회사3'] };   // 그룹사: 소속 계열사 (거래처 정보 그룹사여부·그룹사 기업코드, 가상 값)
+const ARR_SCOPE = ['회사1', '회사2', '회사3'];          // 로그인 계정의 회사 계층 범위 (그룹사 교육담당자)
+const arrGroupOf = co => Object.keys(ARR_GROUPS).find(g => g === co || ARR_GROUPS[g].includes(co)) || null;
+const arrRate = (p, n) => { const r = n ? Math.round(p / n * 1000) / 10 : 0; return `${Number.isInteger(r) ? r : r.toFixed(1)}%`; };
+// 종료된 학습기간 — 종료일 다음 날부터 노출, 최신순
+const arrPeriods = () => Object.entries(ARC_TRAININGS)
+  .filter(([, tr]) => tr.to < new Date(ARC_TODAY.getFullYear(), ARC_TODAY.getMonth(), ARC_TODAY.getDate()))
+  .sort((a, b) => b[1].from - a[1].from)
+  .map(([id, tr]) => ({ id, label: `${arcYmd(tr.from)} ~ ${arcYmd(tr.to)}` }));
+const arrRangeHit = (tr, pt, lo, hi) => { const f = arcIso(tr.from), t = arcIso(tr.to);
+  return pt === 'start' ? f >= lo && f <= hi : pt === 'end' ? t >= lo && t <= hi : f === lo && t === hi; };
+const arrStat = list => ({ n: list.length, pass: list.filter(r => r.pass === '이수').length, sec: list.reduce((a, r) => a + r.total, 0) });
+
+// 보고서 행 — 계열사 보고서(회사) + 그룹사 보고서(그룹사 + 소속 계열사, 2곳 이상일 때만)
+function arrRows(trainId) {
+  const base = ARC_DATA.filter(r => r.trainId === trainId && ARR_SCOPE.includes(r.company));
+  const cos = [...new Set(base.map(r => r.company))];
+  const corp = cos.map(co => {
+    const s = arrStat(base.filter(r => r.company === co)), biz = ARC_BIZ[co] || '-', sr = ARC_SUPPORT[biz];
+    return { key: `C|${trainId}|${co}`, trainId, kind: '계열사', company: co, grp: arrGroupOf(co), s, biz, rate: sr ?? null,
+             support: sr == null ? null : Math.round(s.pass * ARC_FEE * sr) };
+  });
+  const groups = Object.keys(ARR_GROUPS).map(g => {
+    const mem = corp.filter(r => r.grp === g);
+    if (mem.length < 2 || !ARR_SCOPE.includes(g)) return null;
+    const s = arrStat(base.filter(r => mem.some(m => m.company === r.company)));
+    const sups = mem.map(m => m.support).filter(v => v !== null);
+    return { key: `G|${trainId}|${g}`, trainId, kind: '그룹사', company: g, grp: g, s, biz: '-', rate: null, support: sups.length ? sups.reduce((a, b) => a + b, 0) : null };
+  }).filter(Boolean);
+  const rank = r => r.kind === '그룹사' ? 0 : (r.company === r.grp ? 1 : 2);
+  const sortName = r => r.grp || r.company;
+  return { rows: [...groups, ...corp].sort((a, b) => sortName(a).localeCompare(sortName(b), 'ko') || rank(a) - rank(b) || a.company.localeCompare(b.company, 'ko')),
+           summary: arrStat(base), corps: cos.length };
+}
+
+// 비활성 버튼은 회색 (Admin 결과보고서와 동일)
+const arrGray = (el, off) => { el.style.background = off ? '#e5e7eb' : ''; el.style.color = off ? '#9ca3af' : ''; el.style.cursor = off ? 'not-allowed' : ''; };
+let arrFiltered = [], arrPage = 1, arrPageSize = 50, arrSel = new Set(), arrPageKeys = [], arrDlKeys = [];
+
+function arrRenderTable() {
+  const tbody = document.getElementById('arr-table-body');
+  const start = (arrPage - 1) * arrPageSize, slice = arrFiltered.slice(start, start + arrPageSize);
+  arrPageKeys = slice.map(r => r.key);
+  document.getElementById('arr-count').textContent = arrFiltered.length.toLocaleString();
+  if (!slice.length) {
+    const msg = arrPeriods().length ? '현재 조회된 데이터가 없습니다.' : '학습기간이 종료된 훈련과정이 없습니다.';
+    tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:24px;color:#aaa;">${msg}</td></tr>`;
+    document.getElementById('arr-pagination').innerHTML = '';
+  } else {
+    tbody.innerHTML = slice.map((r, idx) => `<tr>
+      <td><input type="checkbox" class="arr-chk" data-key="${r.key}" ${arrSel.has(r.key) ? 'checked' : ''} aria-label="${r.company} 선택"></td>
+      <td>${arrFiltered.length - (start + idx)}</td>
+      <td>${r.company}</td>
+      <td>${arrPeriodLabel(r.trainId)}</td>
+      <td>${r.s.n}명</td>
+      <td>${arcHmsText(r.s.n ? Math.floor(r.s.sec / r.s.n) : 0)}</td>
+      <td>${r.s.pass}명</td>
+      <td>${arrRate(r.s.pass, r.s.n)}</td>
+      <td style="text-align:right">${(r.s.n * ARC_FEE).toLocaleString()}원</td>
+      <td>${r.biz}</td>
+      <td>${r.rate == null ? '-' : Math.round(r.rate * 100) + '%'}</td>
+      <td style="text-align:right">${r.support == null ? '-' : r.support.toLocaleString() + '원'}</td>
+      <td><button class="btn-excel arr-row-dl" data-key="${r.key}" style="margin:0 auto">다운로드</button></td>
+    </tr>`).join('');
+    tbody.querySelectorAll('.arr-chk').forEach(cb => cb.addEventListener('change', () => {
+      cb.checked ? arrSel.add(cb.dataset.key) : arrSel.delete(cb.dataset.key); arrSyncSel();
+    }));
+    tbody.querySelectorAll('.arr-row-dl').forEach(b => b.addEventListener('click', () => arrOpenDownload([b.dataset.key])));
+    renderPagination('arr-pagination', Math.ceil(arrFiltered.length / arrPageSize), arrPage, p => { arrPage = p; arrRenderTable(); });   // 페이지 이동 시 선택 유지
+  }
+  arrSyncSel();
+}
+
+// 선택 상태 — 전체 선택은 현재 페이지 기준. 선택 0건이면 [훈련결과보고서 다운로드] 비활성
+function arrSyncSel() {
+  const n = arrSel.size, btn = document.getElementById('arr-btn-download'), all = document.getElementById('arr-chk-all');
+  document.getElementById('arr-sel-count').textContent = `선택 ${n}건`;
+  btn.disabled = !n; arrGray(btn, !n);
+  const k = arrPageKeys.filter(x => arrSel.has(x)).length;
+  all.checked = arrPageKeys.length > 0 && k === arrPageKeys.length;
+  all.indeterminate = false;   // 일부 선택 상태 표시 없음 — 전체 선택 클릭 시 현재 페이지 전체 선택
+}
+
+const arrPeriodLabel = id => { const tr = ARC_TRAININGS[id]; return `${arcYmd(tr.from)} ~ ${arcYmd(tr.to)}`; };
+
+// 학습기간 검색 — 학습시간 조회와 같은 형식. 종료된 학습기간만 조회
+function arrDoSearch() {
+  const pt = document.getElementById('arr-sel-period-type').value;
+  const lo = document.getElementById('arr-date-from').value, hi = document.getElementById('arr-date-to').value;
+  if (lo && hi && lo > hi) { alert('종료일은 시작일 이후로 선택해주세요.'); return; }
+  const cos = getMultiSelected('arr');
+  const ids = arrPeriods().map(p => p.id).filter(id => arrRangeHit(ARC_TRAININGS[id], pt, lo, hi));
+  const rows = ids.flatMap(id => arrRows(id).rows.map(r => ({ ...r, from: ARC_TRAININGS[id].from })));
+  arrFiltered = rows.filter(r => !cos.length || cos.includes(r.company))
+    .sort((a, b) => b.from - a.from);   // 학습기간 최신순 (같은 학습기간 안에서는 arrRows 정렬 유지)
+  arrSel.clear(); arrPage = 1;   // [검색] 시 선택 해제
+  arrRenderTable();
+}
+
+// 디폴트: 기간 검색, 학습종료일이 오늘 이전인 훈련과정 중 가장 최근 훈련과정의 학습기간
+// 해당 훈련과정이 없으면 기간 검색, 당해 연도 1월 1일 ~ 오늘 (학습시간 조회와 동일)
+function arrSetDefaultPeriod() {
+  const ps = arrPeriods(), t = ARC_TODAY, tr = ps.length ? ARC_TRAININGS[ps[0].id] : null;
+  document.getElementById('arr-sel-period-type').value = 'period';
+  document.getElementById('arr-date-from').value = arcIso(tr ? tr.from : new Date(t.getFullYear(), 0, 1));
+  document.getElementById('arr-date-to').value = arcIso(tr ? tr.to : t);
+}
+function arrReset() {
+  arrSetDefaultPeriod();
+  resetMultiSelect('arr');
+  arrDoSearch();
+}
+
+// 다운로드 팝업 — 출력 형태 복수 선택, 디폴트 요약 보고서
+function arrOpenDownload(keys) {
+  arrDlKeys = keys;
+  document.querySelectorAll('input[name="arr-dl-type"]').forEach(x => x.checked = x.value === 'summary');
+  arrDlSync();
+  openModal('modal-arr-download');
+}
+function arrDlSync() {
+  const t = [...document.querySelectorAll('input[name="arr-dl-type"]:checked')].length, ok = document.getElementById('arr-dl-ok');
+  ok.disabled = !t; arrGray(ok, !t);
+}
+
+// 다운로드 팝업은 스크립트 뒤에 선언되므로 DOM 로드 후 초기화
+document.addEventListener('DOMContentLoaded', function arrInit() {
+  if (!document.getElementById('page-archive-report')) return;
+  setupDatePicker('arr-date-from', 'arr-cal-from');
+  setupDatePicker('arr-date-to', 'arr-cal-to');
+  initMultiSelect('arr', ARR_SCOPE);
+  document.getElementById('arr-btn-search').addEventListener('click', arrDoSearch);
+  document.getElementById('arr-btn-reset').addEventListener('click', arrReset);
+  document.getElementById('arr-page-size').addEventListener('change', function () { arrPageSize = parseInt(this.value); arrPage = 1; arrRenderTable(); });
+  document.getElementById('arr-chk-all').addEventListener('change', function () {
+    arrPageKeys.forEach(k => this.checked ? arrSel.add(k) : arrSel.delete(k)); arrRenderTable();
+  });
+  document.getElementById('arr-btn-download').addEventListener('click', () => { if (arrSel.size) arrOpenDownload([...arrSel]); });
+  document.querySelectorAll('input[name="arr-dl-type"]').forEach(x => x.addEventListener('change', arrDlSync));
+  document.getElementById('arr-dl-ok').addEventListener('click', () => {
+    if (!document.querySelector('input[name="arr-dl-type"]:checked')) return;
+    closeModal('modal-arr-download'); openModal('modal-arr-confirm');
+  });
+  arrReset();
+});
+
 // ── 상세 (이름 클릭)
 let arcCur = null, arcdRows = [], arcdPage = 1, arcdPageSize = 50;
 // 상세 학습이력 탭 — [과정] / [라이브]. 검색 조건은 탭별로 유지
@@ -13686,6 +13978,49 @@ arcDoSearch();
   </div>
 </div>
 
+
+<!-- ══════════════════════════════════════════ -->
+<!-- MODAL: 아카이브 훈련결과보고서 다운로드        -->
+<!-- ══════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-arr-download" onclick="if(event.target===this)closeModal('modal-arr-download')">
+  <div class="modal-container" style="width:440px;max-width:94vw;display:block">
+    <div class="modal-header">
+      <h3>훈련결과보고서 다운로드<span class="change-badge arc" data-num="7" data-memo="출력 형태 복수 선택 - &#x27;요약 보고서&#x27; / &#x27;상세 데이터 (xlsx)&#x27;. 디폴트 &#x27;요약 보고서&#x27;
+- 출력 형태 0개면 [다운로드] 비활성
+- 안내 문구 2줄은 선택과 관계없이 항상 노출
+- 생성 파일, 압축 기준, 파일명은 [ADMIN] 아카이브 현황 &gt; 훈련결과보고서 4-2-3과 동일
+  (보고서 1건 × 출력 형태 1개당 파일 1개, 2개 이상이면 zip 1개)
+- [다운로드] 선택 시 [파일 다운로드 페이지로 이동하시겠습니까?] 확인 팝업 노출. 이후 EDMS 공통 엑셀 다운로드 방식과 동일 (부가서비스 &gt; 파일 다운로드)">7</span></h3>
+      <button class="modal-close" onclick="closeModal('modal-arr-download')">×</button>
+    </div>
+    <div style="padding:20px 24px;font-size:13px;color:#333">
+      <div style="font-weight:600;margin-bottom:8px">출력 형태</div>
+      <label style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><input type="checkbox" name="arr-dl-type" value="summary" checked> 요약 보고서</label>
+      <label style="display:flex;gap:6px;align-items:center;margin-bottom:14px"><input type="checkbox" name="arr-dl-type" value="detail"> 상세 데이터 (xlsx)</label>
+      <p style="margin:0;font-size:12px;color:#888">※ 선택한 출력 형태의 파일만 생성됩니다.<br><span id="arr-dl-zip">※ 파일이 2개 이상이면 압축 파일 1개로 생성됩니다.</span></p>
+    </div>
+    <div class="modal-footer-end" style="display:flex;gap:8px;padding:0 20px 20px">
+      <button class="btn btn-reset" onclick="closeModal('modal-arr-download')">취소</button>
+      <button class="btn btn-primary" id="arr-dl-ok" style="flex:3">다운로드</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: 훈련결과보고서 파일 다운로드 안내 -->
+<div class="modal-overlay" id="modal-arr-confirm" onclick="if(event.target===this)closeModal('modal-arr-confirm')">
+  <div class="modal-container" style="width:440px;max-width:440px">
+    <div class="modal-header" style="justify-content:center;border-bottom:none;padding-bottom:0">
+      <h3 style="margin:0">안내</h3>
+    </div>
+    <div style="padding:24px 24px 28px;text-align:center;color:#333;font-size:14px">
+      파일 다운로드 페이지로 이동하시겠습니까?
+    </div>
+    <div class="modal-footer-end" style="display:flex;gap:8px;padding:0 20px 20px">
+      <button class="btn btn-reset" onclick="closeModal('modal-arr-confirm')">아니오</button>
+      <button class="btn btn-primary" style="flex:3" onclick="closeModal('modal-arr-confirm')">예</button>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════ -->
 <!-- MODAL: 엑셀 다운로드 안내 (공통)           -->
